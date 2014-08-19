@@ -7,6 +7,8 @@ for (var file in window.__karma__.files) {
     }
 }
 
+jasmine.getFixtures().fixturesPath = '/base/test/fixtures';
+
 requirejs.config({
     // Karma serves files from '/base'
     baseUrl: '/base/src',

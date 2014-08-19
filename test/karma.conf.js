@@ -15,6 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+        'node_modules/jquery/dist/jquery.js',
+        'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+        {pattern: 'test/fixtures/*.html', included: false},
         {pattern: 'src/**/*.js', included: false},
         {pattern: 'test/**/*.spec.js', included: false},
         'test/test-main.js'
@@ -58,8 +61,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['ChromeMIDI'],
 
+    customLaunchers: {
+      ChromeMIDI: {
+        base: 'Chrome',
+        flags: ['--enable-web-midi']
+      }
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
