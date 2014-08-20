@@ -3,17 +3,19 @@ define(['menu'], function(menu) {
         var model;
 
         beforeEach(function() {
-            model = {};
+            model = {
+                outputs: [
+                    { id: 0, name: 'Microsoft GS Wavetable Synth' },
+                    { id: 2, name: 'QuickTime Music Synthesizer' }
+                ],
+                selectOutput: jasmine.createSpy(),
+                playNote: jasmine.createSpy()
+            };
             loadFixtures('menu.html');
         });
 
         it('displays a list of available midi outputs', function() {
-            model.outputs = [
-                { id: 0, name: 'Microsoft GS Wavetable Synth' },
-                { id: 2, name: 'QuickTime Music Synthesizer' }
-            ];
-
-            menu.init(document.getElementById('menu'), model);
+            init();
 
             expect($('#menu #output option').length).toBe(2);
             expect($('#menu #output option').eq(0).attr('value')).toBe('0');
@@ -24,8 +26,28 @@ define(['menu'], function(menu) {
         });
 
         it('chooses the selected midi value', function() {
+            init();
 
+            $('#menu #output').val(2).change();
+
+            expect(model.selectOutput).toHaveBeenCalledWith(2);
         });
+
+        it('chooses the first output by default', function() {
+            init();
+            expect(model.selectOutput).toHaveBeenCalledWith(0);
+        });
+
+        it('sends a note on test', function() {
+            init();
+
+            $('#menu button').click();
+            expect(model.playNote).toHaveBeenCalled();
+        });
+
+        function init() {
+            menu.init(document.getElementById('menu'), model);
+        }
     });
 
 });

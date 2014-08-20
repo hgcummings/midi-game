@@ -13,7 +13,23 @@ define('menu', function() {
                 select.appendChild(option);
             }
 
+            var updateOutput = function() {
+                midi.selectOutput(parseInt(select.value, 10));
+            };
+
+            select.onchange = updateOutput;
             element.appendChild(select);
+            updateOutput();
+
+            var button = document.createElement('button');
+            var buttonText = document.createTextNode('Test');
+            button.appendChild(buttonText);
+
+            button.onclick = function() {
+                midi.playNote(65, 1000);
+            };
+
+            element.appendChild(button);
         }
     }
 });
