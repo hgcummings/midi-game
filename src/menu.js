@@ -26,7 +26,7 @@ define('menu', function() {
             button.appendChild(buttonText);
 
             button.onclick = function() {
-                midi.playNote(65, 1000);
+                midi.getChannel(0).playNote(65, 1000);
             };
 
             element.appendChild(button);

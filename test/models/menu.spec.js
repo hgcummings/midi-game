@@ -1,15 +1,21 @@
 define(['menu'], function(menu) {
     describe('menu', function() {
-        var model;
+        var model, channels;
 
         beforeEach(function() {
+            channels = [];
             model = {
                 outputs: [
                     { id: 0, name: 'Microsoft GS Wavetable Synth' },
                     { id: 2, name: 'QuickTime Music Synthesizer' }
                 ],
                 selectOutput: jasmine.createSpy(),
-                playNote: jasmine.createSpy()
+                getChannel: function(channel) {
+                    channels[channel] = {
+                        playNote: jasmine.createSpy()
+                    };
+                    return channels[channel];
+                }
             };
             loadFixtures('menu.html');
         });
@@ -42,7 +48,7 @@ define(['menu'], function(menu) {
             init();
 
             $('#menu button').click();
-            expect(model.playNote).toHaveBeenCalled();
+            expect(channels[0].playNote).toHaveBeenCalled();
         });
 
         function init() {

@@ -7,7 +7,6 @@ define(function() {
         init: function(midiAccess) {
             var outputs = [];
             var selectedOutput = null;
-            var selectedPatch = 0;
 
             for (var i = 0; i < midiAccess.outputs().length; ++i) {
                 var output = midiAccess.outputs()[i];
@@ -16,24 +15,30 @@ define(function() {
 
             var selectOutput = function(outputId) {
                 selectedOutput = outputs[outputId];
-                selectInstrument(selectedPatch);
             };
 
-            var playNote = function(note, duration) {
-                selectedOutput.send([NOTE_ON, note, 127]);
-                selectedOutput.send([NOTE_OFF, note, 64], window.performance.now() + duration);
-            };
+            var getChannel = function(channel) {
+                var output = selectedOutput;
 
-            var selectInstrument = function(instrument) {
-                selectedPatch = instrument;
-                selectedOutput.send([PROGRAM_CHANGE, instrument]);
+                var playNote = function(note, duration) {
+                    output.send([NOTE_ON + channel, note, 127]);
+                    output.send([NOTE_OFF + channel, note, 64], window.performance.now() + duration);
+                };
+
+                var selectInstrument = function(instrument) {
+                    output.send([PROGRAM_CHANGE + channel, instrument]);
+                };
+
+                return {
+                    selectInstrument: selectInstrument,
+                    playNote: playNote
+                }
             };
 
             return {
                 outputs: outputs,
                 selectOutput: selectOutput,
-                selectInstrument: selectInstrument,
-                playNote: playNote
+                getChannel: getChannel
             }
         }
     }
