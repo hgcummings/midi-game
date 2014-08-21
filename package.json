@@ -1,0 +1,21 @@
+{
+  "name": "midi-game",
+  "version": "0.0.0",
+  "description": "Base code for a game using Web MIDI API",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "author": "",
+  "devDependencies": {
+    "gulp": "~3.8.7",
+    "karma": "~0.12.21",
+    "karma-jasmine": "~0.1.5",
+    "karma-chrome-launcher": "~0.1.4",
+    "gulp-requirejs": "~0.1.3",
+    "almond": "~0.2.9",
+    "gulp-uglify": "~0.3.1",
+    "gulp-zip": "~2.0.1",
+    "requirejs": "~2.1.14",
+    "karma-requirejs": "~0.2.2"
+  }
+}
