@@ -1,4 +1,4 @@
-define('model', function() {
+define(function() {
     return {
         init: function() {
             return {

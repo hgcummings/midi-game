@@ -1,6 +1,19 @@
-define('menu', function() {
+define(function() {
     return {
         init: function (element, midi) {
+            var self = {};
+            var hide = function() {
+                element.style.setProperty('display', 'none');
+            };
+            
+            if (midi.outputs.length === 1) {
+                self.registerStart = function(callback) {
+                    callback();
+                };
+                hide();
+                return self;
+            }
+            
             var select = document.createElement('select');
             select.setAttribute('id', 'output');
 
@@ -21,15 +34,35 @@ define('menu', function() {
             element.appendChild(select);
             updateOutput();
 
-            var button = document.createElement('button');
-            var buttonText = document.createTextNode('Test');
-            button.appendChild(buttonText);
-
-            button.onclick = function() {
+            function createButton(text, cssClass) {
+                var button = document.createElement('button');
+                var testText = document.createTextNode(text);
+                button.appendChild(testText);
+                button.classList.add(cssClass);
+                element.appendChild(button);
+                return button;
+            }
+            
+            var testButton = createButton('Test', 'test');
+            testButton.onclick = function() {
                 midi.getChannel(0).playNote(65, 1000);
             };
 
-            element.appendChild(button);
+            var startCallbacks = [];
+            var startButton = createButton('Start!', 'start');
+            startButton.onclick = function() {
+                hide();
+                for (var i = 0; i < startCallbacks.length; ++i) {
+                    startCallbacks[i]();
+                }
+            };
+            
+            self.registerStart = function(callback) {
+                startCallbacks.push(callback);
+                return self;
+            };
+            
+            return self;
         }
-    }
+    };
 });

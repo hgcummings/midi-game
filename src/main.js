@@ -1,10 +1,8 @@
-require(['menu', 'models/midi', 'view', 'model'], function(menu, midi, view, model) {
-    if (navigator && navigator.requestMIDIAccess()) {
+require(['menu', 'models/midi', 'views/game', 'model'], function(menu, midi, view, model) {
+    midi.init(function(midiModel) {
         document.getElementById('warning').remove();
-        navigator.requestMIDIAccess().then(function(midiAccess) {
-            var midiModel = midi.init(midiAccess);
-            menu.init(document.getElementById('menu'), midiModel);
+        menu.init(document.getElementById('menu'), midiModel).registerStart(function() {
             view.init(document.getElementById('game'), model.init());
         });
-    }
+    });
 });
