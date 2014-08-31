@@ -8,14 +8,14 @@ var zip = require('gulp-zip');
  * Run test once and exit
  */
 gulp.task('test', function (done) {
-    karma.start({basePath: __dirname, configFile: __dirname + '/test/karma.conf.js', singleRun: true}, done);
+    karma.start({basePath: __dirname, configFile: __dirname + '/karma.conf.js', singleRun: true}, done);
 });
 
 /**
  * Watch for file changes and re-run tests on each change
  */
 gulp.task('tdd', function (done) {
-    karma.start({basePath: __dirname, configFile: __dirname + '/test/karma.conf.js'}, done);
+    karma.start({basePath: __dirname, configFile: __dirname + '/karma.conf.js'}, done);
 });
 
 gulp.task('build', function() {
