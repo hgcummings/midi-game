@@ -1,4 +1,4 @@
-define(['data/constants', 'graphics/blocks'], function(constants, blocks) {
+define(['data/constants', 'graphics/blocks', 'graphics/paddle'], function(constants, blocks, paddle) {
     return {
         init: function(parent, model) {
             var canvas = document.createElement('canvas');
@@ -10,6 +10,7 @@ define(['data/constants', 'graphics/blocks'], function(constants, blocks) {
             var context = canvas.getContext('2d');
             var startTime = new Date().getTime();
             blocks = blocks.init(canvas);
+            paddle = paddle.init(canvas);
 
             var animate = function() {
                 var gameTime = new Date().getTime() - startTime;
@@ -17,6 +18,7 @@ define(['data/constants', 'graphics/blocks'], function(constants, blocks) {
 
                 context.clearRect(0, 0, constants.WIDTH, constants.HEIGHT);
 
+                paddle.drawPaddle(model.paddle);
                 for (var y = 0; y < model.blocks.length; ++y) {
                     var row = model.blocks[y];
                     for (var x = 0; x < row.length; ++x) {

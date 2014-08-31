@@ -1,4 +1,4 @@
-define(['data/levels'], function(levels) {
+define(['data/levels', 'input/keyboard'], function(levels, keyboard) {
     return {
         init: function (element, midi) {
             var self = {};
@@ -8,7 +8,7 @@ define(['data/levels'], function(levels) {
 
             if (midi.outputs.length === 1) {
                 self.registerStart = function(callback) {
-                    callback(levels[0]);
+                    callback(levels[0], keyboard);
                 };
                 hide();
                 return self;
@@ -53,7 +53,7 @@ define(['data/levels'], function(levels) {
             startButton.onclick = function() {
                 hide();
                 for (var i = 0; i < startCallbacks.length; ++i) {
-                    startCallbacks[i](levels[0]);
+                    startCallbacks[i](levels[0], keyboard);
                 }
             };
 

@@ -1,12 +1,12 @@
 define(['input/keyboard'], function(keyboard) {
     describe('keyboard input', function() {
-    
+
         var input;
-        
+
         beforeEach(function() {
             input = keyboard.init();
         });
-        
+
         describe('getNote', function() {
             it('returns null if no key pressed', function() {
                 expect(input.getNote()).toBeNull();
@@ -20,7 +20,7 @@ define(['input/keyboard'], function(keyboard) {
 
                     expect(actualNote).toBe(expectedNote);
                 };
-                
+
                 verifyNoteForKeyPress('D', 1);
                 verifyNoteForKeyPress('R', 1.5);
                 verifyNoteForKeyPress('F', 2);
@@ -43,13 +43,13 @@ define(['input/keyboard'], function(keyboard) {
             });
 
         });
-        
+
         describe('getDirection', function() {
 
             it('returns zero if no key is pressed', function() {
                 expect(input.getDirection()).toBe(0);
             });
-            
+
             it('returns correct direction for key press', function() {
                 dispatchKeyDown('/');
                 expect(input.getDirection()).toBe(1);
@@ -64,17 +64,25 @@ define(['input/keyboard'], function(keyboard) {
 
                 expect(input.getDirection()).toBe(0);
             });
+
+            it('ignores release of key no longer in effect', function() {
+                dispatchKeyDown('/');
+                dispatchKeyDown('Z');
+                dispatchKeyUp('/');
+
+                expect(input.getDirection()).toBe(-1);
+            });
         });
-       
-       
+
+
         var dispatchKeyDown = function(key) {
             dispatchKeyEvent('keydown', key);
         };
-        
+
         var dispatchKeyUp = function(key) {
             dispatchKeyEvent('keyup', key);
         };
-        
+
         var dispatchKeyEvent = function(eventName, key) {
             var keyCode = getKeyCode(key);
             var event = document.createEvent('HTMLEvents');
@@ -82,12 +90,12 @@ define(['input/keyboard'], function(keyboard) {
             event.keyCode = keyCode;
             document.dispatchEvent(event);
         };
-        
+
         var getKeyCode = function(key) {
             if ((key < 'A' || key > 'Z') && key != '/') {
                 throw new Error('Unknown key code for key "' + key + '"');
             }
-            
+
             if (key === '/') {
                 return 191;
             } else {

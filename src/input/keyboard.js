@@ -12,17 +12,17 @@ define(function() {
     noteMap[75] = 6;
     noteMap[79] = 6.5;
     noteMap[76] = 7;
-    
+
     return {
         init: function() {
             var self = {};
             var currentNote = null;
             var currentDirection = 0;
-            
+
             var getNote = function(keyCode) {
                 return noteMap[keyCode];
             };
-            
+
             var getDirection = function(keyCode) {
                 if (event.keyCode === 191) {
                     return 1;
@@ -30,7 +30,7 @@ define(function() {
                     return -1;
                 }
             };
-            
+
             document.onkeydown = function(event) {
                 if (getNote(event.keyCode)) {
                     currentNote = getNote(event.keyCode);
@@ -42,19 +42,19 @@ define(function() {
             document.onkeyup = function(event) {
                 if (getNote(event.keyCode) === currentNote) {
                     currentNote = null;
-                } else if (getDirection(event.keyCode)) {
+                } else if (getDirection(event.keyCode) === currentDirection) {
                     currentDirection = 0;
                 }
             };
-                        
+
             self.getNote = function() {
                 return currentNote;
             };
-            
+
             self.getDirection = function() {
                 return currentDirection;
             };
-            
+
             return self;
         }
     }
