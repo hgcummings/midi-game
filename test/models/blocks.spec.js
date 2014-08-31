@@ -1,4 +1,4 @@
-define(['models/level'], function(level) {
+define(['models/blocks'], function(level) {
     function getNotes(blocks) {
         return blocks.map(function (row) {
             return row.map(function (block) {

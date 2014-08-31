@@ -1,4 +1,4 @@
-define(['models/level', 'models/paddle', 'data/constants'], function(loader, paddle, constants) {
+define(['models/blocks', 'models/paddle', 'data/constants'], function(blocks, paddle, constants) {
     return {
         init: function(level, input) {
             var self = {};
@@ -9,7 +9,7 @@ define(['models/level', 'models/paddle', 'data/constants'], function(loader, pad
                 self.paddle.update(delta, input.getDirection());
                 prevTime = gameTime;
             };
-            self.blocks = loader.load(level);
+            self.blocks = blocks.load(level);
             self.paddle = paddle.init();
 
             return self;
