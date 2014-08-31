@@ -1,13 +1,4 @@
-define(function() {
-    var BLOCK_SPACING_X = 78;
-    var BLOCK_SPACING_Y = 78;
-    
-    var MARGIN_X = 44;
-    var MARGIN_Y = 72;
-    
-    var BLOCK_WIDTH = 64;
-    var BLOCK_HEIGHT = 40;
-    
+define(['data/constants'], function(c) {
     return {
         init: function(canvas) {
             var context = canvas.getContext('2d');
@@ -18,14 +9,14 @@ define(function() {
                     } else {
                         context.fillStyle = '#CCCCCC';
                     }
-                    
+
                     context.fillRect(
-                        MARGIN_X + x * BLOCK_SPACING_X,
-                        MARGIN_Y + y * BLOCK_SPACING_Y,
-                        BLOCK_WIDTH,
-                        BLOCK_HEIGHT);
+                        c.BLOCK.MARGIN.X + x * c.BLOCK.SPACING.X,
+                        c.BLOCK.MARGIN.Y + y * c.BLOCK.SPACING.Y,
+                        c.BLOCK.SIZE.X,
+                        c.BLOCK.SIZE.Y);
                 }
             };
         }
-    }
+    };
 });

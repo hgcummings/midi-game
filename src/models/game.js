@@ -1,12 +1,12 @@
-define(['data/levels', 'models/level'], function(levels, loader) {
+define(['models/level'], function(loader) {
     return {
-        init: function() {
+        init: function(level) {
             var self = {};
 
             self.update = function() {};
-            self.blocks = loader.load(levels[0]);
+            self.blocks = loader.load(level);
 
-            return self;            
+            return self;
         }
     }
 });
