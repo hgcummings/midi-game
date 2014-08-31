@@ -2,7 +2,7 @@ define(['data/constants'], function(constants) {
     return {
         init: function() {
             var self = {};
-            var speed = constants.WIDTH / 4000;
+            var speed = constants.WIDTH / 2500;
             var leftBound = constants.PADDLE.MARGIN.X + constants.PADDLE.SIZE.X / 2;
             var rightBound = constants.WIDTH - constants.PADDLE.MARGIN.X - constants.PADDLE.SIZE.X / 2;
 
