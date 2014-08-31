@@ -1,15 +1,15 @@
 define(function() {
     var scaleDegrees = [1, 1.5, 2, 2.5, 3, 4, 4.5, 5, 5.5, 6, 6.5, 7];
-    
+
     var loadLevel = function(data, baseNote) {
-        
+
         var blockForNote = function(note) {
             return {
                 note: note,
                 midiNote: baseNote + scaleDegrees.indexOf(note)
             }
         };
-        
+
         var adjustNotes = function(blocks) {
             var octaveAdjust = true, prevNote, col, row;
 
@@ -26,15 +26,15 @@ define(function() {
                     }
                 }
             }
-            
+
             return blocks;
         };
-        
+
         return adjustNotes(data.map(function(line) {
             return line.map(blockForNote);
         }));
     };
-    
+
     return {
         load: loadLevel
     }

@@ -14,7 +14,7 @@ define(function () {
                         var output = midiAccess.outputs()[i];
                         outputs.push(output);
                     }
-                    
+
                     if (outputs.length) {
                         var selectOutput = function (outputId) {
                             selectedOutput = outputs[outputId];

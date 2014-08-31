@@ -9,16 +9,16 @@ define(['models/level'], function(level) {
 
     describe('load', function() {
         var rootNote = 60;
-                
+
         it('generates a block for each data point', function() {
             var data = [[1, 2], [3, 4]];
             var blocks = level.load(data, rootNote);
-            
+
             for (var i = 0; i < data.length; ++i) {
-                expect(blocks[i].length).toBe(data[i].length);                
+                expect(blocks[i].length).toBe(data[i].length);
             }
         });
-        
+
         it('stores the original note against each block', function() {
             var blocks = level.load([[1, 2], [3, 4]], rootNote);
 
@@ -37,7 +37,7 @@ define(['models/level'], function(level) {
                 [2.5, 2],
                 [1.5, 1]
             ], rootNote);
-            
+
             expect(getNotes(blocks)).toEqual([
                 [71, 70],
                 [69, 68],
@@ -47,7 +47,7 @@ define(['models/level'], function(level) {
                 [61, 60]
             ]);
         });
-        
+
         it('ensures higher blocks always have higher notes, by changing octave', function() {
             var blocks = level.load([
                 [1, 5],

@@ -1,7 +1,7 @@
 define(['menu'], function(menu) {
     describe('menu', function() {
         var model, channels;
-        
+
         var createModel = function(outputs) {
             return {
                 outputs: outputs,
@@ -14,7 +14,7 @@ define(['menu'], function(menu) {
                 }
             };
         };
-        
+
         var createOutput = function(id, name) {
             return { id: id, name: name };
         }
@@ -62,14 +62,14 @@ define(['menu'], function(menu) {
         it('calls start function on start', function() {
             var result = init();
             var startCallback = jasmine.createSpy();
-            
+
             result.registerStart(startCallback);
             expect($('#menu .start').length).toBe(1);
             $('#menu .start').click();
-            
+
             expect(startCallback).toHaveBeenCalled();
         });
-        
+
         it('hides on start', function() {
             init();
 
@@ -77,14 +77,14 @@ define(['menu'], function(menu) {
 
             expect($('#menu')).toBeHidden();
         });
-        
+
         it('hides immediately and executes start function if there is exactly one output', function () {
             var result = menu.init(document.getElementById('menu'), createModel(
                 [ createOutput(0, 'Single output') ]
             ));
-            
+
             expect($('#menu')).toBeHidden();
-            
+
             var startCallback = jasmine.createSpy();
             result.registerStart(startCallback);
             expect(startCallback).toHaveBeenCalled();
