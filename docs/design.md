@@ -20,4 +20,4 @@
 * Movement
  * Paddle accelerates to a maximum volicity
  * New ball starts locked to paddle until released (by spacebar), getting horizontal speed from paddle
- * Angle of ball bouncing of paddle: Make paddle act as slightly convex?
+ * Angle of ball bouncing of paddle: Make paddle act as slightly convex

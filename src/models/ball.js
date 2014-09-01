@@ -4,15 +4,24 @@ define(['data/constants'], function(constants) {
             var self = {};
             self.released = false;
             self.x = paddle.x;
-            self.y = constants.HEIGHT - constants.PADDLE.MARGIN.Y * 3/2;
+            self.y = constants.HEIGHT - constants.BORDER - constants.BALL.RADIUS;
 
             var dx = 0;
             var dy = -(constants.WIDTH / 1250);
 
+            var updatePosition = function(delta) {
+                self.x = self.x + dx * delta;
+                self.y = self.y + dy * delta;
+
+                if (self.y < constants.BORDER) {
+                    self.y = (constants.BORDER - self.y) + constants.BORDER;
+                    dy = -dy;
+                }
+            }
+
             self.update = function(delta, action) {
                 if (self.released) {
-                    self.x = self.x + dx * delta;
-                    self.y = self.y + dy * delta;
+                    updatePosition(delta);
                 } else {
                     self.x = paddle.x;
                 }

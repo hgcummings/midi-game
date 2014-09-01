@@ -7,6 +7,7 @@ define(['data/constants'], function(c) {
                     context.fillStyle = '#EEEEEE';
                     context.arc(ball.x, ball.y, c.BALL.RADIUS, 2 * Math.PI, false);
                     context.fill();
+                    context.closePath();
                 }
             };
         }

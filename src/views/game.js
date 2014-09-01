@@ -1,5 +1,5 @@
-define(['data/constants', 'graphics/blocks', 'graphics/paddle', 'graphics/ball'],
-function(constants, blocks, paddle, ball) {
+define(['data/constants', 'graphics/fixtures', 'graphics/blocks', 'graphics/paddle', 'graphics/ball'],
+function(constants, fixtures, blocks, paddle, ball) {
     return {
         init: function(parent, model) {
             var canvas = document.createElement('canvas');
@@ -10,6 +10,7 @@ function(constants, blocks, paddle, ball) {
 
             var context = canvas.getContext('2d');
             var startTime = new Date().getTime();
+            fixtures = fixtures.init(context);
             blocks = blocks.init(context);
             paddle = paddle.init(context);
             ball = ball.init(context);
@@ -20,13 +21,14 @@ function(constants, blocks, paddle, ball) {
 
                 context.clearRect(0, 0, constants.WIDTH, constants.HEIGHT);
 
-                paddle.drawPaddle(model.paddle);
+                fixtures.drawBorder();
                 for (var y = 0; y < model.blocks.length; ++y) {
                     var row = model.blocks[y];
                     for (var x = 0; x < row.length; ++x) {
                         blocks.drawBlock(row[x], x, y);
                     }
                 }
+                paddle.drawPaddle(model.paddle);
                 ball.drawBall(model.ball);
 
                 window.requestAnimationFrame(animate);

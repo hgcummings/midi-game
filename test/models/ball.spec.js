@@ -20,7 +20,16 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
                     model.update(100);
                     return model.y - startPos;
                 }
-            })
+            });
+
+            it('bounces off the top border of the screen', function() {
+                model.update(100, 'LAUNCH');
+                for (var i = 0; i < 10; ++i) {
+                    model.update(1000);
+                }
+
+                expect(model.y).toBeGreaterThan(constants.BORDER);
+            });
         });
     });
 });
