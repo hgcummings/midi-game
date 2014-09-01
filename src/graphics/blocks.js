@@ -1,11 +1,10 @@
 define(['data/constants'], function(c) {
     return {
-        init: function(canvas) {
-            var context = canvas.getContext('2d');
+        init: function(context) {
             return {
                 drawBlock: function(block, x, y) {
                     if (block.hit) {
-                        context.fillStyle = '#FFFFFF';
+                        context.fillStyle = '#000000';
                     } else {
                         context.fillStyle = '#CCCCCC';
                     }

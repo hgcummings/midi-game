@@ -18,6 +18,7 @@ define(function() {
             var self = {};
             var currentNote = null;
             var currentDirection = 0;
+            var currentAction = null;
 
             var getNote = function(keyCode) {
                 return noteMap[keyCode];
@@ -31,11 +32,19 @@ define(function() {
                 }
             };
 
+            var getAction = function(keyCode) {
+                if (event.keyCode === 32) {
+                    return 'LAUNCH';
+                }
+            }
+
             document.onkeydown = function(event) {
                 if (getNote(event.keyCode)) {
                     currentNote = getNote(event.keyCode);
                 } else if (getDirection(event.keyCode)) {
                     currentDirection = getDirection(event.keyCode);
+                } else if (getAction(event.keyCode)) {
+                    currentAction = getAction(event.keyCode);
                 }
             };
 
@@ -44,6 +53,8 @@ define(function() {
                     currentNote = null;
                 } else if (getDirection(event.keyCode) === currentDirection) {
                     currentDirection = 0;
+                } else if (getAction(event.keyCode) === currentAction) {
+                    currentAction = null;
                 }
             };
 
@@ -54,6 +65,10 @@ define(function() {
             self.getDirection = function() {
                 return currentDirection;
             };
+
+            self.getAction = function() {
+                return currentAction;
+            }
 
             return self;
         }

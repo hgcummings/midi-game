@@ -10,6 +10,9 @@ define(function() {
         PADDLE: {
             SIZE: { X: 64, Y: 8 },
             MARGIN: { X: 32, Y: 32 }
+        },
+        BALL: {
+            RADIUS: 5
         }
     }
 })

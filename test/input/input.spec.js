@@ -74,6 +74,25 @@ define(['input/keyboard'], function(keyboard) {
             });
         });
 
+        describe('getAction', function() {
+            it('returns no-op if no key is pressed', function() {
+                expect(input.getAction()).toBeNull();
+            });
+
+            it('returns correct action for key press', function() {
+                dispatchKeyDown(' ');
+
+                expect(input.getAction()).toBe('LAUNCH');
+            });
+
+            it('returns no-op after key is released', function() {
+                dispatchKeyDown(' ');
+                dispatchKeyUp(' ');
+
+                expect(input.getAction()).toBeNull();
+            });
+        })
+
 
         var dispatchKeyDown = function(key) {
             dispatchKeyEvent('keydown', key);
@@ -92,14 +111,12 @@ define(['input/keyboard'], function(keyboard) {
         };
 
         var getKeyCode = function(key) {
-            if ((key < 'A' || key > 'Z') && key != '/') {
-                throw new Error('Unknown key code for key "' + key + '"');
-            }
-
-            if (key === '/') {
+            if ((key >= 'A' && key <= 'Z') || key === ' ') {
+                return key.charCodeAt(0);
+            } else if (key === '/') {
                 return 191;
             } else {
-                return key.charCodeAt(0);
+                throw new Error('Unknown key code for key "' + key + '"');
             }
         };
 

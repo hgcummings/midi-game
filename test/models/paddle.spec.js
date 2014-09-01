@@ -1,5 +1,5 @@
 define(['models/paddle', 'data/constants'], function(paddle, constants) {
-    describe('init', function() {
+    describe('paddle', function() {
         var model;
 
         beforeEach(function() {

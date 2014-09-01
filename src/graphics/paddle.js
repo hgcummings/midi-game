@@ -1,7 +1,6 @@
 define(['data/constants'], function(c) {
     return {
-        init: function(canvas) {
-            var context = canvas.getContext('2d');
+        init: function(context) {
             return {
                 drawPaddle: function(paddle) {
                     context.fillStyle = '#DDDDDD';

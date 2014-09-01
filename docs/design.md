@@ -9,7 +9,7 @@
   * Expires when failed to be caught by the paddle (but doesn't lose a life)
  * Fireball
   * Wildcard hitting any block regardless of note
-  * Passes through blocks rather than bouncing off
+  * Passes through blocks rather than bouncing off?
   * Expires when failed to be caught by the paddle (but doesn't lose a life)
   * Moves much faster than a regular ball, so harder to catch
  * Wave (Waterball?)
