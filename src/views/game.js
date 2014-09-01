@@ -1,4 +1,4 @@
-define(['data/constants', 'graphics/fixtures', 'graphics/blocks', 'graphics/paddle', 'graphics/ball'],
+define(['data/constants', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball'],
 function(constants, fixtures, blocks, paddle, ball) {
     return {
         init: function(parent, model) {
