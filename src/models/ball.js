@@ -4,7 +4,8 @@ define(['data/constants'], function(constants) {
             var self = {};
             self.released = false;
             self.x = paddle.x;
-            self.y = constants.HEIGHT - constants.BORDER - constants.BALL.RADIUS;
+            self.y = constants.HEIGHT - constants.PADDLE.MARGIN.Y -
+                        constants.PADDLE.SIZE.Y - constants.BALL.RADIUS;
 
             var dx = 0;
             var dy = -(constants.WIDTH / 1250);
