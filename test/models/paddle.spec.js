@@ -61,5 +61,27 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
                 expect(model.x).toBeLessThan(constants.WIDTH);
             });
         });
+
+        describe('getNormalAt', function() {
+            it('returns straight up in dead center of paddle', function() {
+                var result = model.getNormalAt(model.x);
+
+                expect(result[0]).toBe(0);
+                expect(result[1]).toBe(-1);
+            });
+
+            it('is close to (but greater than) 45 degrees at the edge', function() {
+                var result = model.getNormalAt(model.x - constants.PADDLE.SIZE.X / 2);
+
+                expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
+                expect(result[0]).toBeGreaterThan(result[1]);
+            });
+
+            it('returns null outside the paddle', function() {
+                var result = model.getNormalAt(model.x - constants.PADDLE.SIZE.X);
+
+                expect(result).toBeNull();
+            });
+        });
     });
 });
