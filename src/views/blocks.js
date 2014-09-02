@@ -24,16 +24,10 @@ define(['data/constants'], function(c) {
             var top = c.BLOCK.MARGIN.Y;
 
             return {
-                drawBlock: function(block, x, y) {
-                    if (block.hit) {
-                        context.fillStyle = '#000000';
-                    } else {
-                        context.fillStyle = '#CCCCCC';
-                    }
-
+                drawBlock: function(block) {
                     context.drawImage(preRenderCanvas,
-                        left + x * c.BLOCK.SPACING.X,
-                        top + y * c.BLOCK.SPACING.Y);
+                        left + block.col * c.BLOCK.SPACING.X,
+                        top + block.row * c.BLOCK.SPACING.Y);
                 }
             };
         }

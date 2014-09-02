@@ -14,6 +14,7 @@ define(function() {
             }
             return sum;
         },
+        magnitude: magnitude,
         normalise: function(v) {
             var m = magnitude(v);
             var n = [];

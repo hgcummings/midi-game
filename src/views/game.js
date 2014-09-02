@@ -22,12 +22,9 @@ function(constants, fixtures, blocks, paddle, ball) {
                 context.clearRect(0, 0, constants.WIDTH, constants.HEIGHT);
 
                 fixtures.drawBorder();
-                for (var y = 0; y < model.blocks.length; ++y) {
-                    var row = model.blocks[y];
-                    for (var x = 0; x < row.length; ++x) {
-                        blocks.drawBlock(row[x], x, y);
-                    }
-                }
+                model.blocks.all.forEach(function(row) {
+                    row.forEach(blocks.drawBlock);
+                });
                 paddle.drawPaddle(model.paddle);
                 ball.drawBall(model.ball);
 
