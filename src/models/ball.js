@@ -10,15 +10,16 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             var dx = 0;
             var dy = -(constants.WIDTH / 1250);
 
-            var leftBound = constants.BORDER;
-            var rightBound = constants.WIDTH - constants.BORDER;
+            var topBound = constants.BORDER + constants.BALL.RADIUS;
+            var leftBound = constants.BORDER + constants.BALL.RADIUS;
+            var rightBound = constants.WIDTH - constants.BORDER - constants.BALL.RADIUS;
 
             var updatePosition = function(delta) {
                 var newX = self.x + dx * delta;
                 var newY = self.y + dy * delta;
 
-                if (newY < constants.BORDER) {
-                    newY = (constants.BORDER - newY) + constants.BORDER;
+                if (newY < topBound) {
+                    newY = (topBound - newY) + topBound;
                     dy = -dy;
                 }
 
@@ -31,7 +32,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 }
 
                 if (newY > paddle.top) {
-                    var deltaToCollision = delta * (paddle.top - self.y) / (newY - self.y);
+                    var deltaToCollision = (paddle.top - self.y) / dy;
                     newX = self.x + dx * deltaToCollision;
                     newY = paddle.top;
 
