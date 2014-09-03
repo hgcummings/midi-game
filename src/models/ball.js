@@ -31,7 +31,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                     dx = -dx;
                 }
 
-                if (newY > paddle.top) {
+                if (newY > paddle.top && self.alive) {
                     var deltaToCollision = (paddle.top - self.y) / dy;
                     newX = self.x + dx * deltaToCollision;
                     newY = paddle.top;
@@ -52,7 +52,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
 
                 self.x = newX;
                 self.y = newY;
-            }
+            };
 
             self.update = function(delta, action) {
                 if (self.released) {

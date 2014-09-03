@@ -77,6 +77,13 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
                 expect(result[0]).toBeGreaterThan(result[1]);
             });
 
+            it('is close to (but greater than) 45 degrees beyond the edge and inside the ball radius', function() {
+                var result = model.getNormalAt(model.x - constants.PADDLE.SIZE.X / 2 - constants.BALL.RADIUS + 1);
+
+                expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
+                expect(result[0]).toBeGreaterThan(result[1]);
+            });
+
             it('returns null outside the paddle', function() {
                 var result = model.getNormalAt(model.x - constants.PADDLE.SIZE.X);
 

@@ -81,6 +81,18 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
                 expect(model.alive).toBe(false);
             });
 
+            it('ceases interacting with the paddle after dying', function() {
+                model.update(100, 'LAUNCH');
+                while (model.y < paddle.top) {
+                    model.update(100);
+                }
+                stubNormal = [0, -1];
+                model.update(100);
+                model.update(100);
+
+                expect(model.y).toBeGreaterThan(paddle.top);
+            });
+
             it('bounces off the right edge of the screen', function() {
                 model.update(100, 'LAUNCH');
                 stubNormal = [1 / Math.sqrt(2), -1 / Math.sqrt(2)];

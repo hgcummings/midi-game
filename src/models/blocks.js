@@ -47,13 +47,9 @@ define(['data/constants'], function(constants) {
         return {
             all: all,
             getTarget: function(x, y) {
-                var gapX = constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X;
-                var gap = Math.min(
-                    constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X,
-                    constants.BLOCK.SPACING.Y - constants.BLOCK.SIZE.Y) / 2;
-
-                var left = constants.BLOCK.MARGIN.Y + gapX / 2;
-                var top = constants.BLOCK.MARGIN.X;
+                var left = constants.BLOCK.MARGIN.X;
+                var top = constants.BLOCK.MARGIN.Y -
+                    (constants.BLOCK.SPACING.Y - constants.BLOCK.SIZE.Y) / 2;
 
                 var col = Math.floor((x - left) / constants.BLOCK.SPACING.X);
                 var row = Math.floor((y - top) / constants.BLOCK.SPACING.Y);
