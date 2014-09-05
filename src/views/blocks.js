@@ -20,14 +20,13 @@ define(['data/constants'], function(c) {
 
             preContext.fill();
 
-            var left = c.BLOCK.MARGIN.X + (c.BLOCK.SPACING.X - c.BLOCK.SIZE.X) / 2;
-            var top = c.BLOCK.MARGIN.Y;
-
             return {
                 drawBlock: function(block) {
-                    context.drawImage(preRenderCanvas,
-                        left + block.col * c.BLOCK.SPACING.X,
-                        top + block.row * c.BLOCK.SPACING.Y);
+                    if (block.hit) {
+                        return;
+                    }
+                    
+                    context.drawImage(preRenderCanvas, block.x, block.y);
                 }
             };
         }

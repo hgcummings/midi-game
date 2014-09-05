@@ -28,18 +28,14 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             expect(model.all[1][1].note).toBe(4);
         });
 
-        it('stores row and column against each block', function() {
+        it('stores position against each block', function() {
             var data = [[1, 2], [3, 4]];
             var model = blocks.load(data, rootNote);
 
-            for (var i = 0; i < model.all.length; ++i) {
-                for (var j = 0; j < model.all[i].length; ++j) {
-                    expect(model.all[i][j].row).toBe(i);
-                    expect(model.all[i][j].col).toBe(j);
-                }
-            }
+            expect(model.all[0][0].x).toBe(
+                constants.BLOCK.MARGIN.X + (constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X) / 2);
+            expect(model.all[0][0].y).toBe(constants.BLOCK.MARGIN.Y);
         });
-
         it('translates scale degrees to corresponding midi notes correctly', function() {
             var model = blocks.load([
                 [7, 6.5],

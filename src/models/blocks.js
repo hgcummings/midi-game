@@ -30,11 +30,14 @@ define(['data/constants'], function(constants) {
             return blocks;
         };
 
+        var left = constants.BLOCK.MARGIN.X + (constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X) / 2;
+        var top = constants.BLOCK.MARGIN.Y;
+
         var addIndices = function(blocks) {
-            for (col = 0; col < blocks[0].length; ++col) {
-                for (row = blocks.length - 1; row >= 0; --row) {
-                    blocks[row][col].row = row;
-                    blocks[row][col].col = col;
+            for (var col = 0; col < blocks[0].length; ++col) {
+                for (var row = blocks.length - 1; row >= 0; --row) {
+                    blocks[row][col].x = left + col * constants.BLOCK.SPACING.X;
+                    blocks[row][col].y = top + row * constants.BLOCK.SPACING.Y;
                 }
             }
             return blocks;
