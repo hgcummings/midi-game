@@ -7,7 +7,7 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
                 return {
                     normal: [0, -1],
                     position: [0, constants.HEIGHT - constants.BORDER],
-                    getNormalAt: function() {
+                    collideAt: function() {
                         return stubNormal;
                     }
                 }

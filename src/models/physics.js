@@ -16,8 +16,15 @@ define(['models/maths'], function(maths) {
                 v[1] - 2 * n[1] * vn
             ];
         },
-        getDistanceToPlane: getDistanceToPlane,
-        getNextCollisionPlane: function(planes, particle) {
+        simplePlane: function(normal, distance) {
+            return {
+                normal: normal,
+                position: [Math.abs(normal[0]) * distance, Math.abs(normal[1]) * distance],
+                collideAt: (function() { return normal; })
+            }
+        },
+        distanceToPlane: getDistanceToPlane,
+        nextCollisionPlane: function(planes, particle) {
             var minTimeToPlane = Infinity;
             var closestPlane = null;
             planes.forEach(function(plane) {

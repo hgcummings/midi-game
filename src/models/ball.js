@@ -10,12 +10,9 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             var dx = 0;
             var dy = -(constants.WIDTH / 1250);
             
-            var topPlane = { normal: [0, 1], position: [0, constants.BORDER],
-                getNormalAt: function() { return [0, 1]; } };
-            var leftPlane = { normal: [1, 0], position: [constants.BORDER, 0], 
-                getNormalAt: function() { return [1, 0]; } };
-            var rightPlane = { normal: [-1, 0], position: [constants.WIDTH - constants.BORDER, 0], 
-                getNormalAt: function() { return [-1, 0]; }};
+            var topPlane = physics.simplePlane([0, 1], constants.BORDER);
+            var leftPlane = physics.simplePlane([1, 0], constants.BORDER);
+            var rightPlane = physics.simplePlane([-1, 0], constants.WIDTH - constants.BORDER);
 
             var updatePosition = function(delta) {
                 var newX = self.x + dx * delta;
@@ -23,19 +20,19 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                
                 var planes = [topPlane, leftPlane, rightPlane, paddle.getCollisionPlane()];
                 
-                var plane = physics.getNextCollisionPlane(planes, { x: self.x, y: self.y, dx: dx, dy: dy});
+                var plane = physics.nextCollisionPlane(planes, { x: self.x, y: self.y, dx: dx, dy: dy});
                 
                 if (plane !== null) {
-                    var previousDistanceToPlane = physics.getDistanceToPlane(plane, self);
-                    var currentDistanceToPlane = physics.getDistanceToPlane(plane, { x: newX, y: newY});
+                    var previousDistanceToPlane = physics.distanceToPlane(plane, self);
+                    var currentDistanceToPlane = physics.distanceToPlane(plane, { x: newX, y: newY});
 
-                    if (previousDistanceToPlane > 0 && currentDistanceToPlane < 0) {
+                    if (previousDistanceToPlane > 0 && currentDistanceToPlane <= 0) {
                         var deltaToCollision =
                             delta * previousDistanceToPlane / (previousDistanceToPlane - currentDistanceToPlane);
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
 
-                        var normal = plane.getNormalAt(newX);
+                        var normal = plane.collideAt(newX);
                         if (normal) {
                             var newV = physics.reflectionV([dx, dy], normal);
                             dx = newV[0];

@@ -81,30 +81,30 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
                 expect(plane.position).toEqual([0, model.top]);
             });
 
-            describe('getNormalAt', function() {
+            describe('collideAt', function() {
                 it('returns straight up in dead center of paddle', function() {
-                    var result = plane.getNormalAt(model.x);
+                    var result = plane.collideAt(model.x);
 
                     expect(result[0]).toBe(0);
                     expect(result[1]).toBe(-1);
                 });
 
                 it('is close to (but greater than) 45 degrees at the edge', function() {
-                    var result = plane.getNormalAt(model.x - constants.PADDLE.SIZE.X / 2);
+                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X / 2);
 
                     expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
                     expect(result[0]).toBeGreaterThan(result[1]);
                 });
 
                 it('is close to (but greater than) 45 degrees beyond the edge and inside the ball radius', function() {
-                    var result = plane.getNormalAt(model.x - constants.PADDLE.SIZE.X / 2 - constants.BALL.RADIUS + 1);
+                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X / 2 - constants.BALL.RADIUS + 1);
 
                     expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
                     expect(result[0]).toBeGreaterThan(result[1]);
                 });
 
                 it('returns null outside the paddle', function() {
-                    var result = plane.getNormalAt(model.x - constants.PADDLE.SIZE.X);
+                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X);
 
                     expect(result).toBeNull();
                 });

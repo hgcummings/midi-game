@@ -23,7 +23,7 @@ define(['data/constants'], function(constants) {
                 return {
                     normal: [0, -1],
                     position: [0, self.top],
-                    getNormalAt: self.getNormalAt,
+                    collideAt: self.getNormalAt,
                     name: 'paddlePlane'
                 };
             };
