@@ -7,7 +7,7 @@ define(['data/constants'], function(c) {
 
                     context.fillRect(
                         paddle.x - c.PADDLE.SIZE.X / 2,
-                        c.HEIGHT - c.PADDLE.MARGIN.Y - c.PADDLE.SIZE.Y,
+                        paddle.top,
                         c.PADDLE.SIZE.X,
                         c.PADDLE.SIZE.Y);
                 }

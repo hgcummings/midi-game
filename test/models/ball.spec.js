@@ -2,11 +2,17 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
     describe('ball', function() {
         var stubNormal = null;
         var paddle = {
-             x: constants.WIDTH / 2,
-             top: constants.HEIGHT - constants.BORDER,
-             getNormalAt: function() {
-                 return stubNormal;
-             }
+            x: constants.WIDTH / 2,
+            getCollisionPlane: function() {
+                return {
+                    normal: [0, -1],
+                    position: [0, constants.HEIGHT - constants.BORDER],
+                    getNormalAt: function() {
+                        return stubNormal;
+                    }
+                }
+            },
+            top: constants.HEIGHT - constants.BORDER
         };
         var model;
 
@@ -22,7 +28,6 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
 
         describe('update', function() {
             it('flies upward with constant speed when launched', function() {
-                var previousPosition = model.y;
                 model.update(100, 'LAUNCH');
                 var previousDistance = getDistanceTravelled();
                 expect(previousDistance).toBeLessThan(0);
@@ -81,7 +86,7 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
                 expect(model.alive).toBe(false);
             });
 
-            it('ceases interacting with the paddle after dying', function() {
+            it('ceases interacting with the paddle after passing below it', function() {
                 model.update(100, 'LAUNCH');
                 while (model.y < paddle.top) {
                     model.update(100);
@@ -114,6 +119,12 @@ define(['models/ball', 'data/constants'], function(ball, constants) {
 
                 expect(model.x).toBeGreaterThan(0);
             });
+            
+//            it('bounces off the edges of blocks', function() {
+//                model.update(100, 'LAUNCH');
+//                
+//                
+//            });
         });
     });
 });
