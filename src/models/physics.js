@@ -22,7 +22,7 @@ define(['models/maths'], function(maths) {
                 v[1] - 2 * n[1] * vn
             ];
         },
-        createPoint: function(x, y, activeCallback) {
+        createPoint: function(x, y, collisionCallback) {
             var position = [x, y];
             var self = {
                 position: function() { return position; },
@@ -30,7 +30,7 @@ define(['models/maths'], function(maths) {
                     return maths.normalise([particle.x - x, particle.y - y])
                 },
                 collideAt: function(particleX, particleY) {
-                    if (!activeCallback || activeCallback()) {
+                    if (!collisionCallback || collisionCallback()) {
                         return maths.normalise([particleX - x, particleY - y]);
                     } else {
                         return null;

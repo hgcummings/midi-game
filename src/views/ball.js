@@ -5,7 +5,7 @@ define(['data/constants'], function(c) {
                 drawBall: function(ball) {
                     context.beginPath();
                     context.fillStyle = '#EEEEEE';
-                    context.arc(ball.x, ball.y, c.BALL.RADIUS, 2 * Math.PI, false);
+                    context.arc(Math.round(ball.x), Math.round(ball.y), c.BALL.RADIUS, 2 * Math.PI, false);
                     context.fill();
                     context.closePath();
                 }
