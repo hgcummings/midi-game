@@ -20,18 +20,20 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 var maxCheckTime = delta + constants.BALL.RADIUS / speed;
                                 
                 while((!collision) && (object = sortedObjects.shift())) {
-//                    if (object.collisionTime > maxCheckTime) {
-//                        break;
-//                    }
+                    if (object.collisionTime > maxCheckTime) {
+                        break;
+                    }
                     
                     var previousDistanceToObject =
                         object.distance(self) - constants.BALL.RADIUS;
-                    var currentDistanceToPlane =
+                    var currentDistanceToObject =
                         object.distance({ x: newX, y: newY}) - constants.BALL.RADIUS;
 
-                    if (previousDistanceToObject > 0 && currentDistanceToPlane <= 0) {
+                    if (previousDistanceToObject > (-constants.BALL.RADIUS) &&
+                        previousDistanceToObject > currentDistanceToObject &&
+                        currentDistanceToObject <= 0) {
                         var deltaToCollision =
-                            delta * previousDistanceToObject / (previousDistanceToObject - currentDistanceToPlane);
+                            delta * previousDistanceToObject / (previousDistanceToObject - currentDistanceToObject);
                         
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
@@ -42,8 +44,8 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                             dy = newV[1];
                         }
 
-                        newX = newX + dx * delta;
-                        newY = newY + dy * delta;
+                        newX = newX + dx * (delta - deltaToCollision);
+                        newY = newY + dy * (delta - deltaToCollision);
                     }
                 }
                 

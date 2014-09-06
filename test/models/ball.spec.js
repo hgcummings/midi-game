@@ -44,7 +44,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
 
                 expect(model.y).toBeGreaterThan(constants.BORDER);
             });
-
+            
             it('bounces off the paddle', function() {
                 model.update(100, 'LAUNCH');
                 stubNormal = [0, -1];
@@ -153,6 +153,44 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                 
                 model.update(100);
                 expect(model.x).toBeGreaterThan(point.position()[0]);
+            });
+            
+            it('bounces off previously irrelevant very nearby planes', function() {
+                model.update(100, 'LAUNCH');
+                model.update(100);
+
+                var collided = false;
+                var newPlane = physics.createPlane([0, 1], model.y - constants.BALL.RADIUS / 2, function() {
+                    collided = true;
+                    return [0, 1];
+                });
+                objects.push(newPlane);
+                
+                model.update(100);
+                
+                expect(collided).toBe(true);
+            });
+            
+            it('maintains speed through collision with plane', function() {
+                model.update(100, 'LAUNCH');
+                var prevY = model.y;
+                model.update(100);
+                var prevDistance = Math.abs(model.y - prevY);
+
+                var collided = false;
+                var newPlane = physics.createPlane([0, 1], model.y - constants.WIDTH / 4, function() {
+                    collided = true;
+                    return [0, 1];
+                });
+                objects.push(newPlane);
+
+                while (!collided) {
+                    prevY = model.y;
+                    model.update(100);
+                }
+                
+                var effectivePlaneY = newPlane.position()[1] + constants.BALL.RADIUS;
+                expect(prevY - effectivePlaneY + model.y - effectivePlaneY).toBeCloseTo(prevDistance, 8);
             });
         });
     });
