@@ -1,7 +1,11 @@
 define(['models/maths'], function(maths) {
     var getDistanceToPlane = function(plane, particle) {
+        var position = [
+            plane.position()[0] + particle.r * plane.positionNormal()[0],
+            plane.position()[1] + particle.r * plane.positionNormal()[1],
+        ];
         return maths.dotProduct([particle.x, particle.y], plane.positionNormal()) -
-            maths.dotProduct(plane.position(), plane.positionNormal());
+            maths.dotProduct(position, plane.positionNormal());
     };
     
     var getCollisionTime = function(object, particle) {
@@ -39,7 +43,7 @@ define(['models/maths'], function(maths) {
             };
             
             self.distance = function(particle) {
-                return maths.cartesianDistance(position, [particle.x, particle.y]);
+                return maths.cartesianDistance(position, [particle.x, particle.y]) - particle.r;
             };
             
             return self;

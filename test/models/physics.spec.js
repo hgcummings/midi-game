@@ -7,7 +7,7 @@ define(['models/physics'], function(physics) {
                 var horizontal = physics.createPlane([0, -1], 100);
                 var vertical = physics.createPlane([-1, 0], 100);
 
-                var particle = { x: 80, y: 90, dx: 5, dy: 2 };
+                var particle = { x: 80, y: 90, dx: 5, dy: 2, r: 2 };
 
                 var result = physics.sortByCollisionTime([passed, horizontal, vertical], particle);
 
@@ -19,10 +19,10 @@ define(['models/physics'], function(physics) {
             it('returns distance from particle to plane', function() {
                 var topPlane = physics.createPlane([0, 1], 10);
                 var bottomPlane = physics.createPlane([0, -1], 90);
-                var particle = { x: 50, y:50, dx: 0, dy: 2 };
+                var particle = { x: 50, y:50, dx: 0, dy: 2, r:5 };
 
-                expect(topPlane.distance(particle)).toBe(40);
-                expect(bottomPlane.distance(particle)).toBe(40);
+                expect(topPlane.distance(particle)).toBe(35);
+                expect(bottomPlane.distance(particle)).toBe(35);
             });
         });
         
@@ -30,9 +30,9 @@ define(['models/physics'], function(physics) {
             it('returns distance from particle to point', function() {
                 var point = physics.createPoint(10, 10);
                 
-                var particle = { x: 13, y: 14 };
+                var particle = { x: 13, y: 14, r:2 };
                 
-                expect(point.distance(particle)).toBe(5);
+                expect(point.distance(particle)).toBe(3);
             });
         });
         
@@ -40,8 +40,8 @@ define(['models/physics'], function(physics) {
             it ('returns normalised vector from point to particle', function() {
                 var point = physics.createPoint(10, 10);
 
-                var headOnCollision = { x: 10, y: 20 };
-                var glancingCollsion = { x: 17, y: 17 };
+                var headOnCollision = { x: 10, y: 20, r:2 };
+                var glancingCollsion = { x: 17, y: 17, r:2 };
 
                 expect(point.collideAt(headOnCollision.x, headOnCollision.y)).toEqual([0, 1]);
                 
