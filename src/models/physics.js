@@ -4,6 +4,13 @@ define(['models/maths'], function(maths) {
             maths.dotProduct(plane.position, plane.normal);
     };
     
+    var getCollisionTime = function(plane, particle) {
+        var distanceToPlane = getDistanceToPlane(plane, particle);
+        var speedToPlane = -maths.dotProduct([particle.dx, particle.dy], plane.normal);
+        var timeToPlane = distanceToPlane / speedToPlane;
+        return timeToPlane;
+    };
+
     return {
         /**
          * Calculate the reflection vector based on the incident velocity and the unit normal
@@ -23,20 +30,15 @@ define(['models/maths'], function(maths) {
             }
         },
         distanceToPlane: getDistanceToPlane,
-        nextCollisionPlane: function(planes, particle) {
-            var minTimeToPlane = Infinity;
-            var closestPlane = null;
-            planes.forEach(function(plane) {
-                var distanceToPlane = getDistanceToPlane(plane, particle);
-                var speedToPlane = -maths.dotProduct([particle.dx, particle.dy], plane.normal);
-                var timeToPlane = distanceToPlane/speedToPlane;
-                
-                if (timeToPlane > 0 && timeToPlane < minTimeToPlane) {
-                    minTimeToPlane = timeToPlane;
-                    closestPlane = plane;
-                }
+        sortByCollisionTime: function (planes, particle) {
+            var result = planes.concat();
+            result.forEach(function(plane) {
+                plane.collisionTime = getCollisionTime(plane, particle);
             });
-            return closestPlane;
+            result.sort(function(a, b) {
+                return a.collisionTime - b.collisionTime;
+            });
+            return result;
         }
     };
 });

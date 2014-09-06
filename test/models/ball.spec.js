@@ -1,4 +1,4 @@
-define(['models/ball', 'data/constants', 'models/fixtures'], function(ball, constants, fixtures) {
+define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], function(ball, constants, fixtures, physics) {
     describe('ball', function() {
         var stubNormal = null;
         var paddle = {
@@ -6,15 +6,18 @@ define(['models/ball', 'data/constants', 'models/fixtures'], function(ball, cons
             top: constants.HEIGHT - constants.BORDER
         };
         var model;
+        var planes;
 
         beforeEach(function() {
-            model = ball.init(paddle, fixtures.init().getCollisionPlanes().concat([{
+            var stubPaddle = {
                 normal: [0, -1],
                 position: [0, constants.HEIGHT - constants.BORDER],
                 collideAt: function() {
                     return stubNormal;
                 }
-            }]));
+            };
+            planes = fixtures.init().getCollisionPlanes().concat([stubPaddle]);
+            model = ball.init(paddle, planes);
         });
 
         describe('init', function() {
@@ -70,7 +73,25 @@ define(['models/ball', 'data/constants', 'models/fixtures'], function(ball, cons
                 model.update(100);
 
                 expect(model.x).toBeGreaterThan(paddle.x);
-                expect(model.y).toBeCloseTo(paddle.top);
+                expect(model.y).toBeCloseTo(paddle.top - constants.BALL.RADIUS);
+            });
+            
+            it('collides edge-to-edge with the paddle', function() {
+                model.update(100, 'LAUNCH');
+                stubNormal = [0, -1];
+
+                model.update(100);
+                var line = model.y;
+                while (model.y <= line) {
+                    model.update(100);
+                }
+                var maxY = 0;
+                while (model.y > line) {
+                    model.update(1);
+                    maxY = Math.max(maxY, model.y);
+                }
+
+                expect(maxY).toBeLessThan(paddle.top - constants.BALL.RADIUS);
             });
 
             it('dies if it misses the paddle', function() {

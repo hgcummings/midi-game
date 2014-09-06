@@ -13,22 +13,25 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             var updatePosition = function(delta) {
                 var newX = self.x + dx * delta;
                 var newY = self.y + dy * delta;
+                var collision = null;
+                var sortedPlanes = physics.sortByCollisionTime(planes, { x: self.x, y: self.y, dx: dx, dy: dy});
+                var plane;
                 
-                var plane = physics.nextCollisionPlane(planes, { x: self.x, y: self.y, dx: dx, dy: dy});
-                
-                if (plane !== null) {
-                    var previousDistanceToPlane = physics.distanceToPlane(plane, self);
-                    var currentDistanceToPlane = physics.distanceToPlane(plane, { x: newX, y: newY});
+                while((!collision) && (plane = sortedPlanes.shift())) {
+                    var previousDistanceToPlane =
+                        physics.distanceToPlane(plane, self) - constants.BALL.RADIUS;
+                    var currentDistanceToPlane =
+                        physics.distanceToPlane(plane, { x: newX, y: newY}) - constants.BALL.RADIUS;
 
                     if (previousDistanceToPlane > 0 && currentDistanceToPlane <= 0) {
                         var deltaToCollision =
                             delta * previousDistanceToPlane / (previousDistanceToPlane - currentDistanceToPlane);
+                        
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
 
-                        var normal = plane.collideAt(newX);
-                        if (normal) {
-                            var newV = physics.reflectionV([dx, dy], normal);
+                        if (collision = plane.collideAt(newX)) {
+                            var newV = physics.reflectionV([dx, dy], collision);
                             dx = newV[0];
                             dy = newV[1];
                         }

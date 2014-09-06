@@ -1,18 +1,19 @@
 define(['models/physics'], function(physics) {
     describe('physics', function() {
         
-        describe('nextCollisionPlane', function() {
-            it('returns the next plane with which the particle will collide', function() {
+        describe('sortByCollisionTime', function() {
+            it('returns the planes in the order with which particle will collide', function() {
                 var passed = { normal: [0, -1],  position: [0, 80] };
                 var horizontal = { normal: [0, -1], position: [0, 100] };
                 var vertical = { normal: [-1, 0], position: [100, 0] };
-                
+
                 var particle = { x: 80, y: 90, dx: 5, dy: 2 };
-                
-                var result = physics.nextCollisionPlane([passed, horizontal, vertical], particle);
-                
-                expect(result).toBe(vertical);
+
+                var result = physics.sortByCollisionTime([passed, horizontal, vertical], particle);
+
+                expect(result).toEqual([passed, vertical, horizontal]);
             });
+        });
             
         describe('getDistanceToPlane', function() {
             it('returns distance from particle to plane', function() {
@@ -23,9 +24,6 @@ define(['models/physics'], function(physics) {
                 expect(physics.distanceToPlane(topPlane, particle)).toBe(40);
                 expect(physics.distanceToPlane(bottomPlane, particle)).toBe(40);
             });
-        });
-            
-
         });
     });
 });
