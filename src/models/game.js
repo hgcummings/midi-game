@@ -1,6 +1,4 @@
-define(
-    ['models/blocks', 'models/paddle', 'models/ball', 'data/constants'],
-function(blocks, paddle, ball, constants) {
+define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], function(fixtures, blocks, paddle, ball) {
     return {
         init: function(level, input) {
             var self = {};
@@ -12,9 +10,11 @@ function(blocks, paddle, ball, constants) {
                 self.ball.update(delta, input.getAction());
                 prevTime = gameTime;
             };
-            self.blocks = blocks.load(level);
+            self.fixtures = fixtures.init();
+            self.blocks = blocks.init(level);
             self.paddle = paddle.init();
-            self.ball = ball.init(self.paddle);
+            self.ball = ball.init(self.paddle, self.fixtures.getCollisionPlanes()
+                .concat(self.paddle.getCollisionPlanes()));
 
             return self;
         }

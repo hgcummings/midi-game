@@ -19,13 +19,13 @@ define(['data/constants'], function(constants) {
                 }
             };
             
-            self.getCollisionPlane = function() {
-                return {
+            self.getCollisionPlanes = function() {
+                return [{
                     normal: [0, -1],
                     position: [0, self.top],
                     collideAt: self.getNormalAt,
                     name: 'paddlePlane'
-                };
+                }];
             };
 
             self.getNormalAt = function(x) {

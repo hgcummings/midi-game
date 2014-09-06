@@ -1,6 +1,6 @@
 define(['data/constants', 'models/physics'], function(constants, physics) {
     return {
-        init: function(paddle) {
+        init: function(paddle, planes) {
             var self = {};
             self.alive = true;
             self.released = false;
@@ -10,15 +10,9 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             var dx = 0;
             var dy = -(constants.WIDTH / 1250);
             
-            var topPlane = physics.simplePlane([0, 1], constants.BORDER);
-            var leftPlane = physics.simplePlane([1, 0], constants.BORDER);
-            var rightPlane = physics.simplePlane([-1, 0], constants.WIDTH - constants.BORDER);
-
             var updatePosition = function(delta) {
                 var newX = self.x + dx * delta;
                 var newY = self.y + dy * delta;
-               
-                var planes = [topPlane, leftPlane, rightPlane, paddle.getCollisionPlane()];
                 
                 var plane = physics.nextCollisionPlane(planes, { x: self.x, y: self.y, dx: dx, dy: dy});
                 

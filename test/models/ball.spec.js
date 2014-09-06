@@ -1,23 +1,20 @@
-define(['models/ball', 'data/constants'], function(ball, constants) {
+define(['models/ball', 'data/constants', 'models/fixtures'], function(ball, constants, fixtures) {
     describe('ball', function() {
         var stubNormal = null;
         var paddle = {
             x: constants.WIDTH / 2,
-            getCollisionPlane: function() {
-                return {
-                    normal: [0, -1],
-                    position: [0, constants.HEIGHT - constants.BORDER],
-                    collideAt: function() {
-                        return stubNormal;
-                    }
-                }
-            },
             top: constants.HEIGHT - constants.BORDER
         };
         var model;
 
         beforeEach(function() {
-            model = ball.init(paddle);
+            model = ball.init(paddle, fixtures.init().getCollisionPlanes().concat([{
+                normal: [0, -1],
+                position: [0, constants.HEIGHT - constants.BORDER],
+                collideAt: function() {
+                    return stubNormal;
+                }
+            }]));
         });
 
         describe('init', function() {

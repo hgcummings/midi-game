@@ -66,7 +66,7 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
             var plane;
             
             beforeEach(function() {
-                plane = model.getCollisionPlane();
+                plane = model.getCollisionPlanes()[0];
             });
             
             it('is horizontal', function() {

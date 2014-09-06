@@ -12,7 +12,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
 
         it('generates a block for each data point', function() {
             var data = [[1, 2], [3, 4]];
-            var model = blocks.load(data, rootNote);
+            var model = blocks.init(data, rootNote);
 
             for (var i = 0; i < data.length; ++i) {
                 expect(model.all[i].length).toBe(data[i].length);
@@ -20,7 +20,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         });
 
         it('stores the original note against each block', function() {
-            var model = blocks.load([[1, 2], [3, 4]], rootNote);
+            var model = blocks.init([[1, 2], [3, 4]], rootNote);
 
             expect(model.all[0][0].note).toBe(1);
             expect(model.all[0][1].note).toBe(2);
@@ -30,14 +30,14 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
 
         it('stores position against each block', function() {
             var data = [[1, 2], [3, 4]];
-            var model = blocks.load(data, rootNote);
+            var model = blocks.init(data, rootNote);
 
             expect(model.all[0][0].x).toBe(
                 constants.BLOCK.MARGIN.X + (constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X) / 2);
             expect(model.all[0][0].y).toBe(constants.BLOCK.MARGIN.Y);
         });
         it('translates scale degrees to corresponding midi notes correctly', function() {
-            var model = blocks.load([
+            var model = blocks.init([
                 [7, 6.5],
                 [6, 5.5],
                 [5, 4.5],
@@ -57,7 +57,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         });
 
         it('ensures higher blocks always have higher notes, by changing octave', function() {
-            var model = blocks.load([
+            var model = blocks.init([
                 [1, 5],
                 [5, 3],
                 [3, 1],
@@ -92,7 +92,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         });
 
         it('returns null if no block nearby', function() {
-            var model = blocks.load(level, 0);
+            var model = blocks.init(level, 0);
 
             var result = model.getTarget(constants.WIDTH / 2, constants.HEIGHT - constants.BORDER);
 
@@ -101,7 +101,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
 
         it('returns the block in the area of the point specified', function() {
             level[2][4] = 1.5;
-            var model = blocks.load(level, 0);
+            var model = blocks.init(level, 0);
 
             var result = model.getTarget(240, 160); //TODO: This will fail if the scale factor changes
 

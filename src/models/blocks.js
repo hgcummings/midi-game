@@ -69,6 +69,6 @@ define(['data/constants'], function(constants) {
     };
 
     return {
-        load: loadLevel
+        init: loadLevel
     }
 });

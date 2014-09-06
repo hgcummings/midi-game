@@ -7,7 +7,7 @@ define(['models/game', 'data/constants'], function(game, constants) {
             action: null,
             getDirection: function() { return stubInput.direction; },
             getAction: function() { return stubInput.action; }
-        }
+        };
 
         beforeEach(function() {
             model = game.init(level, stubInput);
