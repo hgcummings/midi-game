@@ -19,8 +19,7 @@ define(['models/game', 'data/constants'], function(game, constants) {
                 expect(model.ball.x).toBeDefined();
                 expect(model.ball.y).toBeDefined();
                 expect(model.ball.x).toBe(model.paddle.x);
-                expect(model.ball.y).toBeLessThan(
-                    constants.HEIGHT - constants.PADDLE.MARGIN.Y - constants.PADDLE.SIZE.Y);
+                expect(model.ball.y).toBeLessThan(model.paddle.top);
             });
 
             it('links the ball and paddle to user input', function() {
@@ -32,6 +31,10 @@ define(['models/game', 'data/constants'], function(game, constants) {
                 var currentPosition = model.paddle.x;
                 expect(currentPosition).toBeGreaterThan(initialPosition);
                 expect(model.ball.x).toBe(currentPosition);
+            });
+            
+            it('starts with three spare lives', function() {
+                expect(model.spareLives).toBe(3);
             });
         });
 
@@ -45,6 +48,30 @@ define(['models/game', 'data/constants'], function(game, constants) {
                 model.update(1000);
 
                 expect(model.ball.y).toBeLessThan(initialPosition);
+            });
+
+            it('uses up a life and creates a new ball when the ball is lost', function() {
+                stubInput.action = 'LAUNCH';
+                model.update(500);
+                stubInput.direction = 1;
+
+                var firstBall = model.ball;
+                
+                var lastY = model.ball.y;
+                
+                while(model.ball.y < model.paddle.top - constants.BALL.RADIUS) {
+                    model.update(100);
+                    lastY = model.ball.y;
+                }
+                
+                for (var i = 0; i < 10; ++i) {
+                    model.update(100);
+                }
+
+                expect(model.spareLives).toBe(2);
+                expect(model.ball).not.toBe(firstBall);
+                expect(model.ball.x).toBe(model.paddle.x);
+                expect(model.ball.y).toBeLessThan(model.paddle.top);
             });
         });
     });

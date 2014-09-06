@@ -35,7 +35,7 @@ define(function () {
                             return {
                                 selectInstrument: selectInstrument,
                                 playNote: playNote
-                            }
+                            };
                         };
 
                         callback({
@@ -47,5 +47,5 @@ define(function () {
                 });
             }
         }
-    }
+    };
 });

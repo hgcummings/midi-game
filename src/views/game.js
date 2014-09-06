@@ -10,7 +10,7 @@ function(constants, fixtures, blocks, paddle, ball) {
 
             var context = canvas.getContext('2d');
             var startTime = new Date().getTime();
-            fixtures = fixtures.init(context);
+            fixtures = fixtures.init(context, model);
             blocks = blocks.init(context);
             paddle = paddle.init(context);
             ball = ball.init(context);
@@ -21,7 +21,7 @@ function(constants, fixtures, blocks, paddle, ball) {
 
                 context.clearRect(0, 0, constants.WIDTH, constants.HEIGHT);
 
-                fixtures.drawBorder();
+                fixtures.drawBorder(model);
                 model.blocks.all.forEach(function(row) {
                     row.forEach(blocks.drawBlock);
                 });
@@ -33,5 +33,5 @@ function(constants, fixtures, blocks, paddle, ball) {
 
             window.requestAnimationFrame(animate);
         }
-    }
+    };
 });

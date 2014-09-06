@@ -25,7 +25,7 @@ define(function() {
             };
 
             var getDirection = function(keyCode) {
-                if (event.keyCode === 191) {
+                if (keyCode === 191) {
                     return 1;
                 } else if (event.keyCode === 90) {
                     return -1;
@@ -33,10 +33,10 @@ define(function() {
             };
 
             var getAction = function(keyCode) {
-                if (event.keyCode === 32) {
+                if (keyCode === 32) {
                     return 'LAUNCH';
                 }
-            }
+            };
 
             document.onkeydown = function(event) {
                 if (getNote(event.keyCode)) {
@@ -68,9 +68,9 @@ define(function() {
 
             self.getAction = function() {
                 return currentAction;
-            }
+            };
 
             return self;
         }
-    }
+    };
 });

@@ -91,7 +91,7 @@ define(['input/keyboard'], function(keyboard) {
 
                 expect(input.getAction()).toBeNull();
             });
-        })
+        });
 
 
         var dispatchKeyDown = function(key) {
@@ -120,5 +120,5 @@ define(['input/keyboard'], function(keyboard) {
             }
         };
 
-    })
+    });
 });

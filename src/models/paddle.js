@@ -24,14 +24,14 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             };
 
             self.positionNormal = function(x) {
-                var offset = x - self.x;
+                var offset = x - self.x, overlap, angle;
                 if (Math.abs(offset) < halfWidth) {
-                    var overlap = offset / halfWidth;
-                    var angle = angleAtEdge * Math.PI / 4 * overlap * overlap * overlap;
+                    overlap = offset / halfWidth;
+                    angle = angleAtEdge * Math.PI / 4 * overlap * overlap * overlap;
                     return [Math.sin(angle), -Math.cos(angle)];
                 } else if (Math.abs(offset) < halfWidth + constants.BALL.RADIUS) {
-                    var overlap = Math.abs(offset) - halfWidth; 
-                    var angle = (angleAtEdge + (glancingAngleAtEdge - angleAtEdge) *
+                    overlap = Math.abs(offset) - halfWidth; 
+                    angle = (angleAtEdge + (glancingAngleAtEdge - angleAtEdge) *
                         (overlap / constants.BALL.RADIUS)) * offset / Math.abs(offset);
                     return [Math.sin(angle), -Math.cos(angle)];
                 } else {
@@ -44,5 +44,5 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
 
             return self;
         }
-    }
+    };
 });

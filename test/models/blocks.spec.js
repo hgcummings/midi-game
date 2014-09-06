@@ -2,8 +2,8 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
     function getNotes(fromBlocks) {
         return fromBlocks.map(function (row) {
             return row.map(function (block) {
-                return block.midiNote
-            })
+                return block.midiNote;
+            });
         });
     }
 
@@ -337,7 +337,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         
         function pointsMatching(x, y) {
             return model.getCollisionPoints().filter(
-                function(point) { return point.position()[0] === x && point.position()[1] === y});
+                function(point) { return point.position()[0] === x && point.position()[1] === y; });
         }
     });
 });

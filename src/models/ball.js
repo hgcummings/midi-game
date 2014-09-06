@@ -38,7 +38,8 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
 
-                        if (collision = object.collideAt(newX, newY)) {
+                        collision = object.collideAt(newX, newY);
+                        if (collision) {
                             var newV = physics.reflectionV([dx, dy], collision);
                             dx = newV[0];
                             dy = newV[1];

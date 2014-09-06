@@ -18,6 +18,9 @@
     "karma-chrome-launcher": "~0.1.4",
     "karma-jasmine": "~0.2.0",
     "karma-requirejs": "~0.2.2",
-    "requirejs": "~2.1.14"
+    "requirejs": "~2.1.14",
+    "gulp-jshint": "~1.8.4",
+    "jshint-stylish": "~0.4.0",
+    "karma-coverage": "~0.2.6"
   }
 }

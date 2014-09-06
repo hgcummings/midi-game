@@ -27,7 +27,7 @@ define(['models/maths'], function(maths) {
             var self = {
                 position: function() { return position; },
                 positionNormal: function(particle) {
-                    return maths.normalise([particle.x - x, particle.y - y])
+                    return maths.normalise([particle.x - x, particle.y - y]);
                 },
                 collideAt: function(particleX, particleY) {
                     if (!collisionCallback || collisionCallback()) {
@@ -39,7 +39,7 @@ define(['models/maths'], function(maths) {
             };
             
             self.distance = function(particle) {
-                return maths.cartesianDistance(position, [particle.x, particle.y])
+                return maths.cartesianDistance(position, [particle.x, particle.y]);
             };
             
             return self;
@@ -51,7 +51,7 @@ define(['models/maths'], function(maths) {
             }
             
             var self = {
-                positionNormal: function() { return normal },
+                positionNormal: function() { return normal; },
                 position: position,
                 collideAt: collisionCallback || (function() { return normal; })
             };

@@ -18,5 +18,5 @@ define(function() {
         BALL: {
             RADIUS: 5
         }
-    }
-})
+    };
+});

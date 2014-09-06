@@ -17,7 +17,7 @@ define(['menu'], function(menu) {
 
         var createOutput = function(id, name) {
             return { id: id, name: name };
-        }
+        };
 
         beforeEach(function() {
             channels = [];

@@ -87,7 +87,8 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 if (block.hit) {
                     return false;
                 }
-                return block.hit = true;
+                block.hit = true;
+                return true;
             };
             points.push(physics.createPoint(
                 block.x, block.y, collide));
@@ -114,7 +115,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             return {
                 note: note,
                 midiNote: baseNote + scaleDegrees.indexOf(note)
-            }
+            };
         };
 
         var adjustNotes = function(blocks) {
@@ -164,5 +165,5 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
 
     return {
         init: loadLevel
-    }
+    };
 });
