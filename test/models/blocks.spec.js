@@ -175,6 +175,30 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             });
         });
 
+        describe('returns collisions with blocks in first column', function() {
+            var block;
+
+            beforeEach(function() {
+                block = model.all[5][0];
+            });
+
+            it('from top', function() {
+                expect(topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1])).toEqual([0, -1]);
+            });
+
+            it('from bottom', function() {
+                expect(bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1])).toEqual([0, 1]);
+            });
+
+            it('from left', function() {
+                expect(leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1])).toEqual([-1, 0]);
+            });
+
+            it('from right', function() {
+                expect(rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1])).toEqual([1, 0]);
+            });
+        });
+
         describe('does not return collisions for already hit blocks', function() {
             var block;
 

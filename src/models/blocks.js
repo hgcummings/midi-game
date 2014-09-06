@@ -43,7 +43,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 rowTop(row) + constants.BLOCK.SIZE.Y * (normalY + 1) / 2,
                 function (x, y) {
                     var col = getColumn(x);
-                    if (col && !blocks[row][col].hit) {
+                    if (col !== null && !blocks[row][col].hit) {
                         blocks[row][col].hit = true;
                         return [0, normalY];
                     }
@@ -58,7 +58,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 columnLeft(col) + constants.BLOCK.SIZE.X * (normalX + 1) / 2,
                 function (x, y) {
                     var row = getRow(y);
-                    if (row && !blocks[row][col].hit) {
+                    if (row !== null && !blocks[row][col].hit) {
                         blocks[row][col].hit = true;
                         return [normalX, 0];
                     }
