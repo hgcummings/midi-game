@@ -9,13 +9,9 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
         var planes;
 
         beforeEach(function() {
-            var stubPaddle = {
-                normal: [0, -1],
-                position: [0, constants.HEIGHT - constants.BORDER],
-                collideAt: function() {
+            var stubPaddle = physics.createPlane([0, -1], constants.HEIGHT - constants.BORDER, function() {
                     return stubNormal;
-                }
-            };
+                });
             planes = fixtures.init().getCollisionPlanes().concat([stubPaddle]);
             model = ball.init(paddle, planes);
         });

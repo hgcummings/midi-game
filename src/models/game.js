@@ -14,6 +14,7 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
             self.blocks = blocks.init(level);
             self.paddle = paddle.init();
             self.ball = ball.init(self.paddle, self.fixtures.getCollisionPlanes()
+                .concat(self.blocks.getCollisionPlanes())
                 .concat(self.paddle.getCollisionPlanes()));
 
             return self;

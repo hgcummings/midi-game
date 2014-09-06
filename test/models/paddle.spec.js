@@ -62,23 +62,25 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
             });
         });
         
-        describe('collision plane', function() {
+        describe('primary collision plane', function() {
             var plane;
             
             beforeEach(function() {
-                plane = model.getCollisionPlanes()[0];
+                var planes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === -1; });
+                expect(planes.length).toBe(1);
+                plane = planes[0];
             });
             
             it('is horizontal', function() {
-                expect(plane.normal[0]).toBe(0);
+                expect(plane.normal()[0]).toBe(0);
             });
             
             it('can be collided with from above', function() {
-                expect(plane.normal[1]).toBe(-1);
+                expect(plane.normal()[1]).toBe(-1);
             });
             
             it('is at the top of the paddle', function() {
-                expect(plane.position).toEqual([0, model.top]);
+                expect(plane.position()).toEqual([0, model.top]);
             });
 
             describe('collideAt', function() {

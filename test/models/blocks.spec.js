@@ -76,36 +76,190 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             ]);
         });
     });
-
-    describe('getTarget', function() {
-        var level;
-
+    
+    describe('getCollisionPlanes', function() {
+        var model;
+        
         beforeEach(function() {
-            level = [
+            model = blocks.init([
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            ];
+            ]);            
+        });
+        
+        it('returns a plane for each line of block edges', function() {
+            var planes = model.getCollisionPlanes();
+            
+            expect(planes.length).toBe(32 + 12);
+        });
+        
+        it('returns horizontal planes for the top of each row', function() {
+            var topPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === -1; });
+            
+            expect(topPlanes.length).toBe(6);
         });
 
-        it('returns null if no block nearby', function() {
-            var model = blocks.init(level, 0);
+        it('returns horizontal planes for the bottom of each row', function() {
+            var bottomPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === 1; });
 
-            var result = model.getTarget(constants.WIDTH / 2, constants.HEIGHT - constants.BORDER);
-
-            expect(result).toBeNull();
+            expect(bottomPlanes.length).toBe(6);
         });
 
-        it('returns the block in the area of the point specified', function() {
-            level[2][4] = 1.5;
-            var model = blocks.init(level, 0);
+        it('returns vertical planes for the left of each row', function() {
+            var leftPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[0] === -1; });
 
-            var result = model.getTarget(240, 160); //TODO: This will fail if the scale factor changes
-
-            expect(result.midiNote).toBe(1);
+            expect(leftPlanes.length).toBe(16);
         });
+
+        it('returns vertical planes for the right of each row', function() {
+            var rightPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[0] === 1; });
+
+            expect(rightPlanes.length).toBe(16);
+        });
+        
+        describe('returns collisions with blocks', function() {
+            var block;
+            
+            beforeEach(function() {
+                block = model.all[3][8];
+            });
+            
+            it('from top', function() {
+                expect(topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1])).toEqual([0, -1]);
+            });
+
+            it('from bottom', function() {
+                expect(bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1])).toEqual([0, 1]);
+            });
+
+            it('from left', function() {
+                expect(leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1])).toEqual([-1, 0]);
+            });
+
+            it('from right', function() {
+                expect(rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1])).toEqual([1, 0]);
+            });
+        });
+
+        describe('returns collisions with blocks', function() {
+            var block;
+
+            beforeEach(function() {
+                block = model.all[3][8];
+                expect(block.hit).toBeFalsy();
+            });
+
+            it('from top', function() {
+                topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1]);
+                expect(block.hit).toBeTruthy();
+            });
+
+            it('from bottom', function() {
+                bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1]);
+                expect(block.hit).toBeTruthy();
+            });
+
+            it('from left', function() {
+                leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1]);
+                expect(block.hit).toBeTruthy();
+            });
+
+            it('from right', function() {
+                rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1]);
+                expect(block.hit).toBeTruthy();
+            });
+        });
+
+        describe('does not return collisions for already hit blocks', function() {
+            var block;
+
+            beforeEach(function() {
+                block = model.all[3][8];
+                block.hit = true;
+            });
+
+            it('from top', function() {
+                expect(topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1])).toBeNull();
+            });
+
+            it('from bottom', function() {
+                expect(bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1])).toBeNull();
+            });
+
+            it('from left', function() {
+                expect(leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1])).toBeNull();
+            });
+
+            it('from right', function() {
+                expect(rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1])).toBeNull();
+            });
+        });
+
+        it('does not return collisions between blocks', function() {
+            var block = model.all[3][8];
+
+            expect(topPlaneFor(block)
+                .collideAt(topEdgeOf(block)[0] + constants.BLOCK.SPACING.X / 2, topEdgeOf(block)[1]))
+                .toBeNull();
+            expect(bottomPlaneFor(block)
+                .collideAt(bottomEdgeOf(block)[0] + constants.BLOCK.SPACING.X / 2, bottomEdgeOf(block)[1]))
+                .toBeNull();
+            expect(leftPlaneFor(block)
+                .collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1] + constants.BLOCK.SPACING.Y / 2))
+                .toBeNull();
+            expect(rightPlaneFor(block)
+                .collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1] + constants.BLOCK.SPACING.Y / 2))
+                .toBeNull();
+        });
+
+        function topPlaneFor(block) {
+            var topPlanes = model.getCollisionPlanes().filter(
+                function(plane) { return plane.position()[1] === block.y; });
+            expect(topPlanes.length).toBe(1);
+            return topPlanes[0];
+        }
+
+        function bottomPlaneFor(block) {
+            var bottomPlanes = model.getCollisionPlanes().filter(
+                function(plane) { return plane.position()[1] === block.y + constants.BLOCK.SIZE.Y; });
+            expect(bottomPlanes.length).toBe(1);
+            return bottomPlanes[0];
+        }
+
+        function leftPlaneFor(block) {
+            var leftPlanes = model.getCollisionPlanes().filter(
+                function(plane) { return plane.position()[0] === block.x; });
+            expect(leftPlanes.length).toBe(1);
+            return leftPlanes[0];
+        }
+
+        function rightPlaneFor(block) {
+            var rightPlanes = model.getCollisionPlanes().filter(
+                function(plane) { return plane.position()[0] === block.x + constants.BLOCK.SIZE.X; });
+            expect(rightPlanes.length).toBe(1);
+            return rightPlanes[0];
+        }
+
+        function topEdgeOf(block) {
+            return [block.x + constants.BLOCK.SIZE.X / 2, block.y];
+        }
+
+        function bottomEdgeOf(block) {
+            return [block.x + constants.BLOCK.SIZE.X / 2, block.y + constants.BLOCK.SIZE.Y];
+        }
+
+        function leftEdgeOf(block) {
+            return [block.x, block.y + constants.BLOCK.SIZE.Y / 2];
+        }
+
+        function rightEdgeOf(block) {
+            return [block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y / 2];
+        }
     });
+
+
 });

@@ -1,4 +1,4 @@
-define(['data/constants'], function(constants) {
+define(['data/constants', 'models/physics'], function(constants, physics) {
     return {
         init: function() {
             var self = {};
@@ -20,12 +20,7 @@ define(['data/constants'], function(constants) {
             };
             
             self.getCollisionPlanes = function() {
-                return [{
-                    normal: [0, -1],
-                    position: [0, self.top],
-                    collideAt: self.getNormalAt,
-                    name: 'paddlePlane'
-                }];
+                return [physics.createPlane([0, -1], self.top, self.getNormalAt)];
             };
 
             self.getNormalAt = function(x) {

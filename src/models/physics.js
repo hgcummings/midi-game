@@ -1,12 +1,12 @@
 define(['models/maths'], function(maths) {
     var getDistanceToPlane = function(plane, particle) {
-        return maths.dotProduct([particle.x, particle.y], plane.normal) -
-            maths.dotProduct(plane.position, plane.normal);
+        return maths.dotProduct([particle.x, particle.y], plane.normal()) -
+            maths.dotProduct(plane.position(), plane.normal());
     };
     
     var getCollisionTime = function(plane, particle) {
         var distanceToPlane = getDistanceToPlane(plane, particle);
-        var speedToPlane = -maths.dotProduct([particle.dx, particle.dy], plane.normal);
+        var speedToPlane = -maths.dotProduct([particle.dx, particle.dy], plane.normal());
         var timeToPlane = distanceToPlane / speedToPlane;
         return timeToPlane;
     };
@@ -22,11 +22,16 @@ define(['models/maths'], function(maths) {
                 v[1] - 2 * n[1] * vn
             ];
         },
-        simplePlane: function(normal, distance) {
+        createPlane: function(normal, position, collisionCallback) {
+            if (typeof position === 'number') {
+                var staticPosition = [Math.abs(normal[0]) * position, Math.abs(normal[1]) * position];
+                position = function() { return staticPosition; };
+            }
+            
             return {
-                normal: normal,
-                position: [Math.abs(normal[0]) * distance, Math.abs(normal[1]) * distance],
-                collideAt: (function() { return normal; })
+                normal: function() { return normal },
+                position: position,
+                collideAt: collisionCallback || (function() { return normal; })
             }
         },
         distanceToPlane: getDistanceToPlane,
