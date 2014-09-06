@@ -15,6 +15,13 @@ define(function() {
             return sum;
         },
         magnitude: magnitude,
+        cartesianDistance: function(a, b) {
+            var sum = 0;
+            for (var i = 0; i < a.length && i < b.length; ++i) {
+                sum += (a[i] - b[i]) * (a[i] - b[i]);
+            }
+            return Math.sqrt(sum);
+        },
         normalise: function(v) {
             var m = magnitude(v);
             var n = [];

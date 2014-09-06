@@ -19,11 +19,11 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                 }
             };
             
-            self.getCollisionPlanes = function() {
-                return [physics.createPlane([0, -1], self.top, self.getNormalAt)];
+            self.getCollisionObjects = function() {
+                return [physics.createPlane([0, -1], self.top, self.positionNormal)];
             };
 
-            self.getNormalAt = function(x) {
+            self.positionNormal = function(x) {
                 var offset = x - self.x;
                 if (Math.abs(offset) < halfWidth) {
                     var overlap = offset / halfWidth;

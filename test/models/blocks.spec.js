@@ -77,8 +77,9 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         });
     });
     
-    describe('getCollisionPlanes', function() {
+    describe('getCollisionObjects', function() {
         var model;
+        var planes;
         
         beforeEach(function() {
             model = blocks.init([
@@ -88,7 +89,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            ]);            
+            ]);
         });
         
         it('returns a plane for each line of block edges', function() {
@@ -98,25 +99,25 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         });
         
         it('returns horizontal planes for the top of each row', function() {
-            var topPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === -1; });
+            var topPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.positionNormal()[1] === -1; });
             
             expect(topPlanes.length).toBe(6);
         });
 
         it('returns horizontal planes for the bottom of each row', function() {
-            var bottomPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === 1; });
+            var bottomPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.positionNormal()[1] === 1; });
 
             expect(bottomPlanes.length).toBe(6);
         });
 
         it('returns vertical planes for the left of each row', function() {
-            var leftPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[0] === -1; });
+            var leftPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.positionNormal()[0] === -1; });
 
             expect(leftPlanes.length).toBe(16);
         });
 
         it('returns vertical planes for the right of each row', function() {
-            var rightPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[0] === 1; });
+            var rightPlanes = model.getCollisionPlanes().filter(function(plane) { return plane.positionNormal()[0] === 1; });
 
             expect(rightPlanes.length).toBe(16);
         });
@@ -145,7 +146,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             });
         });
 
-        describe('returns collisions with blocks', function() {
+        describe('records collisions against blocks', function() {
             var block;
 
             beforeEach(function() {
@@ -261,5 +262,82 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         }
     });
 
+    describe('getCollisionPoints', function() {
+        var model;
 
+        beforeEach(function() {
+            model = blocks.init([
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            ]);
+        });
+
+        it('returns a point for each active block vertex', function() {
+            var points = model.getCollisionPoints();
+
+            expect(points.length).toBe(16 * 6 * 4);
+        });
+
+        it('positions the points at block vertices', function() {
+            var block = model.all[0][0];
+            var topLeft = pointsMatching(block.x, block.y);
+            var topRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y);
+            var bottomLeft = pointsMatching(block.x, block.y + constants.BLOCK.SIZE.Y);
+            var bottomRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y);
+            
+            expect(topLeft.length).toBe(1);
+            expect(topRight.length).toBe(1);
+            expect(bottomLeft.length).toBe(1);
+            expect(bottomRight.length).toBe(1);
+        });
+
+        it('positions the points at block vertices', function() {
+            var block = model.all[0][0];
+            var topLeft = pointsMatching(block.x, block.y);
+            var topRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y);
+            var bottomLeft = pointsMatching(block.x, block.y + constants.BLOCK.SIZE.Y);
+            var bottomRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y);
+
+            expect(topLeft.length).toBe(1);
+            expect(topRight.length).toBe(1);
+            expect(bottomLeft.length).toBe(1);
+            expect(bottomRight.length).toBe(1);
+        });
+        
+        it('returns collisions with blocks', function() {
+            var block = model.all[3][8];
+            var point = pointsMatching(block.x, block.y)[0];
+
+            var result = point.collideAt(block.x, block.y);
+            expect(result).toBeTruthy();
+        });
+        
+        it('records collisions against blocks', function() {
+            var block = model.all[3][8];
+            var point = pointsMatching(block.x, block.y)[0];
+            expect(block.hit).toBeFalsy();
+
+            point.collideAt(block.x, block.y);
+            
+            expect(block.hit).toBeTruthy();
+        });
+
+        it('does not return collisions for already hit blocks', function() {
+            var block = model.all[3][8];
+            var point = pointsMatching(block.x, block.y)[0];
+            block.hit = true;
+
+            var result = point.collideAt(block.x, block.y);
+            expect(result).toBeFalsy();
+        });
+        
+        function pointsMatching(x, y) {
+            return model.getCollisionPoints().filter(
+                function(point) { return point.position()[0] === x && point.position()[1] === y});
+        }
+    });
 });

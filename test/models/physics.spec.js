@@ -15,14 +15,39 @@ define(['models/physics'], function(physics) {
             });
         });
             
-        describe('getDistanceToPlane', function() {
+        describe('get distance to plane', function() {
             it('returns distance from particle to plane', function() {
                 var topPlane = physics.createPlane([0, 1], 10);
                 var bottomPlane = physics.createPlane([0, -1], 90);
                 var particle = { x: 50, y:50, dx: 0, dy: 2 };
 
-                expect(physics.distanceToPlane(topPlane, particle)).toBe(40);
-                expect(physics.distanceToPlane(bottomPlane, particle)).toBe(40);
+                expect(topPlane.distance(particle)).toBe(40);
+                expect(bottomPlane.distance(particle)).toBe(40);
+            });
+        });
+        
+        describe('get distance to point', function() {
+            it('returns distance from particle to point', function() {
+                var point = physics.createPoint(10, 10);
+                
+                var particle = { x: 13, y: 14 };
+                
+                expect(point.distance(particle)).toBe(5);
+            });
+        });
+        
+        describe('collide with point', function() {
+            it ('returns normalised vector from point to particle', function() {
+                var point = physics.createPoint(10, 10);
+
+                var headOnCollision = { x: 10, y: 20 };
+                var glancingCollsion = { x: 17, y: 17 };
+
+                expect(point.collideAt(headOnCollision.x, headOnCollision.y)).toEqual([0, 1]);
+                
+                var glancingResult = point.collideAt(glancingCollsion.x, glancingCollsion.y);
+                expect(glancingResult[0]).toBeCloseTo(1 / Math.sqrt(2), 10);
+                expect(glancingResult[1]).toBeCloseTo(1 / Math.sqrt(2), 10);
             });
         });
     });

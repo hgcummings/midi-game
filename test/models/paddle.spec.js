@@ -66,17 +66,17 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
             var plane;
             
             beforeEach(function() {
-                var planes = model.getCollisionPlanes().filter(function(plane) { return plane.normal()[1] === -1; });
+                var planes = model.getCollisionObjects().filter(function(plane) { return plane.positionNormal()[1] === -1; });
                 expect(planes.length).toBe(1);
                 plane = planes[0];
             });
             
             it('is horizontal', function() {
-                expect(plane.normal()[0]).toBe(0);
+                expect(plane.positionNormal()[0]).toBe(0);
             });
             
             it('can be collided with from above', function() {
-                expect(plane.normal()[1]).toBe(-1);
+                expect(plane.positionNormal()[1]).toBe(-1);
             });
             
             it('is at the top of the paddle', function() {

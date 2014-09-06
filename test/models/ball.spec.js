@@ -6,14 +6,14 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
             top: constants.HEIGHT - constants.BORDER
         };
         var model;
-        var planes;
+        var objects;
 
         beforeEach(function() {
             var stubPaddle = physics.createPlane([0, -1], constants.HEIGHT - constants.BORDER, function() {
                     return stubNormal;
                 });
-            planes = fixtures.init().getCollisionPlanes().concat([stubPaddle]);
-            model = ball.init(paddle, planes);
+            objects = fixtures.init().getCollisionObjects().concat([stubPaddle]);
+            model = ball.init(paddle, objects);
         });
 
         describe('init', function() {
@@ -134,11 +134,26 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                 expect(model.x).toBeGreaterThan(0);
             });
             
-//            it('bounces off the edges of blocks', function() {
-//                model.update(100, 'LAUNCH');
-//                
-//                
-//            });
+            it('bounces off the corners of blocks', function() {
+                model.update(100, 'LAUNCH');
+                model.update(100);
+                model.update(100);
+
+                var collided = false;
+                var point = physics.createPoint(
+                    model.x - constants.BALL.RADIUS / 2, model.y - 100,
+                    function() { collided = true; return true; }
+                );
+                
+                objects.push(point);
+                
+                while(!collided) {
+                    model.update(20);
+                }
+                
+                model.update(100);
+                expect(model.x).toBeGreaterThan(point.position()[0]);
+            });
         });
     });
 });
