@@ -24,7 +24,7 @@
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
 
 TODO:
- * Spare lives
+ * Game over and level cleared screens
  * Standard ball
  * Earth/fire balls
  * Air ball
@@ -32,3 +32,5 @@ TODO:
  * Resume after browser pauses updates
  * Pause
  * Help screen
+ * Timer, par times (gold/silver/bronze) for levels
+ * Local storage for level progress

@@ -1,22 +1,31 @@
 define(function() {
+    var defaultWidth = 768;
+    var defaultHeight = 432;
+    var scaleFactor = Math.max(0.5,
+        Math.min(window.innerHeight / defaultHeight, window.innerWidth / defaultWidth));
+    
+    var scale = function(number) {
+        return Math.round(number * scaleFactor);
+    };
+    
     return {
-        WIDTH: 768,
-        HEIGHT: 432,
-        BORDER: 28,
-        CORNER: 32,
+        WIDTH: scale(defaultWidth),
+        HEIGHT: scale(defaultHeight),
+        BORDER: scale(28),
+        CORNER: scale(32),
         BLOCK: {
-            SPACING: { X: 40, Y: 40 },
-            SIZE: { X: 32, Y: 18 },
-            MARGIN: { X: 64, Y: 76 },
-            RADIUS: 2
+            SPACING: { X: scale(40), Y: scale(40) },
+            SIZE: { X: scale(32), Y: scale(18) },
+            MARGIN: { X: scale(64), Y: scale(76) },
+            RADIUS: scale(2)
         },
         PADDLE: {
-            SIZE: { X: 64, Y: 8 },
-            MARGIN: { X: 32, Y: 8 },
-            RADIUS: 256
+            SIZE: { X: scale(64), Y: scale(8) },
+            MARGIN: { X: scale(32), Y: scale(8) },
+            RADIUS: scale(256)
         },
         BALL: {
-            RADIUS: 5
+            RADIUS: scale(5)
         }
     };
 });
