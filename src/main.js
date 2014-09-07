@@ -1,8 +1,8 @@
-require(['menu', 'output/midi', 'views/game', 'models/game', 'output/sound'], function(menu, midi, view, model, sound) {
-    midi.init(function(midiModel) {
-        document.getElementById('warning').remove();
-        menu.init(document.getElementById('menu'), midiModel).registerStart(function(level, input) {
-            view.init(document.getElementById('game'), model.init(level, input.init(), sound.init(midiModel)));
+require(['views/game', 'data/levels', 'models/game', 'input/keyboard', 'output/sound', 'output/audio'],
+    function(view, levels, model, input, sound, audio) {
+        audio.init(function(output) {
+            document.getElementById('warning').remove();
+            view.init(document.getElementById('game'), model.init(levels[0], input.init(), sound.init(output)));
         });
-    });
-});
+    }
+);
