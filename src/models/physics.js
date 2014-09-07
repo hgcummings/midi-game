@@ -33,8 +33,8 @@ define(['models/maths'], function(maths) {
                 positionNormal: function(particle) {
                     return maths.normalise([particle.x - x, particle.y - y]);
                 },
-                collideAt: function(particleX, particleY) {
-                    if (!collisionCallback || collisionCallback()) {
+                collideAt: function(particleX, particleY, gameTime) {
+                    if (!collisionCallback || collisionCallback(particleX, particleY, gameTime)) {
                         return maths.normalise([particleX - x, particleY - y]);
                     } else {
                         return null;

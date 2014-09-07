@@ -41,10 +41,10 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
             return physics.createPlane(
                 [0, normalY],
                 rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
-                function (x, y) {
+                function (x, y, t) {
                     var col = getColumn(x);
                     if (col !== null && !blocks[row][col].hit) {
-                        blocks[row][col].hit = true;
+                        blocks[row][col].hit = t;
                         return [0, normalY];
                     }
                     return null;
@@ -56,10 +56,10 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
             return physics.createPlane(
                 [normalX, 0],
                 columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
-                function (x, y) {
+                function (x, y, t) {
                     var row = getRow(y);
                     if (row !== null && !blocks[row][col].hit) {
-                        blocks[row][col].hit = true;
+                        blocks[row][col].hit = t;
                         return [normalX, 0];
                     }
                     return null;
@@ -83,11 +83,11 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
         var points = [];
         
         var createPointsForBlock = function(block) {
-            var collide = function() {
+            var collide = function(x, y, t) {
                 if (block.hit) {
                     return false;
                 }
-                block.hit = true;
+                block.hit = t;
                 return true;
             };
             points.push(physics.createPoint(

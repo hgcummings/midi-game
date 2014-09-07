@@ -12,7 +12,7 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
             var dx = 0;
             var dy = -speed;
             
-            var updatePosition = function(delta) {
+            var updatePosition = function(delta, gameTime) {
                 var newX = self.x + dx * delta;
                 var newY = self.y + dy * delta;
                 var collision = null;
@@ -38,7 +38,7 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
 
-                        collision = object.collideAt(newX, newY);
+                        collision = object.collideAt(newX, newY, gameTime);
                         if (collision) {
                             var newV = physics.reflectionV([dx, dy], collision);
                             dx = newV[0];
@@ -54,9 +54,9 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
                 self.y = newY;
             };
 
-            self.update = function(delta, action) {
+            self.update = function(delta, action, gameTime) {
                 if (self.released) {
-                    updatePosition(delta);
+                    updatePosition(delta, gameTime);
                     if (self.y > d.HEIGHT) {
                         self.alive = false;
                     }

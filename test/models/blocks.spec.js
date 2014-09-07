@@ -148,6 +148,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
 
         describe('records collisions against blocks', function() {
             var block;
+            var gameTime = 1000;
 
             beforeEach(function() {
                 block = model.all[3][8];
@@ -155,23 +156,23 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
             });
 
             it('from top', function() {
-                topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1]);
-                expect(block.hit).toBeTruthy();
+                topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime);
+                expect(block.hit).toBe(gameTime);
             });
 
             it('from bottom', function() {
-                bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1]);
-                expect(block.hit).toBeTruthy();
+                bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime);
+                expect(block.hit).toBe(gameTime);
             });
 
             it('from left', function() {
-                leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1]);
-                expect(block.hit).toBeTruthy();
+                leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime);
+                expect(block.hit).toBe(gameTime);
             });
 
             it('from right', function() {
-                rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1]);
-                expect(block.hit).toBeTruthy();
+                rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime);
+                expect(block.hit).toBe(gameTime);
             });
         });
 
@@ -343,11 +344,12 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
         it('records collisions against blocks', function() {
             var block = model.all[3][8];
             var point = pointsMatching(block.x, block.y)[0];
+            var gameTime = 1000;
             expect(block.hit).toBeFalsy();
 
-            point.collideAt(block.x, block.y);
+            point.collideAt(block.x, block.y, gameTime);
             
-            expect(block.hit).toBeTruthy();
+            expect(block.hit).toBe(gameTime);
         });
 
         it('does not return collisions for already hit blocks', function() {

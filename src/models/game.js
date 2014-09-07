@@ -8,7 +8,7 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
             self.update = function(gameTime) {
                 var delta = gameTime - prevTime;
                 self.paddle.update(delta, input.getDirection());
-                self.ball.update(delta, input.getAction());
+                self.ball.update(delta, input.getAction(), gameTime);
                 
                 if (!self.ball.alive) {
                     --self.spareLives;

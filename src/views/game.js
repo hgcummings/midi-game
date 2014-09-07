@@ -14,16 +14,20 @@ function(c, d, fixtures, blocks, paddle, ball) {
             blocks = blocks.init(context);
             paddle = paddle.init(context);
             ball = ball.init(context);
-
+            
             var animate = function() {
                 var gameTime = new Date().getTime() - startTime;
                 model.update(gameTime);
 
+                var drawBlock = function(block) {
+                    blocks.drawBlock(block, gameTime);
+                };
+
                 context.clearRect(0, 0, d.WIDTH, d.HEIGHT);
 
-                fixtures.drawBorder(model);
+                fixtures.drawBorder(model, gameTime);
                 model.blocks.all.forEach(function(row) {
-                    row.forEach(blocks.drawBlock);
+                    row.forEach(drawBlock);
                 });
                 paddle.drawPaddle(model.paddle);
                 ball.drawBall(model.ball);

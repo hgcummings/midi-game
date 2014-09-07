@@ -27,7 +27,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                 model.update(100, 'LAUNCH');
                 var previousDistance = getDistanceTravelled();
                 expect(previousDistance).toBeLessThan(0);
-                expect(getDistanceTravelled()).toBe(previousDistance);
+                expect(getDistanceTravelled()).toBeCloseTo(previousDistance, 1);
 
                 function getDistanceTravelled() {
                     var startPos = model.y;
