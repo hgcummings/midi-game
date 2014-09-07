@@ -1,4 +1,4 @@
-define(['models/paddle', 'data/constants'], function(paddle, constants) {
+define(['models/paddle', 'data/dimensions'], function(paddle, d) {
     describe('paddle', function() {
         var model;
 
@@ -8,9 +8,9 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
 
         describe('init', function() {
             it('starts stationary in the center of the screen', function() {
-                expect(model.x).toBe(constants.WIDTH / 2);
+                expect(model.x).toBe(d.WIDTH / 2);
                 model.update(1000, 0);
-                expect(model.x).toBe(constants.WIDTH / 2);
+                expect(model.x).toBe(d.WIDTH / 2);
             });
         });
 
@@ -58,7 +58,7 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
                     model.update(1000, 1);
                 }
 
-                expect(model.x).toBeLessThan(constants.WIDTH);
+                expect(model.x).toBeLessThan(d.WIDTH);
             });
         });
         
@@ -92,21 +92,21 @@ define(['models/paddle', 'data/constants'], function(paddle, constants) {
                 });
 
                 it('is close to (but greater than) 45 degrees at the edge', function() {
-                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X / 2);
+                    var result = plane.collideAt(model.x - d.PADDLE.SIZE.X / 2);
 
                     expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
                     expect(result[0]).toBeGreaterThan(result[1]);
                 });
 
                 it('is close to (but greater than) 45 degrees beyond the edge and inside the ball radius', function() {
-                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X / 2 - constants.BALL.RADIUS + 1);
+                    var result = plane.collideAt(model.x - d.PADDLE.SIZE.X / 2 - d.BALL.RADIUS + 1);
 
                     expect(Math.round(result[0] * 10)).toBe(Math.round(result[1] * 10));
                     expect(result[0]).toBeGreaterThan(result[1]);
                 });
 
                 it('returns null outside the paddle', function() {
-                    var result = plane.collideAt(model.x - constants.PADDLE.SIZE.X);
+                    var result = plane.collideAt(model.x - d.PADDLE.SIZE.X);
 
                     expect(result).toBeNull();
                 });

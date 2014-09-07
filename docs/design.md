@@ -24,8 +24,8 @@
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
 
 TODO:
- * Game over and level cleared screens
  * Standard ball
+ * Game over and level cleared screens
  * Earth/fire balls
  * Air ball
  * Wave

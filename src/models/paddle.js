@@ -1,11 +1,11 @@
-define(['data/constants', 'models/physics'], function(constants, physics) {
+define(['data/dimensions', 'models/physics'], function(d, physics) {
     return {
         init: function() {
             var self = {};
-            var speed = constants.WIDTH / 2500;
-            var leftBound = constants.PADDLE.MARGIN.X + constants.PADDLE.SIZE.X / 2;
-            var rightBound = constants.WIDTH - constants.PADDLE.MARGIN.X - constants.PADDLE.SIZE.X / 2;
-            var halfWidth = constants.PADDLE.SIZE.X / 2;
+            var speed = d.WIDTH / 2500;
+            var leftBound = d.PADDLE.MARGIN.X + d.PADDLE.SIZE.X / 2;
+            var rightBound = d.WIDTH - d.PADDLE.MARGIN.X - d.PADDLE.SIZE.X / 2;
+            var halfWidth = d.PADDLE.SIZE.X / 2;
             var angleAtEdge = 0.95 * Math.PI / 4;
             var glancingAngleAtEdge = 0.99 * Math.PI / 4;
 
@@ -29,18 +29,18 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                     overlap = offset / halfWidth;
                     angle = angleAtEdge * Math.PI / 4 * overlap * overlap * overlap;
                     return [Math.sin(angle), -Math.cos(angle)];
-                } else if (Math.abs(offset) < halfWidth + constants.BALL.RADIUS) {
+                } else if (Math.abs(offset) < halfWidth + d.BALL.RADIUS) {
                     overlap = Math.abs(offset) - halfWidth; 
                     angle = (angleAtEdge + (glancingAngleAtEdge - angleAtEdge) *
-                        (overlap / constants.BALL.RADIUS)) * offset / Math.abs(offset);
+                        (overlap / d.BALL.RADIUS)) * offset / Math.abs(offset);
                     return [Math.sin(angle), -Math.cos(angle)];
                 } else {
                     return null;
                 }
             };
 
-            self.x = constants.WIDTH / 2;
-            self.top = constants.HEIGHT - constants.PADDLE.MARGIN.Y - constants.PADDLE.SIZE.Y;
+            self.x = d.WIDTH / 2;
+            self.top = d.HEIGHT - d.PADDLE.MARGIN.Y - d.PADDLE.SIZE.Y;
 
             return self;
         }

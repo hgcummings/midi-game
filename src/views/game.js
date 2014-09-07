@@ -1,11 +1,11 @@
-define(['data/constants', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball'],
-function(constants, fixtures, blocks, paddle, ball) {
+define(['data/colours', 'data/dimensions', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball'],
+function(c, d, fixtures, blocks, paddle, ball) {
     return {
         init: function(parent, model) {
             var canvas = document.createElement('canvas');
-            canvas.setAttribute('width', constants.WIDTH);
-            canvas.setAttribute('height', constants.HEIGHT);
-            canvas.style.backgroundColor = '#000000';
+            canvas.setAttribute('width', d.WIDTH);
+            canvas.setAttribute('height', d.HEIGHT);
+            canvas.style.backgroundColor = c.BACKGROUND;
             parent.appendChild(canvas);
 
             var context = canvas.getContext('2d');
@@ -19,7 +19,7 @@ function(constants, fixtures, blocks, paddle, ball) {
                 var gameTime = new Date().getTime() - startTime;
                 model.update(gameTime);
 
-                context.clearRect(0, 0, constants.WIDTH, constants.HEIGHT);
+                context.clearRect(0, 0, d.WIDTH, d.HEIGHT);
 
                 fixtures.drawBorder(model);
                 model.blocks.all.forEach(function(row) {

@@ -1,24 +1,24 @@
-define(['data/constants', 'models/physics'], function(constants, physics) {
+define(['data/dimensions', 'models/physics'], function(d, physics) {
     var scaleDegrees = [1, 1.5, 2, 2.5, 3, 4, 4.5, 5, 5.5, 6, 6.5, 7];
 
-    var left = constants.BLOCK.MARGIN.X + (constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X) / 2;
-    var top = constants.BLOCK.MARGIN.Y;
+    var left = d.BLOCK.MARGIN.X + (d.BLOCK.SPACING.X - d.BLOCK.SIZE.X) / 2;
+    var top = d.BLOCK.MARGIN.Y;
 
     var columnLeft = function (col) {
-        return left + col * constants.BLOCK.SPACING.X;
+        return left + col * d.BLOCK.SPACING.X;
     };
 
     var rowTop = function(row) {
-        return top + row * constants.BLOCK.SPACING.Y;
+        return top + row * d.BLOCK.SPACING.Y;
     };
 
     function createPlanes(blocks) {
         var planes = [];
 
         var getColumn = function(x) {
-            var withinBlock = ((x - left) % constants.BLOCK.SPACING.X) <= constants.BLOCK.SIZE.X;
+            var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
             if (withinBlock) {
-                var columnIndex = Math.floor((x - left) / constants.BLOCK.SPACING.X);
+                var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
                 if (columnIndex >= 0 && columnIndex < blocks[0].length) {
                     return columnIndex;
                 }
@@ -27,9 +27,9 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
         };
 
         var getRow = function(y) {
-            var withinBlock = ((y - top) % constants.BLOCK.SPACING.Y) <= constants.BLOCK.SIZE.Y;
+            var withinBlock = ((y - top) % d.BLOCK.SPACING.Y) <= d.BLOCK.SIZE.Y;
             if (withinBlock) {
-                var rowIndex = Math.floor((y - top) / constants.BLOCK.SPACING.Y);
+                var rowIndex = Math.floor((y - top) / d.BLOCK.SPACING.Y);
                 if (rowIndex >= 0 && rowIndex < blocks.length) {
                     return rowIndex;
                 }
@@ -40,7 +40,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
         var createHorizontalPlane = function (row, normalY) {
             return physics.createPlane(
                 [0, normalY],
-                rowTop(row) + constants.BLOCK.SIZE.Y * (normalY + 1) / 2,
+                rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
                 function (x, y) {
                     var col = getColumn(x);
                     if (col !== null && !blocks[row][col].hit) {
@@ -55,7 +55,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
         var createVerticalPlane = function (col, normalX) {
             return physics.createPlane(
                 [normalX, 0],
-                columnLeft(col) + constants.BLOCK.SIZE.X * (normalX + 1) / 2,
+                columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
                 function (x, y) {
                     var row = getRow(y);
                     if (row !== null && !blocks[row][col].hit) {
@@ -93,11 +93,11 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             points.push(physics.createPoint(
                 block.x, block.y, collide));
             points.push(physics.createPoint(
-                block.x + constants.BLOCK.SIZE.X, block.y, collide));
+                block.x + d.BLOCK.SIZE.X, block.y, collide));
             points.push(physics.createPoint(
-                block.x, block.y + constants.BLOCK.SIZE.Y, collide));
+                block.x, block.y + d.BLOCK.SIZE.Y, collide));
             points.push(physics.createPoint(
-                block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y, collide));
+                block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
         };
         
         for (var row = 0; row < blocks.length; ++row) {

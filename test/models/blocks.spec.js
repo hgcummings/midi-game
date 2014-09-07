@@ -1,4 +1,4 @@
-define(['models/blocks', 'data/constants'], function(blocks, constants) {
+define(['models/blocks', 'data/dimensions'], function(blocks, d) {
     function getNotes(fromBlocks) {
         return fromBlocks.map(function (row) {
             return row.map(function (block) {
@@ -33,8 +33,8 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             var model = blocks.init(data, rootNote);
 
             expect(model.all[0][0].x).toBe(
-                constants.BLOCK.MARGIN.X + (constants.BLOCK.SPACING.X - constants.BLOCK.SIZE.X) / 2);
-            expect(model.all[0][0].y).toBe(constants.BLOCK.MARGIN.Y);
+                d.BLOCK.MARGIN.X + (d.BLOCK.SPACING.X - d.BLOCK.SIZE.X) / 2);
+            expect(model.all[0][0].y).toBe(d.BLOCK.MARGIN.Y);
         });
         it('translates scale degrees to corresponding midi notes correctly', function() {
             var model = blocks.init([
@@ -228,16 +228,16 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
             var block = model.all[3][8];
 
             expect(topPlaneFor(block)
-                .collideAt(topEdgeOf(block)[0] + constants.BLOCK.SPACING.X / 2, topEdgeOf(block)[1]))
+                .collideAt(topEdgeOf(block)[0] + d.BLOCK.SPACING.X / 2, topEdgeOf(block)[1]))
                 .toBeNull();
             expect(bottomPlaneFor(block)
-                .collideAt(bottomEdgeOf(block)[0] + constants.BLOCK.SPACING.X / 2, bottomEdgeOf(block)[1]))
+                .collideAt(bottomEdgeOf(block)[0] + d.BLOCK.SPACING.X / 2, bottomEdgeOf(block)[1]))
                 .toBeNull();
             expect(leftPlaneFor(block)
-                .collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1] + constants.BLOCK.SPACING.Y / 2))
+                .collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1] + d.BLOCK.SPACING.Y / 2))
                 .toBeNull();
             expect(rightPlaneFor(block)
-                .collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1] + constants.BLOCK.SPACING.Y / 2))
+                .collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1] + d.BLOCK.SPACING.Y / 2))
                 .toBeNull();
         });
 
@@ -250,7 +250,7 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
 
         function bottomPlaneFor(block) {
             var bottomPlanes = model.getCollisionPlanes().filter(
-                function(plane) { return plane.position()[1] === block.y + constants.BLOCK.SIZE.Y; });
+                function(plane) { return plane.position()[1] === block.y + d.BLOCK.SIZE.Y; });
             expect(bottomPlanes.length).toBe(1);
             return bottomPlanes[0];
         }
@@ -264,25 +264,25 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
 
         function rightPlaneFor(block) {
             var rightPlanes = model.getCollisionPlanes().filter(
-                function(plane) { return plane.position()[0] === block.x + constants.BLOCK.SIZE.X; });
+                function(plane) { return plane.position()[0] === block.x + d.BLOCK.SIZE.X; });
             expect(rightPlanes.length).toBe(1);
             return rightPlanes[0];
         }
 
         function topEdgeOf(block) {
-            return [block.x + constants.BLOCK.SIZE.X / 2, block.y];
+            return [block.x + d.BLOCK.SIZE.X / 2, block.y];
         }
 
         function bottomEdgeOf(block) {
-            return [block.x + constants.BLOCK.SIZE.X / 2, block.y + constants.BLOCK.SIZE.Y];
+            return [block.x + d.BLOCK.SIZE.X / 2, block.y + d.BLOCK.SIZE.Y];
         }
 
         function leftEdgeOf(block) {
-            return [block.x, block.y + constants.BLOCK.SIZE.Y / 2];
+            return [block.x, block.y + d.BLOCK.SIZE.Y / 2];
         }
 
         function rightEdgeOf(block) {
-            return [block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y / 2];
+            return [block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y / 2];
         }
     });
 
@@ -309,9 +309,9 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         it('positions the points at block vertices', function() {
             var block = model.all[0][0];
             var topLeft = pointsMatching(block.x, block.y);
-            var topRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y);
-            var bottomLeft = pointsMatching(block.x, block.y + constants.BLOCK.SIZE.Y);
-            var bottomRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y);
+            var topRight = pointsMatching(block.x + d.BLOCK.SIZE.X, block.y);
+            var bottomLeft = pointsMatching(block.x, block.y + d.BLOCK.SIZE.Y);
+            var bottomRight = pointsMatching(block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y);
             
             expect(topLeft.length).toBe(1);
             expect(topRight.length).toBe(1);
@@ -322,9 +322,9 @@ define(['models/blocks', 'data/constants'], function(blocks, constants) {
         it('positions the points at block vertices', function() {
             var block = model.all[0][0];
             var topLeft = pointsMatching(block.x, block.y);
-            var topRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y);
-            var bottomLeft = pointsMatching(block.x, block.y + constants.BLOCK.SIZE.Y);
-            var bottomRight = pointsMatching(block.x + constants.BLOCK.SIZE.X, block.y + constants.BLOCK.SIZE.Y);
+            var topRight = pointsMatching(block.x + d.BLOCK.SIZE.X, block.y);
+            var bottomLeft = pointsMatching(block.x, block.y + d.BLOCK.SIZE.Y);
+            var bottomRight = pointsMatching(block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y);
 
             expect(topLeft.length).toBe(1);
             expect(topRight.length).toBe(1);

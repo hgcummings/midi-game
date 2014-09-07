@@ -1,4 +1,4 @@
-define(['models/game', 'data/constants'], function(game, constants) {
+define(['models/game', 'data/dimensions'], function(game, d) {
     describe('game', function() {
         var level = [[]];
         var model;
@@ -59,7 +59,7 @@ define(['models/game', 'data/constants'], function(game, constants) {
                 
                 var lastY = model.ball.y;
                 
-                while(model.ball.y < model.paddle.top - constants.BALL.RADIUS) {
+                while(model.ball.y < model.paddle.top - d.BALL.RADIUS) {
                     model.update(100);
                     lastY = model.ball.y;
                 }

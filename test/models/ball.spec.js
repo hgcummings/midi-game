@@ -1,15 +1,15 @@
-define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], function(ball, constants, fixtures, physics) {
+define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], function(ball, d, fixtures, physics) {
     describe('ball', function() {
         var stubNormal = null;
         var paddle = {
-            x: constants.WIDTH / 2,
-            top: constants.HEIGHT - constants.BORDER
+            x: d.WIDTH / 2,
+            top: d.HEIGHT - d.BORDER
         };
         var model;
         var objects;
 
         beforeEach(function() {
-            var stubPaddle = physics.createPlane([0, -1], constants.HEIGHT - constants.BORDER, function() {
+            var stubPaddle = physics.createPlane([0, -1], d.HEIGHT - d.BORDER, function() {
                     return stubNormal;
                 });
             objects = fixtures.init().getCollisionObjects().concat([stubPaddle]);
@@ -42,7 +42,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                     model.update(100);
                 }
 
-                expect(model.y).toBeGreaterThan(constants.BORDER);
+                expect(model.y).toBeGreaterThan(d.BORDER);
             });
             
             it('bounces off the paddle', function() {
@@ -69,7 +69,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                 model.update(100);
 
                 expect(model.x).toBeGreaterThan(paddle.x);
-                expect(model.y).toBeCloseTo(paddle.top - constants.BALL.RADIUS);
+                expect(model.y).toBeCloseTo(paddle.top - d.BALL.RADIUS);
             });
             
             it('collides edge-to-edge with the paddle', function() {
@@ -87,7 +87,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                     maxY = Math.max(maxY, model.y);
                 }
 
-                expect(maxY).toBeLessThan(paddle.top - constants.BALL.RADIUS);
+                expect(maxY).toBeLessThan(paddle.top - d.BALL.RADIUS);
             });
 
             it('dies if it misses the paddle', function() {
@@ -120,7 +120,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                     model.update(100);
                 }
 
-                expect(model.x).toBeLessThan(constants.WIDTH);
+                expect(model.x).toBeLessThan(d.WIDTH);
             });
 
             it('bounces off the left edge of the screen', function() {
@@ -141,7 +141,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
 
                 var collided = false;
                 var point = physics.createPoint(
-                    model.x - constants.BALL.RADIUS / 2, model.y - 100,
+                    model.x - d.BALL.RADIUS / 2, model.y - 100,
                     function() { collided = true; return true; }
                 );
                 
@@ -160,7 +160,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                 model.update(100);
 
                 var collided = false;
-                var newPlane = physics.createPlane([0, 1], model.y - constants.BALL.RADIUS / 2, function() {
+                var newPlane = physics.createPlane([0, 1], model.y - d.BALL.RADIUS / 2, function() {
                     collided = true;
                     return [0, 1];
                 });
@@ -178,7 +178,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                 var prevDistance = Math.abs(model.y - prevY);
 
                 var collided = false;
-                var newPlane = physics.createPlane([0, 1], model.y - constants.WIDTH / 4, function() {
+                var newPlane = physics.createPlane([0, 1], model.y - d.WIDTH / 4, function() {
                     collided = true;
                     return [0, 1];
                 });
@@ -189,7 +189,7 @@ define(['models/ball', 'data/constants', 'models/fixtures', 'models/physics'], f
                     model.update(100);
                 }
                 
-                var effectivePlaneY = newPlane.position()[1] + constants.BALL.RADIUS;
+                var effectivePlaneY = newPlane.position()[1] + d.BALL.RADIUS;
                 expect(prevY - effectivePlaneY + model.y - effectivePlaneY).toBeCloseTo(prevDistance, 8);
             });
         });

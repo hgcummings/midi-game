@@ -1,22 +1,22 @@
-define(['data/constants'], function(c) {
+define(['data/colours', 'data/dimensions'], function(c, d) {
     return {
         init: function(context) {
             var preRenderCanvas = document.createElement('canvas');
-            preRenderCanvas.width = c.BLOCK.SIZE.X;
-            preRenderCanvas.height = c.BLOCK.SIZE.Y;
+            preRenderCanvas.width = d.BLOCK.SIZE.X;
+            preRenderCanvas.height = d.BLOCK.SIZE.Y;
 
             var preContext = preRenderCanvas.getContext('2d');
-            preContext.fillStyle = '#CCCCCC';
+            preContext.fillStyle = c.BLOCK;
             preContext.beginPath();
 
-            preContext.arc(c.BLOCK.RADIUS, c.BLOCK.RADIUS, c.BLOCK.RADIUS, Math.PI, Math.PI * 3 / 2, false);
-            preContext.lineTo(c.BLOCK.SIZE.X - c.BLOCK.RADIUS, 0);
-            preContext.arc(c.BLOCK.SIZE.X - c.BLOCK.RADIUS, c.BLOCK.RADIUS, c.BLOCK.RADIUS, Math.PI * 3 / 2, 0, false);
-            preContext.lineTo(c.BLOCK.SIZE.X, c.BLOCK.SIZE.Y - c.BLOCK.RADIUS);
-            preContext.arc(c.BLOCK.SIZE.X - c.BLOCK.RADIUS, c.BLOCK.SIZE.Y - c.BLOCK.RADIUS, c.BLOCK.RADIUS, 0, Math.PI / 2, false);
-            preContext.lineTo(c.BLOCK.RADIUS, c.BLOCK.SIZE.Y);
-            preContext.arc(c.BLOCK.RADIUS, c.BLOCK.SIZE.Y - c.BLOCK.RADIUS, c.BLOCK.RADIUS, Math.PI / 2, Math.PI, false);
-            preContext.lineTo(0, c.BLOCK.RADIUS);
+            preContext.arc(d.BLOCK.RADIUS, d.BLOCK.RADIUS, d.BLOCK.RADIUS, Math.PI, Math.PI * 3 / 2, false);
+            preContext.lineTo(d.BLOCK.SIZE.X - d.BLOCK.RADIUS, 0);
+            preContext.arc(d.BLOCK.SIZE.X - d.BLOCK.RADIUS, d.BLOCK.RADIUS, d.BLOCK.RADIUS, Math.PI * 3 / 2, 0, false);
+            preContext.lineTo(d.BLOCK.SIZE.X, d.BLOCK.SIZE.Y - d.BLOCK.RADIUS);
+            preContext.arc(d.BLOCK.SIZE.X - d.BLOCK.RADIUS, d.BLOCK.SIZE.Y - d.BLOCK.RADIUS, d.BLOCK.RADIUS, 0, Math.PI / 2, false);
+            preContext.lineTo(d.BLOCK.RADIUS, d.BLOCK.SIZE.Y);
+            preContext.arc(d.BLOCK.RADIUS, d.BLOCK.SIZE.Y - d.BLOCK.RADIUS, d.BLOCK.RADIUS, Math.PI / 2, Math.PI, false);
+            preContext.lineTo(0, d.BLOCK.RADIUS);
 
             preContext.fill();
 

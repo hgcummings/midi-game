@@ -1,34 +1,34 @@
-define(['data/constants', 'views/util'], function(c, util) {
+define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
     return {
         init: function(context, model) {
-            var gap = c.CORNER - c.BORDER;
-            var inner = c.BORDER - gap;
+            var gap = d.CORNER - d.BORDER;
+            var inner = d.BORDER - gap;
             var totalSpareLives = model.spareLives;
             return {
                 drawBorder: function(model) {
-                    context.fillStyle = '#666666';
-                    context.fillRect(0, gap, c.WIDTH, inner);
-                    context.fillRect(gap, 0, inner, c.HEIGHT);
-                    context.fillRect(c.WIDTH - c.CORNER + gap, 0, inner, c.HEIGHT);
+                    context.fillStyle = c.FIXTURES.BORDER;
+                    context.fillRect(0, gap, d.WIDTH, inner);
+                    context.fillRect(gap, 0, inner, d.HEIGHT);
+                    context.fillRect(d.WIDTH - d.CORNER + gap, 0, inner, d.HEIGHT);
                     
                     
                     for (var life = 0; life < totalSpareLives; ++life) {
-                        var x = (life - (totalSpareLives - 1) / 2) * c.BORDER + c.WIDTH / 2;
-                        var y = c.BORDER / 2;
-                        util.drawCircle(context, '#000', x, y, c.BALL.RADIUS + 2);
+                        var x = (life - (totalSpareLives - 1) / 2) * d.BORDER + d.WIDTH / 2;
+                        var y = d.BORDER / 2;
+                        util.drawCircle(context, c.FIXTURES.SLOT, x, y, d.BALL.RADIUS + 2);
                         if (model.spareLives > life) {
-                            util.drawCircle(context, '#eee', x, y, c.BALL.RADIUS);
+                            util.drawCircle(context, c.BALL, x, y, d.BALL.RADIUS);
                         }
                     }
 
-                    context.fillStyle = '#EEEEEE';
+                    context.fillStyle = c.FIXTURES.CORNER;
                     for (var i = 0; i < 2; ++i) {
                         for (var j = 0; j < 2; ++j) {
                             context.fillRect(
-                                i * (c.WIDTH - c.CORNER),
-                                j * (c.HEIGHT - c.CORNER),
-                                c.CORNER,
-                                c.CORNER
+                                i * (d.WIDTH - d.CORNER),
+                                j * (d.HEIGHT - d.CORNER),
+                                d.CORNER,
+                                d.CORNER
                             );
                         }
                     }

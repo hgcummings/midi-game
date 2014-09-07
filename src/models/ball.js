@@ -1,14 +1,14 @@
-define(['data/constants', 'models/physics'], function(constants, physics) {
+define(['data/dimensions', 'models/physics'], function(d, physics) {
     return {
         init: function(paddle, objects) {
             var self = {};
             self.alive = true;
             self.released = false;
             self.x = paddle.x;
-            self.y = paddle.top - constants.BALL.RADIUS;
-            var radius = self.r = constants.BALL.RADIUS;
+            self.y = paddle.top - d.BALL.RADIUS;
+            var radius = self.r = d.BALL.RADIUS;
 
-            var speed = constants.WIDTH / 2500;
+            var speed = d.WIDTH / 2500;
             var dx = 0;
             var dy = -speed;
             
@@ -29,7 +29,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
                     var previousDistanceToObject = object.distance(self);
                     var currentDistanceToObject = object.distance({ x: newX, y: newY, r: radius });
 
-                    if (previousDistanceToObject > (-constants.BALL.RADIUS) &&
+                    if (previousDistanceToObject > (-d.BALL.RADIUS) &&
                         previousDistanceToObject > currentDistanceToObject &&
                         currentDistanceToObject <= 0) {
                         var deltaToCollision =
@@ -57,7 +57,7 @@ define(['data/constants', 'models/physics'], function(constants, physics) {
             self.update = function(delta, action) {
                 if (self.released) {
                     updatePosition(delta);
-                    if (self.y > constants.HEIGHT) {
+                    if (self.y > d.HEIGHT) {
                         self.alive = false;
                     }
                 } else {
