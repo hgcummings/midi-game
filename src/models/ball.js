@@ -1,6 +1,6 @@
-define(['data/dimensions', 'models/physics'], function(d, physics) {
+define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physics, sound) {
     return {
-        init: function(paddle, objects) {
+        init: function(paddle, objects, input, output) {
             var self = {};
             self.alive = true;
             self.released = false;
@@ -43,6 +43,9 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
                             var newV = physics.reflectionV([dx, dy], collision);
                             dx = newV[0];
                             dy = newV[1];
+                            if (input.getNote()) {
+                                output.playBounce(sound.getMidiNote(input.getNote()));
+                            }
                         }
 
                         newX = newX + dx * (delta - deltaToCollision);

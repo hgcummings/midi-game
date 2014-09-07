@@ -1,6 +1,4 @@
-define(['data/dimensions', 'models/physics'], function(d, physics) {
-    var scaleDegrees = [1, 1.5, 2, 2.5, 3, 4, 4.5, 5, 5.5, 6, 6.5, 7];
-
+define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physics, sound) {
     var left = d.BLOCK.MARGIN.X + (d.BLOCK.SPACING.X - d.BLOCK.SIZE.X) / 2;
     var top = d.BLOCK.MARGIN.Y;
 
@@ -12,109 +10,133 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
         return top + row * d.BLOCK.SPACING.Y;
     };
 
-    function createPlanes(blocks) {
-        var planes = [];
+    var loadLevel = function(data, input, output) {
+        function createPlanes(blocks) {
+            var planes = [];
 
-        var getColumn = function(x) {
-            var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
-            if (withinBlock) {
-                var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
-                if (columnIndex >= 0 && columnIndex < blocks[0].length) {
-                    return columnIndex;
-                }
-            }
-            return null;
-        };
-
-        var getRow = function(y) {
-            var withinBlock = ((y - top) % d.BLOCK.SPACING.Y) <= d.BLOCK.SIZE.Y;
-            if (withinBlock) {
-                var rowIndex = Math.floor((y - top) / d.BLOCK.SPACING.Y);
-                if (rowIndex >= 0 && rowIndex < blocks.length) {
-                    return rowIndex;
-                }
-            }
-            return null;
-        };
-
-        var createHorizontalPlane = function (row, normalY) {
-            return physics.createPlane(
-                [0, normalY],
-                rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
-                function (x, y, t) {
-                    var col = getColumn(x);
-                    if (col !== null && !blocks[row][col].hit) {
-                        blocks[row][col].hit = t;
-                        return [0, normalY];
+            var getColumn = function(x) {
+                var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
+                if (withinBlock) {
+                    var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
+                    if (columnIndex >= 0 && columnIndex < blocks[0].length) {
+                        return columnIndex;
                     }
-                    return null;
                 }
-            );
-        };
-
-        var createVerticalPlane = function (col, normalX) {
-            return physics.createPlane(
-                [normalX, 0],
-                columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
-                function (x, y, t) {
-                    var row = getRow(y);
-                    if (row !== null && !blocks[row][col].hit) {
-                        blocks[row][col].hit = t;
-                        return [normalX, 0];
-                    }
-                    return null;
-                }
-            );
-        };
-
-        for (var row = 0; row < blocks.length; ++row) {
-            planes.push(createHorizontalPlane(row, -1));
-            planes.push(createHorizontalPlane(row, 1));
-        }
-
-        for (var col = 0; col < blocks[0].length; ++col) {
-            planes.push(createVerticalPlane(col, -1));
-            planes.push(createVerticalPlane(col, 1));
-        }
-        return planes;
-    }
-    
-    var createPoints = function(blocks) {
-        var points = [];
-        
-        var createPointsForBlock = function(block) {
-            var collide = function(x, y, t) {
-                if (block.hit) {
-                    return false;
-                }
-                block.hit = t;
-                return true;
+                return null;
             };
-            points.push(physics.createPoint(
-                block.x, block.y, collide));
-            points.push(physics.createPoint(
-                block.x + d.BLOCK.SIZE.X, block.y, collide));
-            points.push(physics.createPoint(
-                block.x, block.y + d.BLOCK.SIZE.Y, collide));
-            points.push(physics.createPoint(
-                block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
+
+            var getRow = function(y) {
+                var withinBlock = ((y - top) % d.BLOCK.SPACING.Y) <= d.BLOCK.SIZE.Y;
+                if (withinBlock) {
+                    var rowIndex = Math.floor((y - top) / d.BLOCK.SPACING.Y);
+                    if (rowIndex >= 0 && rowIndex < blocks.length) {
+                        return rowIndex;
+                    }
+                }
+                return null;
+            };
+
+            var createHorizontalPlane = function (row, normalY) {
+                return physics.createPlane(
+                    [0, normalY],
+                    rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
+                    function (x, y, t) {
+                        var col = getColumn(x);
+                        if (col !== null) {
+                            var block = blocks[row][col];
+                            if (!block.hit) {
+                                if (block.note === input.getNote()) {
+                                    output.playHit(block.midiNote);
+                                    block.hit = t;
+                                    return null;
+                                } else {
+                                    output.playBounce(block.midiNote);
+                                    return [0, normalY];
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                );
+            };
+
+            var createVerticalPlane = function (col, normalX) {
+                return physics.createPlane(
+                    [normalX, 0],
+                    columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
+                    function (x, y, t) {
+                        var row = getRow(y);
+                        if (row !== null) {
+                            var block = blocks[row][col];
+                            if (!block.hit) {
+                                if (block.note === input.getNote()) {
+                                    output.playHit(block.midiNote);
+                                    block.hit = t;
+                                    return null;
+                                } else {
+                                    output.playBounce(block.midiNote);
+                                    return [normalX, 0];
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                );
+            };
+
+            for (var row = 0; row < blocks.length; ++row) {
+                planes.push(createHorizontalPlane(row, -1));
+                planes.push(createHorizontalPlane(row, 1));
+            }
+
+            for (var col = 0; col < blocks[0].length; ++col) {
+                planes.push(createVerticalPlane(col, -1));
+                planes.push(createVerticalPlane(col, 1));
+            }
+            return planes;
+        }
+
+        var createPoints = function(blocks) {
+            var points = [];
+
+            var createPointsForBlock = function(block) {
+                var collide = function(x, y, t) {
+                    if (!block.hit) {
+                        if (block.note === input.getNote()) {
+                            output.playHit(block.midiNote);
+                            block.hit = t;
+                            return false;
+                        } else {
+                            output.playBounce(block.midiNote);
+                            return true;
+                        }
+                    }
+                    return false;
+                };
+                points.push(physics.createPoint(
+                    block.x, block.y, collide));
+                points.push(physics.createPoint(
+                    block.x + d.BLOCK.SIZE.X, block.y, collide));
+                points.push(physics.createPoint(
+                    block.x, block.y + d.BLOCK.SIZE.Y, collide));
+                points.push(physics.createPoint(
+                    block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
+            };
+
+            for (var row = 0; row < blocks.length; ++row) {
+                for (var col = 0; col < blocks[row].length; ++col) {
+                    createPointsForBlock(blocks[row][col]);
+                }
+            }
+
+            return points;
         };
         
-        for (var row = 0; row < blocks.length; ++row) {
-            for (var col = 0; col < blocks[row].length; ++col) {
-                createPointsForBlock(blocks[row][col]);
-            }
-        }
-        
-        return points;
-    };
-
-    var loadLevel = function(data, baseNote) {
 
         var blockForNote = function(note) {
             return {
                 note: note,
-                midiNote: baseNote + scaleDegrees.indexOf(note)
+                midiNote: sound.getMidiNote(note)
             };
         };
 

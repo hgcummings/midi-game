@@ -8,6 +8,7 @@ define(['data/levels', 'input/keyboard'], function(levels, keyboard) {
 
             if (midi.outputs.length === 1) {
                 self.registerStart = function(callback) {
+                    midi.selectOutput(midi.outputs[0].id);
                     callback(levels[0], keyboard);
                 };
                 hide();

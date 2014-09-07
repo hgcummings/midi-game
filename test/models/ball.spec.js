@@ -7,13 +7,21 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
         };
         var model;
         var objects;
+        var stubNote;
+        var bounceNoteSpy;
 
         beforeEach(function() {
+            stubNote = null;
+            bounceNoteSpy = null;
             var stubPaddle = physics.createPlane([0, -1], d.HEIGHT - d.BORDER, function() {
                     return stubNormal;
                 });
             objects = fixtures.init().getCollisionObjects().concat([stubPaddle]);
-            model = ball.init(paddle, objects);
+            model = ball.init(paddle, objects, {
+                getNote: function() { return stubNote; }
+            }, {
+                playBounce: function(note) { bounceNoteSpy = note; }
+            });
         });
 
         describe('init', function() {
@@ -191,6 +199,30 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                 
                 var effectivePlaneY = newPlane.position()[1] + d.BALL.RADIUS;
                 expect(prevY - effectivePlaneY + model.y - effectivePlaneY).toBeCloseTo(prevDistance, 8);
+            });
+            
+            it('plays its current note when bouncing off an object', function() {
+                model.update(100, 'LAUNCH');
+                
+                stubNote = 1;
+                
+                for (var i = 0; i < 100; ++i) {
+                    model.update(100);
+                }
+
+                expect(bounceNoteSpy).toBe(60);
+            });
+
+            it('does not play a note if no current note is selected', function() {
+                model.update(100, 'LAUNCH');
+                
+                stubNote = null;
+                
+                for (var i = 0; i < 100; ++i) {
+                    model.update(100);
+                }
+
+                expect(bounceNoteSpy).toBeNull();
             });
         });
     });

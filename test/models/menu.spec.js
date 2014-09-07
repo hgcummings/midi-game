@@ -79,15 +79,17 @@ define(['menu'], function(menu) {
         });
 
         it('hides immediately and executes start function if there is exactly one output', function () {
-            var result = menu.init(document.getElementById('menu'), createModel(
+            model = createModel(
                 [ createOutput(0, 'Single output') ]
-            ));
+            );
+            var result = menu.init(document.getElementById('menu'), model);
 
             expect($('#menu')).toBeHidden();
 
             var startCallback = jasmine.createSpy();
             result.registerStart(startCallback);
             expect(startCallback).toHaveBeenCalled();
+            expect(model.selectOutput).toHaveBeenCalledWith(0);
         });
 
         function init() {

@@ -30,7 +30,7 @@ function(c, d, fixtures, blocks, paddle, ball) {
                     row.forEach(drawBlock);
                 });
                 paddle.drawPaddle(model.paddle);
-                ball.drawBall(model.ball);
+                ball.drawBall(model.ball, model.input);
 
                 window.requestAnimationFrame(animate);
             };
