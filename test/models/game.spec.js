@@ -6,7 +6,8 @@ define(['models/game', 'data/dimensions'], function(game, d) {
             direction: 0,
             action: null,
             getDirection: function() { return stubInput.direction; },
-            getAction: function() { return stubInput.action; }
+            getAction: function() { return stubInput.action; },
+            getNote: function() { return null; }
         };
 
         beforeEach(function() {
@@ -64,12 +65,13 @@ define(['models/game', 'data/dimensions'], function(game, d) {
 
                 var firstBall = model.ball;
                 
+                var gameTime = 500;
                 while(model.ball.y < model.paddle.top - d.BALL.RADIUS) {
-                    model.update(100);
+                    model.update(gameTime += 100);
                 }
                 
                 for (var i = 0; i < 10; ++i) {
-                    model.update(100);
+                    model.update(gameTime += 500);
                 }
 
                 expect(model.remainingLives).toBe(2);
@@ -95,10 +97,10 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 stubInput.action = 'AIR';
                 model.update(500);
                 stubInput.action = 'FIRE';
-                model.update(500);
+                model.update(1000);
                 var fireMode = model.ball.mode;
                 stubInput.action = 'AIR';
-                model.update(500);
+                model.update(1500);
                 expect(model.ball.mode).toBe(fireMode);
             });
         });
