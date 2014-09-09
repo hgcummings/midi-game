@@ -34,7 +34,14 @@ define(['models/game', 'data/dimensions'], function(game, d) {
             });
             
             it('starts with three spare lives', function() {
-                expect(model.spareLives).toBe(3);
+                expect(model.remainingLives).toBe(3);
+            });
+            
+            it('starts with all available elements', function() {
+                expect(model.remainingElements).toContain('EARTH');
+                expect(model.remainingElements).toContain('AIR');
+                expect(model.remainingElements).toContain('FIRE');
+                expect(model.remainingElements).toContain('WATER');
             });
         });
 
@@ -57,21 +64,42 @@ define(['models/game', 'data/dimensions'], function(game, d) {
 
                 var firstBall = model.ball;
                 
-                var lastY = model.ball.y;
-                
                 while(model.ball.y < model.paddle.top - d.BALL.RADIUS) {
                     model.update(100);
-                    lastY = model.ball.y;
                 }
                 
                 for (var i = 0; i < 10; ++i) {
                     model.update(100);
                 }
 
-                expect(model.spareLives).toBe(2);
+                expect(model.remainingLives).toBe(2);
                 expect(model.ball).not.toBe(firstBall);
                 expect(model.ball.x).toBe(model.paddle.x);
                 expect(model.ball.y).toBeLessThan(model.paddle.top);
+            });
+            
+            it('removes element from remaining elements when used', function() {
+                stubInput.action = 'AIR';
+                model.update(500);
+                expect(model.remainingElements).not.toContain('AIR');
+            });
+
+            it('places current ball back in spare slot when using an element', function() {
+                var initialLives = model.remainingLives;
+                stubInput.action = 'AIR';
+                model.update(500);
+                expect(model.remainingLives).toBe(initialLives + 1);
+            });
+
+            it('does not allow the same element to be used twice', function() {
+                stubInput.action = 'AIR';
+                model.update(500);
+                stubInput.action = 'FIRE';
+                model.update(500);
+                var fireMode = model.ball.mode;
+                stubInput.action = 'AIR';
+                model.update(500);
+                expect(model.ball.mode).toBe(fireMode);
             });
         });
     });

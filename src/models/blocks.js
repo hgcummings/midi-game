@@ -10,7 +10,20 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
         return top + row * d.BLOCK.SPACING.Y;
     };
 
-    var loadLevel = function(data, input, output) {
+    var loadLevel = function(data, output) {
+        var processHit = function(block, time, note) {
+            if (!block.hit) {
+                if (note === true || block.note === note) {
+                    output.playHit(block.midiNote);
+                    block.hit = time;
+                    return note === true;
+                } else {
+                    output.playBounce(block.midiNote);
+                    return true;
+                }
+            }
+        };
+        
         function createPlanes(blocks) {
             var planes = [];
 
@@ -38,22 +51,13 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
 
             var createHorizontalPlane = function (row, normalY) {
                 return physics.createPlane(
+                    'BLOCK',
                     [0, normalY],
                     rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
-                    function (x, y, t) {
+                    function (x, y, t, note) {
                         var col = getColumn(x);
-                        if (col !== null) {
-                            var block = blocks[row][col];
-                            if (!block.hit) {
-                                if (block.note === input.getNote()) {
-                                    output.playHit(block.midiNote);
-                                    block.hit = t;
-                                    return null;
-                                } else {
-                                    output.playBounce(block.midiNote);
-                                    return [0, normalY];
-                                }
-                            }
+                        if (col !== null && processHit(blocks[row][col], t, note)) {
+                            return [0, normalY];
                         }
                         return null;
                     }
@@ -62,22 +66,13 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
 
             var createVerticalPlane = function (col, normalX) {
                 return physics.createPlane(
+                    'BLOCK',
                     [normalX, 0],
                     columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
-                    function (x, y, t) {
+                    function (x, y, t, note) {
                         var row = getRow(y);
-                        if (row !== null) {
-                            var block = blocks[row][col];
-                            if (!block.hit) {
-                                if (block.note === input.getNote()) {
-                                    output.playHit(block.midiNote);
-                                    block.hit = t;
-                                    return null;
-                                } else {
-                                    output.playBounce(block.midiNote);
-                                    return [normalX, 0];
-                                }
-                            }
+                        if (row !== null && processHit(blocks[row][col], t, note)) {
+                            return [normalX, 0];
                         }
                         return null;
                     }
@@ -100,27 +95,17 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             var points = [];
 
             var createPointsForBlock = function(block) {
-                var collide = function(x, y, t) {
-                    if (!block.hit) {
-                        if (block.note === input.getNote()) {
-                            output.playHit(block.midiNote);
-                            block.hit = t;
-                            return false;
-                        } else {
-                            output.playBounce(block.midiNote);
-                            return true;
-                        }
-                    }
-                    return false;
+                var collide = function(x, y, t, note) {
+                    return processHit(block, t, note);
                 };
                 points.push(physics.createPoint(
-                    block.x, block.y, collide));
+                    'BLOCK', block.x, block.y, collide));
                 points.push(physics.createPoint(
-                    block.x + d.BLOCK.SIZE.X, block.y, collide));
+                    'BLOCK', block.x + d.BLOCK.SIZE.X, block.y, collide));
                 points.push(physics.createPoint(
-                    block.x, block.y + d.BLOCK.SIZE.Y, collide));
+                    'BLOCK', block.x, block.y + d.BLOCK.SIZE.Y, collide));
                 points.push(physics.createPoint(
-                    block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
+                    'BLOCK', block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
             };
 
             for (var row = 0; row < blocks.length; ++row) {

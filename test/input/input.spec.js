@@ -35,11 +35,11 @@ define(['input/keyboard'], function(keyboard) {
                 verifyNoteForKeyPress('L', 7);
             });
 
-            it('returns null after key is released', function() {
+            it('continues to return note after key is released', function() {
                 dispatchKeyDown('H');
                 dispatchKeyUp('H');
 
-                expect(input.getNote()).toBeNull();
+                expect(input.getNote()).toBe(4);
             });
 
         });
@@ -80,9 +80,19 @@ define(['input/keyboard'], function(keyboard) {
             });
 
             it('returns correct action for key press', function() {
-                dispatchKeyDown(' ');
+                var verifyActionForKeyPress = function(key, expectedAction) {
+                    dispatchKeyDown(key);
 
-                expect(input.getAction()).toBe('LAUNCH');
+                    var actualAction = input.getAction();
+
+                    expect(actualAction).toBe(expectedAction);
+                };
+
+                verifyActionForKeyPress(' ', 'LAUNCH');
+                verifyActionForKeyPress('1', 'EARTH');
+                verifyActionForKeyPress('2', 'AIR');
+                verifyActionForKeyPress('3', 'FIRE');
+                verifyActionForKeyPress('4', 'WATER');
             });
 
             it('returns no-op after key is released', function() {
@@ -111,7 +121,7 @@ define(['input/keyboard'], function(keyboard) {
         };
 
         var getKeyCode = function(key) {
-            if ((key >= 'A' && key <= 'Z') || key === ' ') {
+            if ((key >= '0' && key <= '9') || (key >= 'A' && key <= 'Z') || key === ' ') {
                 return key.charCodeAt(0);
             } else if (key === '/') {
                 return 191;

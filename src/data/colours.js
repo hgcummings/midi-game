@@ -22,6 +22,12 @@ define(function() {
             6: '#0026FF',
             6.5: '#57007F',
             7: '#B200FF'            
+        },
+        ELEMENTS: {
+            EARTH: ['#855723', '#613318'],
+            AIR: ['#FFFFFF', '#CCE0E9'],
+            FIRE: ['#ff0', '#f00'],
+            WATER: ['#0ff', '#00f']
         }
     };
 });

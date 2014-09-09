@@ -20,7 +20,7 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
             };
             
             self.getCollisionObjects = function() {
-                return [physics.createPlane([0, -1], self.top, self.positionNormal)];
+                return [physics.createPlane('PADDLE', [0, -1], self.top, self.positionNormal)];
             };
 
             self.positionNormal = function(x) {

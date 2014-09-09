@@ -92,11 +92,17 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ], {
-                getNote: function() { return stubNote; }
-            }, {
                 playHit: function(note) { hitNoteSpy = note; },
                 playBounce: function(note) { bounceNoteSpy = note; }
             });
+        });
+        
+        it('specifies the object type as BLOCK', function() {
+            var objects = model.getCollisionObjects();
+            
+            for (var i = 0; i < objects.length; ++i) {
+                expect(objects[i].type).toBe('BLOCK');
+            }
         });
         
         describe('planes', function() {
@@ -183,22 +189,60 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 });
 
                 it('from top', function() {
-                    topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime);
+                    topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime, stubNote);
                 });
 
                 it('from bottom', function() {
-                    bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime);
+                    bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime, stubNote);
                     expect(block.hit).toBe(gameTime);
                 });
 
                 it('from left', function() {
-                    leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime);
+                    leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime, stubNote);
                     expect(block.hit).toBe(gameTime);
                 });
 
                 it('from right', function() {
-                    rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime);
+                    rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime, stubNote);
                     expect(block.hit).toBe(gameTime);
+                });
+            });
+
+            describe('records collisions against blocks when hit with the wildcard note', function() {
+                var block;
+                var gameTime = 1000;
+                var result;
+
+                beforeEach(function() {
+                    block = model.all[3][8];
+                    expect(block.hit).toBeFalsy();
+                });
+
+                afterEach(function() {
+                    expect(block.hit).toBe(gameTime);
+                    expect(hitNoteSpy).toBe(block.midiNote);
+                    expect(result).toBeTruthy();
+                });
+
+                it('from top', function() {
+                    result = topPlaneFor(block)
+                        .collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime, true);
+                });
+
+                it('from bottom', function() {
+                    result = bottomPlaneFor(block)
+                        .collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime, true);
+                });
+
+                it('from left', function() {
+                    result = leftPlaneFor(block)
+                        .collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime, true);
+                    expect(block.hit).toBe(gameTime);
+                });
+
+                it('from right', function() {
+                    result = rightPlaneFor(block)
+                        .collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime, true);
                 });
             });
 
@@ -218,19 +262,19 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 });
 
                 it('from top', function() {
-                    topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime);
+                    topPlaneFor(block).collideAt(topEdgeOf(block)[0], topEdgeOf(block)[1], gameTime, stubNote);
                 });
 
                 it('from bottom', function() {
-                    bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime);
+                    bottomPlaneFor(block).collideAt(bottomEdgeOf(block)[0], bottomEdgeOf(block)[1], gameTime, stubNote);
                 });
 
                 it('from left', function() {
-                    leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime);
+                    leftPlaneFor(block).collideAt(leftEdgeOf(block)[0], leftEdgeOf(block)[1], gameTime, stubNote);
                 });
 
                 it('from right', function() {
-                    rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime);
+                    rightPlaneFor(block).collideAt(rightEdgeOf(block)[0], rightEdgeOf(block)[1], gameTime, stubNote);
                 });
             });
 
@@ -401,10 +445,23 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 expect(block.hit).toBeFalsy();
                 stubNote = block.note;
 
-                point.collideAt(block.x, block.y, gameTime);
+                point.collideAt(block.x, block.y, gameTime, stubNote);
 
                 expect(block.hit).toBe(gameTime);
                 expect(hitNoteSpy).toBe(block.midiNote);
+            });
+
+            it('records collisions against blocks when hit with the wildcard note', function() {
+                var block = model.all[3][8];
+                var point = pointsMatching(block.x, block.y)[0];
+                var gameTime = 1000;
+                expect(block.hit).toBeFalsy();
+
+                var result = point.collideAt(block.x, block.y, gameTime, true);
+
+                expect(block.hit).toBe(gameTime);
+                expect(hitNoteSpy).toBe(block.midiNote);
+                expect(result).toBeTruthy();
             });
             
             it('ignores collisions against blocks when hit with the wrong note', function() {
@@ -414,7 +471,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 expect(block.hit).toBeFalsy();
                 stubNote = block.note + 2;
 
-                point.collideAt(block.x, block.y, gameTime);
+                point.collideAt(block.x, block.y, gameTime, stubNote);
 
                 expect(block.hit).toBeFalsy();
                 expect(bounceNoteSpy).toBe(block.midiNote);

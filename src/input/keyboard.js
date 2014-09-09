@@ -12,6 +12,13 @@ define(function() {
     noteMap[75] = 6;
     noteMap[79] = 6.5;
     noteMap[76] = 7;
+    
+    var actionMap = [];
+    actionMap[32] = 'LAUNCH';
+    actionMap[49] = 'EARTH';
+    actionMap[50] = 'AIR';
+    actionMap[51] = 'FIRE';
+    actionMap[52] = 'WATER';
 
     return {
         init: function() {
@@ -33,9 +40,7 @@ define(function() {
             };
 
             var getAction = function(keyCode) {
-                if (keyCode === 32) {
-                    return 'LAUNCH';
-                }
+                return actionMap[keyCode];
             };
 
             document.onkeydown = function(event) {
@@ -49,9 +54,7 @@ define(function() {
             };
 
             document.onkeyup = function(event) {
-                if (getNote(event.keyCode) === currentNote) {
-                    currentNote = null;
-                } else if (getDirection(event.keyCode) === currentDirection) {
+                if (getDirection(event.keyCode) === currentDirection) {
                     currentDirection = 0;
                 } else if (getAction(event.keyCode) === currentAction) {
                     currentAction = null;

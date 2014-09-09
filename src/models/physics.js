@@ -26,15 +26,16 @@ define(['models/maths'], function(maths) {
                 v[1] - 2 * n[1] * vn
             ];
         },
-        createPoint: function(x, y, collisionCallback) {
+        createPoint: function(type, x, y, collisionCallback) {
             var position = [x, y];
             var self = {
+                type: type,
                 position: function() { return position; },
                 positionNormal: function(particle) {
                     return maths.normalise([particle.x - x, particle.y - y]);
                 },
-                collideAt: function(particleX, particleY, gameTime) {
-                    if (!collisionCallback || collisionCallback(particleX, particleY, gameTime)) {
+                collideAt: function(particleX, particleY, gameTime, note) {
+                    if (!collisionCallback || collisionCallback(particleX, particleY, gameTime, note)) {
                         return maths.normalise([particleX - x, particleY - y]);
                     } else {
                         return null;
@@ -48,13 +49,14 @@ define(['models/maths'], function(maths) {
             
             return self;
         },
-        createPlane: function(normal, position, collisionCallback) {
+        createPlane: function(type, normal, position, collisionCallback) {
             if (typeof position === 'number') {
                 var staticPosition = [Math.abs(normal[0]) * position, Math.abs(normal[1]) * position];
                 position = function() { return staticPosition; };
             }
             
             var self = {
+                type: type,
                 positionNormal: function() { return normal; },
                 position: position,
                 collideAt: collisionCallback || (function() { return normal; })
