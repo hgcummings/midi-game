@@ -1,29 +1,33 @@
 define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], function(d, physics, maths, sound) {
+    var always = function() { return true; };
+    var never = function() { return false; };
+    var fromInput = function(input) { return input.getNote(); };
+    var defaultSpeed = d.WIDTH / 3000;
+    
     var modes = {
-        REGULAR: {
-            regular: true,
-            speed: d.WIDTH / 3000,
-            getNote: function(input) { return input.getNote(); },
-            isSolid: function() { return true; },
-            isSticky: function() { return false; }
+        STANDARD: {
+            speed: defaultSpeed,
+            getNote: fromInput,
+            isSolid: always,
+            isSticky: never
         },
         EARTH: {
-            speed: d.WIDTH / 3600,
-            getNote: function(input) { return input.getNote(); },
-            isSolid: function() { return true; },
+            speed: defaultSpeed * 5 / 6,
+            getNote: fromInput,
+            isSolid: always,
             isSticky: function(type) { return type === 'PADDLE'; }
         },
         AIR: {
-            speed: d.WIDTH / 2400,
-            getNote: function() { return false; },
+            speed: defaultSpeed * 5 / 4,
+            getNote: never,
             isSolid: function(type) { return type !== 'BLOCK'; },
-            isSticky: function() { return false; }
+            isSticky: never
         },
         FIRE: {
-            speed: d.WIDTH / 1800,
-            getNote: function() { return true; },
-            isSolid: function() { return true; },
-            isSticky: function() { return false; }
+            speed: defaultSpeed * 5 / 3,
+            getNote: always,
+            isSolid: always,
+            isSticky: never
         }
     };
     
@@ -34,11 +38,11 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
             self.released = false;
             self.x = paddle.x;
             self.y = paddle.top - d.BALL.RADIUS;
-            self.mode = modes.REGULAR;
+            self.mode = modes.STANDARD;
             var radius = self.r = d.BALL.RADIUS;
 
             var dx = 0;
-            var dy = -modes.REGULAR.speed;
+            var dy = -modes.STANDARD.speed;
             
             var updatePosition = function(delta, gameTime) {
                 var newX = self.x + dx * delta;

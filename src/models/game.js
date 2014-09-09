@@ -8,6 +8,18 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
             self.input = input;
             self.remainingLives = 3;
             self.remainingElements = allElements.concat();
+
+            self.fixtures = fixtures.init();
+            self.blocks = blocks.init(level, output);
+            self.paddle = paddle.init();
+            
+            var collisionObjects = self.fixtures.getCollisionObjects()
+                .concat(self.blocks.getCollisionObjects(), self.paddle.getCollisionObjects());
+            var createBall = function() {
+                return ball.init(self.paddle, collisionObjects, input, output);
+            };
+
+            self.ball = createBall();
             self.update = function(gameTime) {
                 var delta = gameTime - prevTime;
                 var action = input.getAction();
@@ -25,17 +37,11 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
                 
                 if (!self.ball.alive) {
                     --self.remainingLives;
-                    self.ball = ball.init(self.paddle, collisionObjects, input, output);
+                    self.ball = createBall();
                 }
                 
                 prevTime = gameTime;
             };
-            self.fixtures = fixtures.init();
-            self.blocks = blocks.init(level, output);
-            self.paddle = paddle.init();
-            var collisionObjects = self.fixtures.getCollisionObjects()
-                .concat(self.blocks.getCollisionObjects(), self.paddle.getCollisionObjects());
-            self.ball = ball.init(self.paddle, collisionObjects, input, output);
 
             return self;
         }
