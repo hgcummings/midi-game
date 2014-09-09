@@ -35,11 +35,11 @@ define(['input/keyboard'], function(keyboard) {
                 verifyNoteForKeyPress('L', 7);
             });
 
-            it('continues to return note after key is released', function() {
+            it('returns null after key is released', function() {
                 dispatchKeyDown('H');
                 dispatchKeyUp('H');
 
-                expect(input.getNote()).toBe(4);
+                expect(input.getNote()).toBeNull();
             });
 
         });

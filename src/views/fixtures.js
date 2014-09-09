@@ -28,7 +28,6 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                     context.fillRect(gap, 0, inner, d.HEIGHT);
                     context.fillRect(d.WIDTH - d.CORNER + gap, 0, inner, d.HEIGHT);
                     
-                    
                     for (var life = 0; life <= totalSpareLives; ++life) {
                         var x = (life - totalSpareLives / 2) * d.BORDER + d.WIDTH / 2;
                         var y = (d.BORDER + gap) / 2;

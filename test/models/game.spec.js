@@ -11,7 +11,7 @@ define(['models/game', 'data/dimensions'], function(game, d) {
         };
 
         beforeEach(function() {
-            model = game.init(level, stubInput);
+            model = game.init(level, stubInput, { playBounce: function() {} });
         });
 
         describe('init', function() {
@@ -102,6 +102,27 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 stubInput.action = 'AIR';
                 model.update(1500);
                 expect(model.ball.mode).toBe(fireMode);
+            });
+            
+            it('deactivates the ball when water is selected', function() {
+                stubInput.action = 'WATER';
+                model.update(500);
+                
+                expect(model.ball).toBeNull();
+                expect(model.wave).toBeTruthy();
+            });
+
+            it('restores next ball after water expires', function() {
+                stubInput.action = 'WATER';
+                model.update(500);
+                
+                var gameTime = 500;
+                for (var i = 0; i < 20; ++i) {
+                    model.update(gameTime += 1000);
+                }
+
+                expect(model.wave).toBeNull();
+                expect(model.ball).toBeTruthy();
             });
         });
     });

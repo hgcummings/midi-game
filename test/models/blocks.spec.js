@@ -75,6 +75,52 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
         });
     });
     
+    describe('getIntersection', function() {
+        var model;
+        
+        beforeEach(function() {
+            model = blocks.init([
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            ]);
+        });
+        
+        it('returns blocks intersecting line', function() {
+            var result = model.getIntersection(
+                d.BLOCK.MARGIN.X + 4 * d.BLOCK.SPACING.X - d.BLOCK.SIZE.X / 2,
+                d.BLOCK.MARGIN.Y + d.BLOCK.SPACING.Y,
+                d.HEIGHT - d.BORDER
+            );
+            
+            expect(result.length).toBe(5);
+            expect(result).toContain(model.all[1][3]);
+            expect(result).toContain(model.all[2][3]);
+            expect(result).toContain(model.all[3][3]);
+            expect(result).toContain(model.all[4][3]);
+            expect(result).toContain(model.all[5][3]);
+        });
+
+        it('detects intersecting blocks in first column', function() {
+            var result = model.getIntersection(
+                d.BLOCK.MARGIN.X + d.BLOCK.SIZE.X / 2,
+                d.BORDER,
+                d.HEIGHT - d.BORDER
+            );
+
+            expect(result.length).toBe(6);
+            expect(result).toContain(model.all[0][0]);
+            expect(result).toContain(model.all[1][0]);
+            expect(result).toContain(model.all[2][0]);
+            expect(result).toContain(model.all[3][0]);
+            expect(result).toContain(model.all[4][0]);
+            expect(result).toContain(model.all[5][0]);
+        });
+    });
+    
     describe('getCollisionObjects', function() {
         var model;
         var stubNote = null;

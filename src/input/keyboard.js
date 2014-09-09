@@ -58,6 +58,8 @@ define(function() {
                     currentDirection = 0;
                 } else if (getAction(event.keyCode) === currentAction) {
                     currentAction = null;
+                } else if (getNote(event.keyCode) === currentNote) {
+                    currentNote = null;
                 }
             };
 

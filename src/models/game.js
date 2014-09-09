@@ -1,4 +1,5 @@
-define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], function(fixtures, blocks, paddle, ball) {
+define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
+    function(fixtures, blocks, paddle, ball, wave) {
     var allElements = ['EARTH', 'AIR', 'FIRE', 'WATER'];
     return {
         init: function(level, input, output) {
@@ -18,6 +19,9 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
             var createBall = function() {
                 return ball.init(self.paddle, collisionObjects, input, output);
             };
+            var getActive = function() {
+                return self.ball || self.wave;
+            };
 
             self.ball = createBall();
             self.update = function(gameTime) {
@@ -33,10 +37,21 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball'], fun
                     self.remainingElements.splice(elementIndex, 1);
                 }
                 self.paddle.update(delta, input.getDirection());
-                self.ball.update(delta, action, gameTime);
                 
-                if (!self.ball.alive) {
+                if (action === 'WATER') {
+                    self.ball = null;
+                    self.wave = wave.init(self.paddle, self.blocks, output);
+                }
+                
+                if (self.ball !== null) {
+                    self.ball.update(delta, action, gameTime);
+                } else if (self.wave !== null) {
+                    self.wave.update(delta);
+                }
+                
+                if (!getActive().alive) {
                     --self.remainingLives;
+                    self.wave = null;
                     self.ball = createBall();
                 }
                 

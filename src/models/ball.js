@@ -1,29 +1,38 @@
 define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], function(d, physics, maths, sound) {
     var always = function() { return true; };
     var never = function() { return false; };
-    var fromInput = function(input) { return input.getNote(); };
     var defaultSpeed = d.WIDTH / 3000;
+    var previousNote = null;
     
     var modes = {
         STANDARD: {
             speed: defaultSpeed,
-            getNote: fromInput,
+            getNote: function(input) {
+                if (input.getNote() === null) {
+                    return previousNote;
+                } else {
+                    return input.getNote();
+                }
+            },
             isSolid: always,
             isSticky: never
         },
         EARTH: {
+            element: 'EARTH',
             speed: defaultSpeed * 5 / 6,
-            getNote: fromInput,
+            getNote: function(input) { return input.getNote(); },
             isSolid: always,
             isSticky: function(type) { return type === 'PADDLE'; }
         },
         AIR: {
+            element: 'AIR',
             speed: defaultSpeed * 5 / 4,
             getNote: never,
             isSolid: function(type) { return type !== 'BLOCK'; },
             isSticky: never
         },
         FIRE: {
+            element: 'FIRE',
             speed: defaultSpeed * 5 / 3,
             getNote: always,
             isSolid: always,
@@ -34,6 +43,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
     return {
         init: function(paddle, objects, input, output) {
             var self = {};
+            previousNote = null;
             self.alive = true;
             self.released = false;
             self.x = paddle.x;
@@ -95,6 +105,9 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
             };
 
             self.update = function(delta, action, gameTime) {
+                if (input.getNote() !== null) {
+                    previousNote = input.getNote();
+                }
                 if (self.released) {
                     updatePosition(delta, gameTime);
                     if (self.y > d.HEIGHT) {

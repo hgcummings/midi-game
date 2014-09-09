@@ -6,17 +6,17 @@ define(function() {
             return baseNote + scaleDegrees.indexOf(note);
         },
         init: function(output) {
-            var hitChannel = output.getChannel(0);
-            var bounceChannel = output.getChannel(1);
-            hitChannel.selectInstrument(53);
-            bounceChannel.selectInstrument(98);
+            var channel = output.getChannel();
             
             return {
                 playHit: function(midiNote) {
-                    hitChannel.playNote(midiNote, 1000);
+                    channel.playNote(midiNote, 1000);
                 },
                 playBounce: function(midiNote) {
-                    bounceChannel.playNote(midiNote, 1000);
+                    channel.playNote(midiNote, 1000);
+                },
+                startNote: function(midiNote) {
+                    return channel.startNote(midiNote);
                 }
             };
         }

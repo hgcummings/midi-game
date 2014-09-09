@@ -20,19 +20,29 @@ define(function () {
                         var gainNode = context.createGain();
                         oscillator.connect(gainNode);
                         gainNode.connect(context.destination);
-                        oscillator.start(0);
+                        oscillator.start(context.currentTime);
                         gainNode.gain.setValueAtTime(1, context.currentTime);
                         gainNode.gain.linearRampToValueAtTime(0, context.currentTime + duration / 1000);
                         oscillator.stop(context.currentTime + duration / 1000);
                     };
+                    
+                    var startNote = function(note) {
+                        var oscillator = context.createOscillator();
+                        oscillator.type = waveform;
+                        oscillator.frequency.value = frequencies[note];
+                        oscillator.connect(context.destination);
+                        oscillator.start(context.currentTime);
                         
-                    var selectInstrument = function (instrument) {
-                        // No-op (sine waves for all)
+                        return {
+                            stop: function() {
+                                oscillator.stop(context.currentTime);
+                            }
+                        };
                     };
     
                     return {
-                        selectInstrument: selectInstrument,
-                        playNote: playNote
+                        playNote: playNote,
+                        startNote: startNote
                     };
                 };
     

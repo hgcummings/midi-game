@@ -9,6 +9,14 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
         var objects;
         var stubNote;
         var bounceNoteSpy;
+        
+        var createModel = function() {
+            return ball.init(paddle, objects, {
+                getNote: function() { return stubNote; }
+            }, {
+                playBounce: function(note) { bounceNoteSpy = note; }
+            });
+        };
 
         beforeEach(function() {
             stubNote = null;
@@ -17,11 +25,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                     return stubNormal;
                 });
             objects = fixtures.init().getCollisionObjects().concat([stubPaddle]);
-            model = ball.init(paddle, objects, {
-                getNote: function() { return stubNote; }
-            }, {
-                playBounce: function(note) { bounceNoteSpy = note; }
-            });
+            model = createModel();
         });
 
         describe('init', function() {
@@ -235,22 +239,66 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
 
                 expect(bounceNoteSpy).toBe(60);
             });
-
-            it('does not play a note if no current note is selected', function() {
-                model.update(100, 'LAUNCH');
-                
-                stubNote = null;
-                
-                for (var i = 0; i < 100; ++i) {
-                    model.update(100);
-                }
-
-                expect(bounceNoteSpy).toBeNull();
-            });
         });
         
         describe('modes', function() {
+            describe('normal', function() {
+                it('latches current note', function() {
+                    model.update(100, 'LAUNCH');
+
+                    stubNote = 1;
+                    model.update(100);
+                    stubNote = null;
+
+                    for (var i = 0; i < 100; ++i) {
+                        model.update(100);
+                    }
+
+                    expect(bounceNoteSpy).toBe(60);
+                });
+                
+                it('clears previous note on re-initialised', function() {
+                    model.update(100, 'LAUNCH');
+
+                    stubNote = 1;
+                    model.update(100);
+                    stubNote = null;
+
+                    for (var i = 0; i < 100; ++i) {
+                        model.update(100);
+                    }
+
+                    expect(bounceNoteSpy).toBe(60);
+                    
+                    bounceNoteSpy = null;
+
+                    model = createModel();
+                    model.update(100, 'LAUNCH');
+
+                    for (i = 0; i < 100; ++i) {
+                        model.update(100);
+                    }
+
+                    expect(bounceNoteSpy).toBeNull();
+                });
+            });
+            
             describe('earth', function() {
+                it('does not latch current note', function() {
+                    model.update(100, 'LAUNCH');
+                    model.update(100, 'EARTH');
+
+                    stubNote = 1;
+                    model.update(100);
+                    stubNote = null;
+
+                    for (var i = 0; i < 100; ++i) {
+                        model.update(100);
+                    }
+
+                    expect(bounceNoteSpy).toBeNull();
+                });
+                
                 it('moves slower than a standard ball', function() {
                     model.update(100, 'LAUNCH');
                     var y1 = model.y;

@@ -11,6 +11,17 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
     };
 
     var loadLevel = function(data, output) {
+        var getColumn = function(blocks, x) {
+            var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
+            if (withinBlock) {
+                var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
+                if (columnIndex >= 0 && columnIndex < blocks[0].length) {
+                    return columnIndex;
+                }
+            }
+            return null;
+        };
+        
         var processHit = function(block, time, note) {
             if (!block.hit) {
                 if (note === true || block.note === note) {
@@ -26,17 +37,6 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
         
         function createPlanes(blocks) {
             var planes = [];
-
-            var getColumn = function(x) {
-                var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
-                if (withinBlock) {
-                    var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
-                    if (columnIndex >= 0 && columnIndex < blocks[0].length) {
-                        return columnIndex;
-                    }
-                }
-                return null;
-            };
 
             var getRow = function(y) {
                 var withinBlock = ((y - top) % d.BLOCK.SPACING.Y) <= d.BLOCK.SIZE.Y;
@@ -55,7 +55,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                     [0, normalY],
                     rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
                     function (x, y, t, note) {
-                        var col = getColumn(x);
+                        var col = getColumn(blocks, x);
                         if (col !== null && processHit(blocks[row][col], t, note)) {
                             return [0, normalY];
                         }
@@ -117,6 +117,24 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             return points;
         };
         
+        var getIntersection = function(x, start, end) {
+            var column = getColumn(all, x);
+            if (column !== null) {
+                var topRow = Math.max(0, Math.floor(
+                    (start - top + (d.BLOCK.SPACING.Y - d.BLOCK.SIZE.Y)) / d.BLOCK.SPACING.Y));
+                if (topRow < all.length) {
+                    var bottomRow = Math.min(all.length - 1, (end - top) / d.BLOCK.SPACING.Y);
+                    if (bottomRow >= 0) {
+                        var intersecting = [];
+                        for (var row = topRow; row <= bottomRow; ++row) {
+                            intersecting.push(all[row][column]);
+                        }
+                        return intersecting;
+                    }
+                }
+            }
+            return [];
+        };     
 
         var blockForNote = function(note) {
             return {
@@ -166,7 +184,8 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             all: all,
             getCollisionObjects: function() { return planes.concat(points); },
             getCollisionPlanes: function() { return planes; },
-            getCollisionPoints: function() { return points; }
+            getCollisionPoints: function() { return points; },
+            getIntersection: getIntersection
         };
     };
 
