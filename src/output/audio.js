@@ -30,12 +30,16 @@ define(function () {
                         var oscillator = context.createOscillator();
                         oscillator.type = waveform;
                         oscillator.frequency.value = frequencies[note];
-                        oscillator.connect(context.destination);
+                        var gainNode = context.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(context.destination);
                         oscillator.start(context.currentTime);
+                        gainNode.gain.setValueAtTime(1, context.currentTime);
                         
                         return {
                             stop: function() {
-                                oscillator.stop(context.currentTime);
+                                gainNode.gain.linearRampToValueAtTime(0, context.currentTime + 0.3);
+                                oscillator.stop(context.currentTime + 0.3);
                             }
                         };
                     };
