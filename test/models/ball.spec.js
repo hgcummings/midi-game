@@ -321,6 +321,32 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                     expect(model.y).toEqual(paddle.top - d.BALL.RADIUS);
                     expect(model.released).toBe(false);
                 });
+                
+                it('moves directly upwards when re-released', function() {
+                    model.update(100, 'LAUNCH');
+                    model.update(100, 'EARTH');
+
+                    var collided = false;
+                    var point = physics.createPoint('BLOCK',
+                        model.x - d.BALL.RADIUS / 2, model.y - d.HEIGHT / 5,
+                        function() { collided = true; return true; }
+                    );
+                    
+                    objects.push(point);
+                    
+                    while(model.released) {
+                        model.update(100);
+                    }
+                    
+                    objects.pop();
+                    
+                    model.update(100, 'LAUNCH');
+                    var initialX = model.x;
+                    model.update(100);
+                    
+                    expect(model.released).toBe(true);
+                    expect(model.x).toBe(initialX);
+                });
             });
             
             describe('air', function() {

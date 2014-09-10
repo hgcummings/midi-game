@@ -92,6 +92,8 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                         
                         if (collision && self.mode.isSticky(object.type)) {
                             self.released = false;
+                            dx = object.positionNormal()[0] * self.mode.speed;
+                            dy = object.positionNormal()[1] * self.mode.speed;
                             continue;
                         }
 
