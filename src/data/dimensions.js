@@ -2,7 +2,7 @@ define(function() {
     var defaultWidth = 768;
     var defaultHeight = 432;
     var scaleFactor = Math.min(window.innerHeight / defaultHeight, window.innerWidth / defaultWidth);
-    scaleFactor = Math.max(0.5, Math.round(2 * scaleFactor) / 2);
+    scaleFactor = Math.max(0.5, Math.floor(2 * scaleFactor) / 2);
     
     var scale = function(number) {
         return Math.round(number * scaleFactor);
