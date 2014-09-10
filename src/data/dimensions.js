@@ -14,15 +14,13 @@ define(function() {
         BORDER: scale(28),
         CORNER: scale(32),
         BLOCK: {
-            SPACING: { X: scale(40), Y: scale(40) },
-            SIZE: { X: scale(32), Y: scale(18) },
-            MARGIN: { X: scale(64), Y: scale(76) },
+            MARGIN: { X: scale(68), Y: scale(68) },
+            RATIO: 1.618,
             RADIUS: scale(2)
         },
         PADDLE: {
             SIZE: { X: scale(64), Y: scale(8) },
-            MARGIN: { X: scale(32), Y: scale(8) },
-            RADIUS: scale(256)
+            MARGIN: { X: scale(32), Y: scale(8) }
         },
         BALL: {
             RADIUS: scale(5)

@@ -11,7 +11,7 @@ function(c, d, fixtures, blocks, paddle, ball) {
             var context = canvas.getContext('2d');
             var startTime = new Date().getTime();
             fixtures = fixtures.init(context, model);
-            blocks = blocks.init(context);
+            blocks = blocks.init(context, model.blocks);
             paddle = paddle.init(context);
             ball = ball.init(context);
             

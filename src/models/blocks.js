@@ -1,20 +1,28 @@
 define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physics, sound) {
-    var left = d.BLOCK.MARGIN.X + (d.BLOCK.SPACING.X - d.BLOCK.SIZE.X) / 2;
-    var top = d.BLOCK.MARGIN.Y;
-
-    var columnLeft = function (col) {
-        return left + col * d.BLOCK.SPACING.X;
-    };
-
-    var rowTop = function(row) {
-        return top + row * d.BLOCK.SPACING.Y;
-    };
-
     var loadLevel = function(data, output) {
+        var left = d.BLOCK.MARGIN.X;
+        var top = d.BLOCK.MARGIN.Y;
+        
+        var gap = (d.WIDTH - 2 * d.BLOCK.MARGIN.X) / (4 * data[0].length + data[0].length - 1);
+
+        var width = Math.round(gap * 4);
+        var height = Math.round(width / d.BLOCK.RATIO);
+
+        var spacingX = Math.round(gap * 5);
+        var spacingY = Math.round(gap * 5);
+                
+        var columnLeft = function (col) {
+            return left + col * spacingX;
+        };
+
+        var rowTop = function(row) {
+            return top + row * spacingY;
+        };
+        
         var getColumn = function(blocks, x) {
-            var withinBlock = ((x - left) % d.BLOCK.SPACING.X) <= d.BLOCK.SIZE.X;
+            var withinBlock = ((x - left) % spacingX) <= width;
             if (withinBlock) {
-                var columnIndex = Math.floor((x - left) / d.BLOCK.SPACING.X);
+                var columnIndex = Math.floor((x - left) / spacingX);
                 if (columnIndex >= 0 && columnIndex < blocks[0].length) {
                     return columnIndex;
                 }
@@ -39,9 +47,9 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             var planes = [];
 
             var getRow = function(y) {
-                var withinBlock = ((y - top) % d.BLOCK.SPACING.Y) <= d.BLOCK.SIZE.Y;
+                var withinBlock = ((y - top) % spacingY) <= height;
                 if (withinBlock) {
-                    var rowIndex = Math.floor((y - top) / d.BLOCK.SPACING.Y);
+                    var rowIndex = Math.floor((y - top) / spacingY);
                     if (rowIndex >= 0 && rowIndex < blocks.length) {
                         return rowIndex;
                     }
@@ -53,7 +61,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 return physics.createPlane(
                     'BLOCK',
                     [0, normalY],
-                    rowTop(row) + d.BLOCK.SIZE.Y * (normalY + 1) / 2,
+                    rowTop(row) + height * (normalY + 1) / 2,
                     function (x, y, t, note) {
                         var col = getColumn(blocks, x);
                         if (col !== null && processHit(blocks[row][col], t, note)) {
@@ -68,7 +76,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 return physics.createPlane(
                     'BLOCK',
                     [normalX, 0],
-                    columnLeft(col) + d.BLOCK.SIZE.X * (normalX + 1) / 2,
+                    columnLeft(col) + width * (normalX + 1) / 2,
                     function (x, y, t, note) {
                         var row = getRow(y);
                         if (row !== null && processHit(blocks[row][col], t, note)) {
@@ -101,11 +109,11 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 points.push(physics.createPoint(
                     'BLOCK', block.x, block.y, collide));
                 points.push(physics.createPoint(
-                    'BLOCK', block.x + d.BLOCK.SIZE.X, block.y, collide));
+                    'BLOCK', block.x + width, block.y, collide));
                 points.push(physics.createPoint(
-                    'BLOCK', block.x, block.y + d.BLOCK.SIZE.Y, collide));
+                    'BLOCK', block.x, block.y + height, collide));
                 points.push(physics.createPoint(
-                    'BLOCK', block.x + d.BLOCK.SIZE.X, block.y + d.BLOCK.SIZE.Y, collide));
+                    'BLOCK', block.x + width, block.y + height, collide));
             };
 
             for (var row = 0; row < blocks.length; ++row) {
@@ -121,9 +129,9 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             var column = getColumn(all, x);
             if (column !== null) {
                 var topRow = Math.max(0, Math.floor(
-                    (start - top + (d.BLOCK.SPACING.Y - d.BLOCK.SIZE.Y)) / d.BLOCK.SPACING.Y));
+                    (start - top + (spacingY - height)) / spacingY));
                 if (topRow < all.length) {
-                    var bottomRow = Math.min(all.length - 1, (end - top) / d.BLOCK.SPACING.Y);
+                    var bottomRow = Math.min(all.length - 1, (end - top) / spacingY);
                     if (bottomRow >= 0) {
                         var intersecting = [];
                         for (var row = topRow; row <= bottomRow; ++row) {
@@ -163,7 +171,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             return blocks;
         };
 
-        var addIndices = function(blocks) {
+        var addCoordinates = function(blocks) {
             for (var col = 0; col < blocks[0].length; ++col) {
                 for (var row = blocks.length - 1; row >= 0; --row) {
                     blocks[row][col].x = columnLeft(col);
@@ -173,7 +181,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             return blocks;
         };
 
-        var all = addIndices(adjustNotes(data.map(function(line) {
+        var all = addCoordinates(adjustNotes(data.map(function(line) {
             return line.map(blockForNote);
         })));
 
@@ -182,6 +190,8 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
 
         return {
             all: all,
+            blockWidth: width,
+            blockHeight: height,
             getCollisionObjects: function() { return planes.concat(points); },
             getCollisionPlanes: function() { return planes; },
             getCollisionPoints: function() { return points; },
