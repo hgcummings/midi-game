@@ -22,7 +22,7 @@ define(['data/dimensions'], function(d) {
                     }
                 } else {
                     self.bottom -= growthRate * delta / 2;
-                    if (self.bottom < self.top) {
+                    if (self.bottom < self.top + 2 * d.BALL.RADIUS) {
                         self.bottom = self.top;
                         self.alive = false;
                     }
