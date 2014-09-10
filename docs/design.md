@@ -23,11 +23,10 @@
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
 
 TODO:
- * Wave
+ * Levels
+ * Tutorial
  * Paddle acceleration
  * Paddle imparting momentum to ball on launch
- * Game over and level cleared screens
- * Resume after browser pauses animation
- * Manual pause and help screen
+ * Help screen
  * Timer, par times (gold/silver/bronze) for levels
  * Local storage for level progress

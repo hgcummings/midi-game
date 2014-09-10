@@ -1,6 +1,6 @@
 define(['models/game', 'data/dimensions'], function(game, d) {
     describe('game', function() {
-        var level = [[]];
+        var level = [[1, 1]];
         var model;
         var stubInput = {
             direction: 0,
@@ -123,6 +123,41 @@ define(['models/game', 'data/dimensions'], function(game, d) {
 
                 expect(model.wave).toBeNull();
                 expect(model.ball).toBeTruthy();
+            });
+            
+            it('returns success when level cleared', function() {
+                for (var row = 0; row < model.blocks.all.length; ++row) {
+                    for (var col = 0; col < model.blocks.all[row].length; ++col) {
+                        model.blocks.all[row][col].hit = 1;
+                    }
+                }
+                
+                var result = model.update(500);
+                expect(result).toBe('CLEARED');
+            });
+
+            it('returns failure when no more spare lives', function() {
+                var gameTime = 100;
+                
+                while(model.remainingLives >= 0) {
+                    stubInput.action = 'LAUNCH';
+                    model.update(gameTime);
+                    stubInput.action = null;
+                    stubInput.direction = model.remainingLives % 2;
+                    while (model.ball.y <= model.paddle.top - d.BALL.RADIUS) {
+                        model.update(gameTime += 100);
+                    }
+                    model.update(gameTime += 500);
+                }
+
+                var result = model.update(gameTime += 500);
+                expect(result).toBe('FAILED');
+            });
+            
+            it('returns paused when paused', function() {
+                stubInput.action = 'PAUSE';
+                var result = model.update(100);
+                expect(result).toBe('PAUSED');
             });
         });
     });

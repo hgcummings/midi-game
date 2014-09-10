@@ -93,6 +93,7 @@ define(['input/keyboard'], function(keyboard) {
                 verifyActionForKeyPress('2', 'AIR');
                 verifyActionForKeyPress('3', 'FIRE');
                 verifyActionForKeyPress('4', 'WATER');
+                verifyActionForKeyPress('P', 'PAUSE');
             });
 
             it('returns no-op after key is released', function() {

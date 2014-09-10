@@ -1,6 +1,17 @@
 define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
     function(fixtures, blocks, paddle, ball, wave) {
     var allElements = ['EARTH', 'AIR', 'FIRE', 'WATER'];
+    function cleared(blocks) {
+        for (var row = 0; row < blocks.all.length; ++row) {
+            for (var col = 0; col < blocks.all[row].length; ++col) {
+                if (!blocks.all[row][col].hit) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     return {
         init: function(level, input, output) {
             var self = {};
@@ -27,6 +38,11 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
             self.update = function(gameTime) {
                 var delta = gameTime - prevTime;
                 var action = input.getAction();
+                
+                if (action === 'PAUSE') {
+                    return 'PAUSED';
+                }                
+                
                 var elementIndex = self.remainingElements.indexOf(action);
                 if (elementIndex === -1) {
                     if (allElements.indexOf(action) !== -1) {
@@ -37,7 +53,7 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
                     self.remainingElements.splice(elementIndex, 1);
                 }
                 self.paddle.update(delta, input.getDirection());
-                
+
                 if (action === 'WATER') {
                     self.ball = null;
                     self.wave = wave.init(self.paddle, self.blocks, output);
@@ -51,11 +67,20 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
                 
                 if (!getActive().alive) {
                     --self.remainingLives;
+                    
+                    if (self.remainingLives < 0) {
+                        return 'FAILED';
+                    }
+                    
                     self.wave = null;
                     self.ball = createBall();
                 }
-                
+
                 prevTime = gameTime;
+                
+                if (cleared(self.blocks)) {
+                    return 'CLEARED';
+                }
             };
 
             return self;

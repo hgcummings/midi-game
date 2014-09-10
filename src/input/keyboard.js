@@ -19,6 +19,7 @@ define(function() {
     actionMap[50] = 'AIR';
     actionMap[51] = 'FIRE';
     actionMap[52] = 'WATER';
+    actionMap[80] = 'PAUSE';
 
     return {
         init: function() {
