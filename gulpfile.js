@@ -33,7 +33,9 @@ gulp.task('build', function() {
         baseUrl: 'src',
         out: 'app.min.js'
     })
-    .pipe(uglify())
+    .pipe(uglify({
+        preserveComments: 'some'
+    }))
     .pipe(gulp.dest('./src/scripts/'))
 });
 

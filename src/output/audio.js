@@ -1,4 +1,4 @@
-define(function () {
+define(['output/wavetable-5'], function (wavetable) {
     var CONCERT_A_HERTZ = 440;
 
     return {
@@ -9,13 +9,16 @@ define(function () {
                     frequencies[midiNote] = Math.pow(2, (midiNote - 69) / 12) * CONCERT_A_HERTZ;
                 }
                 
+                var context = new AudioContext();                
+                var wave = context.createPeriodicWave(
+                    new Float32Array(wavetable.real.map(wavetable.uncompress)),
+                    new Float32Array(wavetable.imag.map(wavetable.uncompress)));
+
                 var getChannel = function () {
-                    var context = new AudioContext();
-                    var waveform = 0;
-                    
                     var playNote = function (note, duration) {
                         var oscillator = context.createOscillator();
-                        oscillator.type = waveform;
+                        oscillator.type = 4;
+                        oscillator.setPeriodicWave(wave);                        
                         oscillator.frequency.value = frequencies[note];
                         var gainNode = context.createGain();
                         oscillator.connect(gainNode);
@@ -28,7 +31,8 @@ define(function () {
                     
                     var startNote = function(note) {
                         var oscillator = context.createOscillator();
-                        oscillator.type = waveform;
+                        oscillator.type = 4;
+                        oscillator.setPeriodicWave(wave);
                         oscillator.frequency.value = frequencies[note];
                         var gainNode = context.createGain();
                         oscillator.connect(gainNode);
