@@ -28,5 +28,5 @@ TODO:
  * Paddle acceleration
  * Paddle imparting momentum to ball on launch
  * Help screen
- * Timer, par times (gold/silver/bronze) for levels
+ * Par times (gold/silver/bronze) for levels
  * Local storage for level progress

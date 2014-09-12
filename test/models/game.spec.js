@@ -1,10 +1,8 @@
 define(['models/game', 'data/dimensions'], function(game, d) {
     describe('game', function() {
-        var level = [[1, 1]];
+        var level = { name: 'Test Level', notes: [[1, 1]]};
         var model;
         var stubInput = {
-            direction: 0,
-            action: null,
             getDirection: function() { return stubInput.direction; },
             getAction: function() { return stubInput.action; },
             getNote: function() { return null; }
@@ -12,6 +10,8 @@ define(['models/game', 'data/dimensions'], function(game, d) {
 
         beforeEach(function() {
             model = game.init(level, stubInput, { playBounce: function() {} });
+            stubInput.action = null;
+            stubInput.direction = 0;
         });
 
         describe('init', function() {
@@ -43,6 +43,10 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 expect(model.remainingElements).toContain('AIR');
                 expect(model.remainingElements).toContain('FIRE');
                 expect(model.remainingElements).toContain('WATER');
+            });
+            
+            it('exposes the level name', function() {
+                expect(model.levelName).toBe(level.name);
             });
         });
 
@@ -104,12 +108,23 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 expect(model.ball.mode).toBe(fireMode);
             });
             
-            it('deactivates the ball when water is selected', function() {
+            it('deactivates the ball when wave is selected', function() {
                 stubInput.action = 'WATER';
                 model.update(500);
                 
                 expect(model.ball).toBeNull();
                 expect(model.wave).toBeTruthy();
+            });
+
+            it('deactivates the wave when another element is selected', function() {
+                stubInput.action = 'WATER';
+                model.update(500);
+
+                stubInput.action = 'FIRE';
+                model.update(500);
+
+                expect(model.ball).toBeTruthy();
+                expect(model.wave).toBeNull();
             });
 
             it('restores next ball after water expires', function() {
@@ -158,6 +173,14 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 stubInput.action = 'PAUSE';
                 var result = model.update(100);
                 expect(result).toBe('PAUSED');
+            });
+            
+            it('updates the gameTime', function() {
+                expect(model.gameTime).toBe(0);
+                model.update(500);
+                expect(model.gameTime).toBe(500);
+                model.update(1000);
+                expect(model.gameTime).toBe(1000);
             });
         });
     });

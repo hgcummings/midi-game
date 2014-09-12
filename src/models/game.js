@@ -15,16 +15,18 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
     return {
         init: function(level, input, output) {
             var self = {};
-            var prevTime = 0;
+            self.gameTime = 0;
 
             self.input = input;
             self.remainingLives = 3;
             self.remainingElements = allElements.concat();
 
             self.fixtures = fixtures.init();
-            self.blocks = blocks.init(level, output);
+            self.blocks = blocks.init(level.notes, output);
             self.paddle = paddle.init();
             
+            self.levelName = level.name;
+
             var collisionObjects = self.fixtures.getCollisionObjects()
                 .concat(self.blocks.getCollisionObjects(), self.paddle.getCollisionObjects());
             var createBall = function() {
@@ -36,13 +38,13 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
 
             self.ball = createBall();
             self.update = function(gameTime) {
-                var delta = gameTime - prevTime;
+                var delta = gameTime - self.gameTime;
                 var action = input.getAction();
                 
                 if (action === 'PAUSE') {
                     return 'PAUSED';
-                }                
-                
+                }
+
                 var elementIndex = self.remainingElements.indexOf(action);
                 if (elementIndex === -1) {
                     if (allElements.indexOf(action) !== -1) {
@@ -51,6 +53,10 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
                 } else {
                     self.remainingLives++;
                     self.remainingElements.splice(elementIndex, 1);
+                    if (self.wave) {
+                        self.wave = null;
+                        self.ball = createBall();
+                    }
                 }
                 self.paddle.update(delta, input.getDirection());
 
@@ -58,26 +64,26 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
                     self.ball = null;
                     self.wave = wave.init(self.paddle, self.blocks, output);
                 }
-                
+
                 if (self.ball !== null) {
                     self.ball.update(delta, action, gameTime);
                 } else if (self.wave !== null) {
                     self.wave.update(delta);
                 }
-                
+
                 if (!getActive().alive) {
                     --self.remainingLives;
-                    
+
                     if (self.remainingLives < 0) {
                         return 'FAILED';
                     }
-                    
+
                     self.wave = null;
                     self.ball = createBall();
                 }
 
-                prevTime = gameTime;
-                
+                self.gameTime = gameTime;
+
                 if (cleared(self.blocks)) {
                     return 'CLEARED';
                 }

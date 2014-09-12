@@ -1,6 +1,7 @@
 define(function() {
     return {
         BACKGROUND: '#000',
+        FOREGROUND: '#FFF',
         BALL: '#999',
         PADDLE: '#CCC',
         FIXTURES: {
@@ -21,13 +22,13 @@ define(function() {
             5.5: '#00137F',
             6: '#0026FF',
             6.5: '#57007F',
-            7: '#B200FF'            
+            7: '#B200FF'
         },
         ELEMENTS: {
             EARTH: ['#855723', '#613318'],
             AIR: ['#FFFFFF', '#CCE0E9'],
-            FIRE: ['#ff0', '#f00'],
-            WATER: ['#0ff', '#00f']
+            FIRE: ['#FF0', '#F00'],
+            WATER: ['#0FF', '#00F']
         }
     };
 });
