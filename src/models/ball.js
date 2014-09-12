@@ -92,8 +92,6 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                         
                         if (collision && self.mode.isSticky(object.type)) {
                             self.released = false;
-                            dx = object.positionNormal()[0] * self.mode.speed;
-                            dy = object.positionNormal()[1] * self.mode.speed;
                             continue;
                         }
 
@@ -120,7 +118,11 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                 }
 
                 if (action === 'LAUNCH') {
-                    self.released = true;
+                    if (!self.released) {
+                        self.released = true;
+                        dx = 0;
+                        dy = -self.mode.speed;
+                    }
                 } else if (modes.hasOwnProperty(action)) {
                     self.mode = modes[action];
                     var normalisedVelocity = maths.normalise([dx, dy]);
