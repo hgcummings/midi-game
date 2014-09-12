@@ -1,8 +1,13 @@
-require(['views/game', 'data/levels', 'models/game', 'input/keyboard', 'output/sound', 'output/audio'],
-    function(view, levels, model, input, sound, audio) {
-        audio.init(function(output) {
+require(['data/dimensions', 'views/menu'], function(d, menuView) {
+        var gameElement = document.getElementById('game');
+        gameElement.style.width = d.WIDTH + 'px';
+        gameElement.style.height = d.HEIGHT + 'px';
+        gameElement.style.fontSize = d.PERCENT + '%';
+        gameElement.style.marginTop = (window.innerHeight - d.HEIGHT) / 4 + 'px';
+        
+        menuView.init(function(menuElement) {
             document.getElementById('warning').remove();
-            view.init(document.getElementById('game'), model.init(levels[0], input.init(), sound.init(output)));
+            gameElement.appendChild(menuElement);
         });
     }
 );

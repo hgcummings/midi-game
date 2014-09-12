@@ -24,6 +24,7 @@ define(function() {
         },
         BALL: {
             RADIUS: scale(5)
-        }
+        },
+        PERCENT: scale(100)
     };
 });

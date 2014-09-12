@@ -22,11 +22,13 @@
  * New ball starts locked to paddle until released (by spacebar), getting horizontal speed from paddle
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
 
-TODO:
+TODO (compo):
  * Levels
  * Tutorial
- * Paddle acceleration
- * Paddle imparting momentum to ball on launch
  * Help screen
  * Par times (gold/silver/bronze) for levels
  * Local storage for level progress
+ 
+TODO (post-compo):
+  * Paddle acceleration
+  * Paddle imparting momentum to ball on launch

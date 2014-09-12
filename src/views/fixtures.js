@@ -85,7 +85,7 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                     var timeString = Math.floor(timeSeconds / 60) +
                         (timeSeconds % 60 < 10 ? ':0' : ':') + timeSeconds % 60;
                     
-                    context.font = d.BORDER * 2 / 3 + 'px "Gill Sans MT","Gill Sans", Calibri, sans-serif';
+                    context.font = d.BORDER * 2 / 3 + 'px "Gill Sans MT","Gill Sans",Calibri,sans-serif';
                     context.fillStyle = c.FOREGROUND;
                     context.textBaseline = 'middle';
                     context.textAlign = 'right';

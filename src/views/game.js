@@ -19,8 +19,6 @@ function(c, d, fixtures, blocks, paddle, ball) {
             canvas.setAttribute('height', d.HEIGHT);
             canvas.style.backgroundColor = c.BACKGROUND;
             parent.appendChild(canvas);
-            parent.style.width = d.WIDTH + 'px';
-            parent.style.height = d.HEIGHT + 'px';
             
             var pauseScreen = document.createElement('div');
             pauseScreen.style.display = 'none';
