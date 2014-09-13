@@ -23,11 +23,9 @@
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
 
 TODO (compo):
- * Levels
  * Tutorial
  * Help screen
- * Par times (gold/silver/bronze) for levels
- * Local storage for level progress
+
  
 TODO (post-compo):
   * Paddle acceleration

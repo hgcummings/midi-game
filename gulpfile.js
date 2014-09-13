@@ -5,6 +5,9 @@ var uglify = require('gulp-uglify');
 var zip = require('gulp-zip');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
+var minifyCSS = require('gulp-minify-css');
+var minifyHTML = require('gulp-minify-html');
+var htmlreplace = require('gulp-html-replace');
 
 /**
  * Run test once and exit
@@ -36,11 +39,22 @@ gulp.task('build', function() {
     .pipe(uglify({
         preserveComments: 'some'
     }))
-    .pipe(gulp.dest('./src/scripts/'))
+    .pipe(gulp.dest('./target/'));
+
+    gulp.src('./src/*.css')
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('./target/'));
+    
+    gulp.src('./src/*.html')
+        .pipe(htmlreplace({
+            'js': 'app.min.js'
+        }))
+        .pipe(minifyHTML())
+        .pipe(gulp.dest('./target/'));
 });
 
 gulp.task('compress', function() {
-    return gulp.src(['./src/scripts/*.js', './src/*.html', './src/*.css'])
+    return gulp.src(['./target/**'])
         .pipe(zip('client.zip'))
         .pipe(gulp.dest('dist'));
 });
