@@ -24,7 +24,6 @@
 
 TODO (compo):
  * Tutorial
- * Help screen
 
  
 TODO (post-compo):

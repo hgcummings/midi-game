@@ -89,6 +89,13 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
                     return 'CLEARED';
                 }
             };
+            
+            self.getHint = function() {
+                if (!self.ball.released) {
+                    return 'Press SPACE to launch the ball (or P to pause the game)';
+                }
+                return null;
+            };
 
             return self;
         }

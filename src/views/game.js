@@ -1,5 +1,5 @@
-define(['data/colours', 'data/dimensions', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball'],
-function(c, d, fixturesView, blocksView, paddleView, ballView) {
+define(['data/colours', 'data/dimensions', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball', 'views/help'],
+function(c, d, fixturesView, blocksView, paddleView, ballView, helpView) {
     var headerText = {
         CLEARED: 'Level cleared!',
         FAILED: 'Game over!',
@@ -29,6 +29,7 @@ function(c, d, fixturesView, blocksView, paddleView, ballView) {
             pauseBody.appendChild(pauseBodyText);
             pauseScreen.appendChild(pauseHeader);
             pauseScreen.appendChild(pauseBody);
+            pauseScreen.appendChild(helpView.init());
             parent.appendChild(pauseScreen);
 
             var context = canvas.getContext('2d');
@@ -75,6 +76,7 @@ function(c, d, fixturesView, blocksView, paddleView, ballView) {
                 if (model.wave) {
                     ball.drawWave(model.wave);
                 }
+                helpView.drawHint(context, model);
             };
             
             var animate = function() {
@@ -88,7 +90,7 @@ function(c, d, fixturesView, blocksView, paddleView, ballView) {
                         window.location.reload();
                         return;
                     }
-                } else {
+                } else if (!paused) {
                     update(currentTime);
                     prevTime = currentTime;                    
                 }

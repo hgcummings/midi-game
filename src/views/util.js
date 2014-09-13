@@ -21,6 +21,15 @@ define(function() {
         formatTime: function(seconds) {
             seconds = Math.round(seconds);
             return Math.floor(seconds / 60) + (seconds % 60 < 10 ? ':0' : ':') + seconds % 60;
+        },
+        drawText: function(context, text, fill, x, y, size, align, baseline) {
+            context.save();
+            context.font = size + 'px "Gill Sans MT","Gill Sans",Calibri,sans-serif';
+            context.fillStyle = fill;
+            context.textAlign = align;
+            context.textBaseline = baseline;
+            context.fillText(text, x, y);
+            context.restore();
         }
     };
 });

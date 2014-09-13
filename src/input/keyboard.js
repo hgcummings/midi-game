@@ -22,6 +22,8 @@ define(function() {
     actionMap[80] = 'PAUSE';
 
     return {
+        noteMap: noteMap,
+        actionMap: actionMap,
         init: function() {
             var self = {};
             var currentNote = null;

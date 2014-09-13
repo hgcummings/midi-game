@@ -80,14 +80,24 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                     }
 
                     context.drawImage(cachedCanvas, 0, 0);
-                    context.font = d.BORDER * 2 / 3 + 'px "Gill Sans MT","Gill Sans",Calibri,sans-serif';
-                    context.fillStyle = c.FOREGROUND;
-                    context.textBaseline = 'middle';
-                    context.textAlign = 'right';
-                    context.fillText(util.formatTime(model.gameTime / 1000),
-                        d.WIDTH - d.BLOCK.MARGIN.X, (d.BORDER + gap) / 2);
-                    context.textAlign = 'left';
-                    context.fillText(model.levelName, d.BLOCK.MARGIN.X, (d.BORDER + gap) / 2);
+                    var fontSize = d.BORDER * 2 / 3;
+                    util.drawText(context,
+                        util.formatTime(model.gameTime / 1000),
+                        c.FOREGROUND,
+                        d.WIDTH - d.BLOCK.MARGIN.X,
+                        (d.BORDER + gap) / 2,
+                        fontSize,
+                        'right',
+                        'middle'
+                    );
+                    util.drawText(context,
+                        model.levelName,
+                        c.FOREGROUND,
+                        d.BLOCK.MARGIN.X,
+                        (d.BORDER + gap) / 2,
+                        fontSize,
+                        'left',
+                        'middle');
                 }
             };
         }
