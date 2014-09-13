@@ -96,7 +96,7 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
                     if (hint) {
                         return hint;
                     }
-                } else if (!self.ball.released) {
+                } else if (self.ball && !self.ball.released) {
                     return 'Press SPACE to launch the ball (or P to pause the game)';
                 }
                 return null;
