@@ -18,11 +18,11 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     context,
                     name,
                     textStyle,
-                    x + (keySize * 7 / 8),
-                    y + (keySize * 7 / 8),
+                    x + keySize / 8,
+                    y,
                     keySize / 2,
-                    'right',
-                    'bottom'
+                    'left',
+                    'top'
                 );
             };
             
@@ -31,7 +31,9 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
             var notesLeft = (d.WIDTH - (7 * keySize) - 6 * noteSpacing) / 2;
             
             var drawNote = function(note) {
-                var x = notesLeft + (note - 1) * keySize + Math.floor(note - 1) * noteSpacing;
+                var x = notesLeft +
+                    (Math.floor(note) + (note % 1) * 3 / 2 - 1) * keySize +
+                    Math.floor(note - 1) * noteSpacing;
                 var y = notesTop;
 
                 if (note === Math.floor(note)) {
@@ -89,7 +91,7 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     context,
                     name.toUpperCase(),
                     c.FOREGROUND,
-                    x + (-2 * direction + 1) * keySize / 2,
+                    x + (-3 * direction + 2) * keySize / 4,
                     y + keySize / 2,
                     keySize * 2 / 3,
                     name,

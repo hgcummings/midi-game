@@ -25,7 +25,7 @@ define(function() {
         },
         drawText: function(context, text, fill, x, y, size, align, baseline) {
             context.save();
-            context.font = size + 'px "Gill Sans MT","Gill Sans",Calibri,sans-serif';
+            context.font = size + 'px Candara,"Gill Sans MT","Gill Sans",Calibri,sans-serif';
             context.fillStyle = fill;
             context.textAlign = align;
             context.textBaseline = baseline;

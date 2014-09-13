@@ -56,7 +56,7 @@ function(c, d, fixturesView, blocksView, paddleView, ballView, helpView) {
                     pauseScreen.style.display = 'block';
                     paused = status;
                     if (headerText.hasOwnProperty(status)) {
-                        pauseHeaderText.replaceWholeText(headerText[status]);
+                        pauseHeaderText.nodeValue = headerText[status];
                     }
                 }
 
@@ -77,7 +77,9 @@ function(c, d, fixturesView, blocksView, paddleView, ballView, helpView) {
                 if (model.wave) {
                     ball.drawWave(model.wave);
                 }
-                helpView.drawHint(context, model);
+                if (!paused) {
+                    helpView.drawHint(context, model);
+                }
             };
             
             var animate = function() {
