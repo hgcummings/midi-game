@@ -1,4 +1,5 @@
 define(['models/physics'], function(physics) {
+    'use strict';
     describe('physics', function() {
         
         describe('sortByCollisionTime', function() {

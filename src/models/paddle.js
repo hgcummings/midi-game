@@ -1,4 +1,5 @@
 define(['data/dimensions', 'models/physics'], function(d, physics) {
+    'use strict';
     return {
         init: function() {
             var self = {};

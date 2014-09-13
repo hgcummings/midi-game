@@ -1,4 +1,5 @@
 require(['data/dimensions', 'views/menu'], function(d, menuView) {
+        'use strict';
         var gameElement = document.getElementById('game');
         gameElement.style.width = d.WIDTH + 'px';
         gameElement.style.height = d.HEIGHT + 'px';

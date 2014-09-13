@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     return {
         BACKGROUND: '#000',
         FOREGROUND: '#FFF',

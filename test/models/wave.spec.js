@@ -1,4 +1,5 @@
 define(['models/wave', 'data/dimensions'], function(wave, d) {
+    'use strict';
     describe('wave', function() {
         var model;
         var stubPaddle;

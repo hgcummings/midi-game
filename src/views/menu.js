@@ -9,6 +9,7 @@ define(['data/colours',
     'input/tutorial',
     'output/sound',
     'output/audio'], function(c, d, levels, progress, util, gameView, gameModel, keyboard, tutorial, sound, audio) {
+    'use strict';
     return {
         init: function(callback) {
             audio.init(function(output) {

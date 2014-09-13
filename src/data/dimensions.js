@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     var defaultWidth = 768;
     var defaultHeight = 432;
     var scaleFactor = Math.min(window.innerHeight / defaultHeight, window.innerWidth / defaultWidth);

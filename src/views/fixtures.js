@@ -1,4 +1,5 @@
 define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
+    'use strict';
     return {
         init: function(context, model) {
             var gap = d.CORNER - d.BORDER;

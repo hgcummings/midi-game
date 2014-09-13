@@ -1,4 +1,5 @@
 define(['data/colours', 'data/dimensions'], function(c, d) {
+    'use strict';
     return {
         init: function(context) {
             return {

@@ -1,4 +1,5 @@
 define(['output/wavetable-5'], function (wavetable) {
+    'use strict';
     var CONCERT_A_HERTZ = 440;
 
     return {

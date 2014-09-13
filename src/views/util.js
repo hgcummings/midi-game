@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     return {
         drawCircle: function(context, fillStyle, x, y, radius) {
             context.beginPath();

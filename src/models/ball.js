@@ -1,4 +1,5 @@
 define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], function(d, physics, maths, sound) {
+    'use strict';
     var always = function() { return true; };
     var never = function() { return false; };
     var defaultSpeed = d.WIDTH / 3000;

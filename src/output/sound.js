@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     var scaleDegrees = [1, 1.5, 2, 2.5, 3, 4, 4.5, 5, 5.5, 6, 6.5, 7];
     var baseNote = 60;
     return {

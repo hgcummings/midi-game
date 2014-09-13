@@ -1,4 +1,5 @@
 define(['input/keyboard'], function(keyboard) {
+    'use strict';
     describe('keyboard input', function() {
 
         var input;

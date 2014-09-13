@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     var magnitude = function(v) {
         var m2 = 0;
         for(var i = 0; i < v.length; ++i) {

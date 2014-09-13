@@ -1,4 +1,5 @@
 define(['models/paddle', 'data/dimensions'], function(paddle, d) {
+    'use strict';
     describe('paddle', function() {
         var model;
 

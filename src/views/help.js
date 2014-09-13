@@ -1,4 +1,5 @@
 define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], function(c, d, util, keyboard) {
+    'use strict';
     return {
         init: function() {
             var canvas = document.createElement('canvas');

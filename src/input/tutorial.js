@@ -1,4 +1,5 @@
 define(['input/keyboard'], function(keyboard) {
+    'use strict';
     return {
         init: function() {
             var realInput = keyboard.init();

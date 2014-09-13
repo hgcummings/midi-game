@@ -1,4 +1,5 @@
 define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physics, sound) {
+    'use strict';
     var loadLevel = function(data, output) {
         var left = d.BLOCK.MARGIN.X;
         var top = d.BLOCK.MARGIN.Y;

@@ -1,4 +1,5 @@
 define(['models/game', 'data/dimensions'], function(game, d) {
+    'use strict';
     describe('game', function() {
         var level = { name: 'Test Level', notes: [[1, 1]]};
         var model;

@@ -1,4 +1,5 @@
 define(['models/blocks', 'data/dimensions'], function(blocks, d) {
+    'use strict';
     function getNotes(fromBlocks) {
         return fromBlocks.map(function (row) {
             return row.map(function (block) {

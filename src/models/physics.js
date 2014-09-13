@@ -1,4 +1,5 @@
 define(['models/maths'], function(maths) {
+    'use strict';
     var getDistanceToPlane = function(plane, particle) {
         var position = [
             plane.position()[0] + particle.r * plane.positionNormal()[0],
@@ -59,7 +60,7 @@ define(['models/maths'], function(maths) {
                 type: type,
                 positionNormal: function() { return normal; },
                 position: position,
-                collideAt: collisionCallback || (function() { return normal; })
+                collideAt: collisionCallback || function() { return normal; }
             };
             
             self.distance = function(particle) { return getDistanceToPlane(self, particle); };

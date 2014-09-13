@@ -1,9 +1,23 @@
 {
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": true,
+    "freeze": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": true,
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonew": true,
+    "quotmark": "single",
     "undef": true,
-    "unused": true,
     "predef": [
         "window", "document", "localStorage", "AudioContext", "Float32Array",
         "requirejs", "define", "require",
         "jasmine", "describe", "it", "expect", "beforeEach", "afterEach"
-    ]
+    ],
+    "unused": true,
+    "strict": true
 }

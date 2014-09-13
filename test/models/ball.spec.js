@@ -1,4 +1,5 @@
 define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], function(ball, d, fixtures, physics) {
+    'use strict';
     describe('ball', function() {
         var stubNormal = null;
         var paddle = {
@@ -36,16 +37,16 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
 
         describe('update', function() {
             it('flies upward with constant speed when launched', function() {
+                var getDistanceTravelled = function () {
+                    var startPos = model.y;
+                    model.update(100);
+                    return model.y - startPos;
+                };
+                
                 model.update(100, 'LAUNCH');
                 var previousDistance = getDistanceTravelled();
                 expect(previousDistance).toBeLessThan(0);
                 expect(getDistanceTravelled()).toBeCloseTo(previousDistance, 1);
-
-                function getDistanceTravelled() {
-                    var startPos = model.y;
-                    model.update(100);
-                    return model.y - startPos;
-                }
             });
 
             it('bounces off the top border of the screen', function() {

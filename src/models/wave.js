@@ -1,4 +1,5 @@
 define(['data/dimensions'], function(d) {
+    'use strict';
     var growthRate = d.HEIGHT / 4800;
     return {        
         init: function(paddle, blocks, output) {

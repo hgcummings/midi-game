@@ -1,5 +1,6 @@
 define(['data/colours', 'data/dimensions', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball', 'views/help'],
 function(c, d, fixturesView, blocksView, paddleView, ballView, helpView) {
+    'use strict';
     var headerText = {
         CLEARED: 'Level cleared!',
         FAILED: 'Game over!',

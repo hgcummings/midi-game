@@ -1,4 +1,5 @@
 define(function() {
+    'use strict';
     var noteMap = [];
     noteMap[68] = 1;
     noteMap[82] = 1.5;

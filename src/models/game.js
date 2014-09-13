@@ -1,5 +1,6 @@
 define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
     function(progress, fixtures, blocks, paddle, ball, wave) {
+        'use strict';
     var allElements = ['EARTH', 'AIR', 'FIRE', 'WATER'];
     function cleared(blocks) {
         for (var row = 0; row < blocks.all.length; ++row) {
