@@ -105,10 +105,11 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
             return canvas;
         },
         drawHint: function(context, model) {
-            if (model.getHint()) {
+            var hint = model.getHint();
+            if (hint) {
                 util.drawText(
                     context,
-                    model.getHint(),
+                    hint,
                     c.FOREGROUND,
                     d.WIDTH / 2,
                     d.HEIGHT - d.BLOCK.MARGIN.Y,

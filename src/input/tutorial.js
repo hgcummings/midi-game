@@ -37,19 +37,30 @@ define(['input/keyboard'], function(keyboard) {
                     init: function() { }
                 },
                 {
-                    hint: 'You can move the paddle left and right with the Z and / keys..',
+                    hint: 'You can move the paddle left and right with the Z and / keys...',
                     test: function(model) { return model.paddle.x !== stateData.initialPaddleX; },
                     init: function(model) { allowMovement = true; stateData.initialPaddleX = model.paddle.x; }
                 },
                 {
-                    hint: 'Finally, you can activate special elemental powers. Try pressing 3 now!',
-                    test: function(model) { return model.remainingElements.length < 4 && !model.ball.mode.element; },
+                    hint: 'Finally, you can activate special elemental powers! Try pressing 3...',
+                    test: function(model) { return model.remainingElements.length < 4; },
                     init: function() { allowedActions.push('FIRE'); }
                 },
                 {
+                    hint: null,
+                    test: function(model) { return !model.ball.mode.element; },
+                    init: function() {}
+                },
+                {
                     hint: 'You can pause the game at any time and view help by pressing P...',
-                    test: function() { return realInput.getAction() === 'PAUSE'; },
-                    init: function() { allowedActions.push('PAUSE', 'EARTH', 'AIR', 'WATER'); }
+                    test: function(model) {
+                        return model.gameTime + 500 - stateData.gameTime < new Date().getTime() - stateData.startTime;
+                    },
+                    init: function(model) {
+                        allowedActions.push('PAUSE', 'EARTH', 'AIR', 'WATER');
+                        stateData.gameTime = model.gameTime;
+                        stateData.startTime = new Date().getTime();
+                    }
                 },
                 {
                     hint: null,
