@@ -37,7 +37,7 @@ define(function() {
             var getDirection = function(keyCode) {
                 if (keyCode === 191) {
                     return 1;
-                } else if (event.keyCode === 90) {
+                } else if (keyCode === 90) {
                     return -1;
                 }
             };
@@ -45,8 +45,16 @@ define(function() {
             var getAction = function(keyCode) {
                 return actionMap[keyCode];
             };
+            
+            var isGameKey = function(keyCode) {
+                return getNote(keyCode) || getDirection(keyCode) || getAction(keyCode);
+            };
 
             document.onkeydown = function(event) {
+                if (isGameKey(event.keyCode)) {
+                    event.preventDefault();
+                }
+                
                 if (getNote(event.keyCode)) {
                     currentNote = getNote(event.keyCode);
                 } else if (getDirection(event.keyCode)) {
@@ -57,6 +65,10 @@ define(function() {
             };
 
             document.onkeyup = function(event) {
+                if (isGameKey(event.keyCode)) {
+                    event.preventDefault();
+                }
+                
                 if (getDirection(event.keyCode) === currentDirection) {
                     currentDirection = 0;
                 } else if (getAction(event.keyCode) === currentAction) {

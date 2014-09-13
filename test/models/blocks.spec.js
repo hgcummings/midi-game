@@ -151,7 +151,6 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
         });
         
         describe('planes', function() {
-            var planes;
             it('returns a plane for each line of block edges', function() {
                 var planes = model.getCollisionPlanes();
 

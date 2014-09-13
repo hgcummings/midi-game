@@ -1,3 +1,9 @@
 {
-    
+    "undef": true,
+    "unused": true,
+    "predef": [
+        "window", "document", "localStorage", "AudioContext", "Float32Array",
+        "requirejs", "define", "require",
+        "jasmine", "describe", "it", "expect", "beforeEach", "afterEach"
+    ]
 }

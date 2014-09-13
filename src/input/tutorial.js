@@ -59,6 +59,8 @@ define(['input/keyboard'], function(keyboard) {
 
             enterState(0);
             
+            var self = {};
+            
             self.getHint = function(model) {
                 var state = states[currentState];
                 
