@@ -21,11 +21,8 @@
  * Paddle accelerates to a maximum velocity
  * New ball starts locked to paddle until released (by spacebar), getting horizontal speed from paddle
  * Angle of ball bouncing of paddle: Make paddle act as slightly convex
-
-TODO (compo):
- * Tutorial
-
  
 TODO (post-compo):
-  * Paddle acceleration
-  * Paddle imparting momentum to ball on launch
+ * Add more levels
+ * Paddle acceleration
+ * Paddle imparting momentum to ball on launch
