@@ -23,7 +23,7 @@ function(c, d, fixturesView, blocksView, paddleView, ballView, helpView) {
             var pauseHeader = document.createElement('h2');
             var pauseHeaderText = document.createTextNode('');
             var pauseBody = document.createElement('p');
-            var pauseBodyText = document.createTextNode('Press space to continue');
+            var pauseBodyText = document.createTextNode('Press SPACE to continue');
             
             pauseHeader.appendChild(pauseHeaderText);
             pauseBody.appendChild(pauseBodyText);

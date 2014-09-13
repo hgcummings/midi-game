@@ -91,7 +91,12 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
             };
             
             self.getHint = function() {
-                if (!self.ball.released) {
+                if (self.input.getHint) {
+                    var hint = self.input.getHint(self);
+                    if (hint) {
+                        return hint;
+                    }
+                } else if (!self.ball.released) {
                     return 'Press SPACE to launch the ball (or P to pause the game)';
                 }
                 return null;

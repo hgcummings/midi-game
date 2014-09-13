@@ -6,8 +6,9 @@ define(['data/colours',
     'views/game',
     'models/game',
     'input/keyboard',
+    'input/tutorial',
     'output/sound',
-    'output/audio'], function(c, d, levels, progress, util, gameView, gameModel, input, sound, audio) {
+    'output/audio'], function(c, d, levels, progress, util, gameView, gameModel, keyboard, tutorial, sound, audio) {
     return {
         init: function(callback) {
             audio.init(function(output) {
@@ -30,6 +31,7 @@ define(['data/colours',
                     var startLevel = function(e) {
                         e.preventDefault();
                         menu.style.display = 'none';
+                        var input = i === 0 ? tutorial : keyboard;
                         gameView.init(menu.parentNode, gameModel.init(level, input.init(), sound.init(output)));
                     };
                     
