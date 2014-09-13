@@ -1,15 +1,9 @@
 define(['data/colours', 'data/dimensions', 'views/fixtures', 'views/blocks', 'views/paddle', 'views/ball'],
-function(c, d, fixtures, blocks, paddle, ball) {
+function(c, d, fixturesView, blocksView, paddleView, ballView) {
     var headerText = {
         CLEARED: 'Level cleared!',
         FAILED: 'Game over!',
         PAUSED: 'Paused'
-    };
-
-    var bodyText = {
-        CLEARED: 'Press F5 to play again',
-        FAILED: 'Press F5 to play again',
-        PAUSED: 'Press space to resume'
     };
     
     return {
@@ -29,7 +23,7 @@ function(c, d, fixtures, blocks, paddle, ball) {
             var pauseHeader = document.createElement('h2');
             var pauseHeaderText = document.createTextNode('');
             var pauseBody = document.createElement('p');
-            var pauseBodyText = document.createTextNode('');
+            var pauseBodyText = document.createTextNode('Press space to continue');
             
             pauseHeader.appendChild(pauseHeaderText);
             pauseBody.appendChild(pauseBodyText);
@@ -41,10 +35,10 @@ function(c, d, fixtures, blocks, paddle, ball) {
             var startTime = new Date().getTime();
             var pauseTime = 0;
             var prevTime = startTime;
-            fixtures = fixtures.init(context, model);
-            blocks = blocks.init(context, model.blocks);
-            paddle = paddle.init(context);
-            ball = ball.init(context);
+            var fixtures = fixturesView.init(context, model);
+            var blocks = blocksView.init(context, model.blocks);
+            var paddle = paddleView.init(context);
+            var ball = ballView.init(context);
             
             var paused = false;
             
@@ -61,10 +55,6 @@ function(c, d, fixtures, blocks, paddle, ball) {
                     paused = status;
                     if (headerText.hasOwnProperty(status)) {
                         pauseHeaderText.replaceWholeText(headerText[status]);
-                    }
-
-                    if (bodyText.hasOwnProperty(status)) {
-                        pauseBodyText.replaceWholeText(bodyText[status]);
                     }
                 }
 
@@ -89,10 +79,14 @@ function(c, d, fixtures, blocks, paddle, ball) {
             
             var animate = function() {
                 var currentTime = new Date().getTime();
-                if (paused) {
-                    if (paused === 'PAUSED' && model.input.getAction() === 'LAUNCH') {
+                if (paused && model.input.getAction() === 'LAUNCH') {
+                    if (paused === 'PAUSED') {
                         paused = false;
                         pauseScreen.style.display = 'none';
+                        model.input.clearAction();
+                    } else {
+                        window.location.reload();
+                        return;
                     }
                 } else {
                     update(currentTime);

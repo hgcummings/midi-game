@@ -17,6 +17,10 @@ define(function() {
             context.lineTo(x + r, y + h);
             context.arc(x + r, y + h - r, r, Math.PI / 2, Math.PI, false);
             context.lineTo(x, y + r);
+        },
+        formatTime: function(seconds) {
+            seconds = Math.round(seconds);
+            return Math.floor(seconds / 60) + (seconds % 60 < 10 ? ':0' : ':') + seconds % 60;
         }
     };
 });

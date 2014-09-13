@@ -1,5 +1,5 @@
-define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
-    function(fixtures, blocks, paddle, ball, wave) {
+define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
+    function(progress, fixtures, blocks, paddle, ball, wave) {
     var allElements = ['EARTH', 'AIR', 'FIRE', 'WATER'];
     function cleared(blocks) {
         for (var row = 0; row < blocks.all.length; ++row) {
@@ -85,6 +85,7 @@ define(['models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'mod
                 self.gameTime = gameTime;
 
                 if (cleared(self.blocks)) {
+                    progress.saveTime(level.id, Math.round(gameTime / 1000));
                     return 'CLEARED';
                 }
             };

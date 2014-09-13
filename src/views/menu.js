@@ -1,49 +1,86 @@
-define(['data/dimensions', 'data/levels', 'views/game', 'models/game', 'input/keyboard', 'output/sound', 'output/audio'],
-    function(d, levels, gameView, gameModel, input, sound, audio) {
+define(['data/colours',
+    'data/dimensions',
+    'data/levels',
+    'data/progress',
+    'views/util',
+    'views/game',
+    'models/game',
+    'input/keyboard',
+    'output/sound',
+    'output/audio'], function(c, d, levels, progress, util, gameView, gameModel, input, sound, audio) {
     return {
         init: function(callback) {
             audio.init(function(output) {
                 var menu = document.createElement('div');
                 menu.style.width = d.WIDTH + 'px';
                 menu.style.height = d.HEIGHT + 'px';
-                menu.classList.add('menu');
+                menu.setAttribute('id', 'menu');
                 
-                var createLevelLink = function(level) {
+                var title = document.createElement('h1');
+                title.appendChild(document.createTextNode('Menu'));
+                menu.appendChild(title);
+                                
+                levels.forEach(function (level, i) {
+                    level.id = i;
+                    
                     var link = document.createElement('a');
                     link.classList.add('level');
-                    
-                    var title = document.createElement('h2');
-                    title.appendChild(document.createTextNode(level.name));
-                    
-                    var best = document.createElement('h3');
-                    best.appendChild(document.createTextNode('1:23'));
-                    
-                    var stars = document.createElement('h4');
-                    stars.innerHTML = '&#9733;&#9733;&#9734;';
-                    
-                    link.appendChild(title);
-                    link.appendChild(best);
-                    link.appendChild(stars);
-
-                    link.onclick = function(e) {
+                    link.style.display = 'block';
+                    link.style.height = d.HEIGHT * 0.4 + 'px';
+                    var startLevel = function(e) {
                         e.preventDefault();
                         menu.style.display = 'none';
                         gameView.init(menu.parentNode, gameModel.init(level, input.init(), sound.init(output)));
                     };
                     
-                    return link;
-                };
-                
-                var title = document.createElement('h1');
-                title.appendChild(document.createTextNode('Menu'));
-                menu.appendChild(title);
-                
-                for (var i = 0; i < levels.length; ++i) {
-                    menu.appendChild(createLevelLink(levels[i]));
-                }
+                    var title = document.createElement('h2');
+                    var contents = [title];
+                    
+                    var bestTime = progress.getTime(i);
+                    if (bestTime) {
+                        title.appendChild(document.createTextNode(level.name));
+                        link.style.borderColor = c.NOTES[1 + (i % 7)];
+
+                        var best = document.createElement('h3');
+                        best.innerHTML = '&#8987; ' + util.formatTime(bestTime);
+                        contents.push(best);
+
+                        var stars = document.createElement('h4');
+                        contents.push(stars);
+                        var starsHtml = '';
+                        
+                        for (var p = 0; p < level.par.length; ++p) {
+                            if (bestTime < level.par[p]) {
+                                starsHtml += '&#9733;';
+                            } else{
+                                starsHtml += '&#9734;';
+                            }
+                        }
+                        
+                        stars.innerHTML = starsHtml;
+                        link.onclick = startLevel;
+                    } else if (i < 2 || progress.getTime(i-1) || progress.getTime(i-2)) {
+                        title.appendChild(document.createTextNode(level.name));
+
+                        var start = document.createElement('h3');
+                        start.appendChild(document.createTextNode('Click to start'));
+                        
+                        contents.push(start);
+                        link.onclick = startLevel;
+                    } else {
+                        link.classList.add('locked');
+                        title.appendChild(document.createTextNode('?'));
+                    }
+                    
+                    contents.forEach(function(content) {
+                        link.appendChild(content);
+                    });
+
+                    menu.appendChild(link);
+                });
                 
                 callback(menu);
             });
         }
-    }
+    };
 });

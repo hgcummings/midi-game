@@ -9,7 +9,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
         var height = Math.round(width / d.BLOCK.RATIO);
 
         var spacingX = Math.round(gap * 5);
-        var spacingY = Math.round(gap * 5);
+        var spacingY = Math.round((d.HEIGHT - (3 * d.BLOCK.MARGIN.Y)) / data.length);
                 
         var columnLeft = function (col) {
             return left + col * spacingX;

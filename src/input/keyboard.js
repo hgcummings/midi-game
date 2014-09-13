@@ -75,6 +75,10 @@ define(function() {
             self.getAction = function() {
                 return currentAction;
             };
+            
+            self.clearAction = function() {
+                currentAction = null;
+            };
 
             return self;
         }

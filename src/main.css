@@ -9,15 +9,16 @@ body {
 #game {
     margin: auto;
     position: relative;
+    font-family: "Gill Sans MT","Gill Sans",Calibri,sans-serif;
 }
 
-canvas, .pause, .menu {
+canvas, .pause, #menu {
     position: absolute;
     top: 0;
     left: 0
 }
 
-.pause, .menu {
+.pause, #menu {
     box-sizing: border-box;
 }
 
@@ -28,36 +29,51 @@ canvas, .pause, .menu {
     background-color: rgba(96, 96, 96, 0.75);
 }
 
-.menu {
+#menu {
 }
 
-.menu h1 {
-    margin: 0.5em 0;
+#menu h1 {
+    margin:  0 0 0.75em 0;
 }
 
-.menu .level {
+#menu .level {
     margin: 0 0 2.5% 2.5%;
     width: 18%;
     box-sizing: border-box;
-    border: 0.75em solid #ccc;
+    border: 0.75em solid #eee;
     padding: 0.5em;
     float: left;
+    border-radius: 0.25em;
+    opacity: 0.85;
+}
+
+#menu .level:not(.locked):hover {
+    opacity: 1;
+}
+
+#menu .level:not(.locked) {
     cursor: pointer;
 }
 
-.menu .level:hover {
-    background-color: #333;
-    border-color: #eee;
-}
-
-.menu .level:nth-of-type(5n+1) {
+#menu .level:nth-of-type(5n+1) {
     margin-left: 0;
 }
 
-.menu .level h2 {
+#menu .level h2 {
     margin-top: 0.25em;
 }
 
-.menu .level h4 {
-    margin-bottom: 0.5em;
+#menu .level h3 {
+    font-weight: normal;
+    font-size: 1.25em;
+    margin: 0.75em;
+}
+
+#menu .level h4 {
+    margin: 0;
+    font-size: 2em;
+}
+
+#menu .level.locked h2 {
+    font-size: 4.75em;
 }

@@ -80,17 +80,12 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                     }
 
                     context.drawImage(cachedCanvas, 0, 0);
-                    
-                    var timeSeconds = Math.round(model.gameTime / 1000);
-                    var timeString = Math.floor(timeSeconds / 60) +
-                        (timeSeconds % 60 < 10 ? ':0' : ':') + timeSeconds % 60;
-                    
                     context.font = d.BORDER * 2 / 3 + 'px "Gill Sans MT","Gill Sans",Calibri,sans-serif';
                     context.fillStyle = c.FOREGROUND;
                     context.textBaseline = 'middle';
                     context.textAlign = 'right';
-                    context.fillText(
-                        timeString, d.WIDTH - d.BLOCK.MARGIN.X, (d.BORDER + gap) / 2);
+                    context.fillText(util.formatTime(model.gameTime / 1000),
+                        d.WIDTH - d.BLOCK.MARGIN.X, (d.BORDER + gap) / 2);
                     context.textAlign = 'left';
                     context.fillText(model.levelName, d.BLOCK.MARGIN.X, (d.BORDER + gap) / 2);
                 }
