@@ -104,6 +104,16 @@ define(['input/keyboard'], function(keyboard) {
                 expect(input.getAction()).toBeNull();
             });
         });
+        
+        describe('clearAction', function() {
+            it('clears the current action', function() {
+                dispatchKeyDown(' ');
+                
+                input.clearAction();
+                
+                expect(input.getAction()).toBeNull();
+            });
+        });
 
 
         var dispatchKeyDown = function(key) {
