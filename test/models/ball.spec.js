@@ -1,4 +1,4 @@
-define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], function(ball, d, fixtures, physics) {
+define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'models/physics'], function(ball, d, fixtures, maths, physics) {
     'use strict';
     describe('ball', function() {
         var stubNormal = null;
@@ -37,63 +37,48 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
 
         describe('update', function() {
             it('flies upward with constant speed when launched', function() {
-                var getDistanceTravelled = function () {
-                    var startPos = model.y;
-                    model.update(100);
-                    return model.y - startPos;
-                };
+                triggerLaunch();
+                var initialV = measureVelocity();
+                var currentV = measureVelocity();
                 
-                model.update(100, 'LAUNCH');
-                var previousDistance = getDistanceTravelled();
-                expect(previousDistance).toBeLessThan(0);
-                expect(getDistanceTravelled()).toBeCloseTo(previousDistance, 1);
+                expect(initialV[0]).toBeLessThan(1);
+                expect(initialV[1]).toBeLessThan(0);
+                expect(currentV[1]).toBeCloseTo(initialV[1], 1);
             });
 
             it('bounces off the top border of the screen', function() {
-                model.update(100, 'LAUNCH');
-                for (var i = 0; i < 100; ++i) {
-                    model.update(100);
-                }
+                triggerLaunch();
+                runToCollision();
 
                 expect(model.y).toBeGreaterThan(d.BORDER);
             });
             
             it('bounces off the paddle', function() {
-                model.update(100, 'LAUNCH');
+                triggerLaunch();
                 stubNormal = [0, -1];
-                for (var i = 0; i < 100; ++i) {
-                    model.update(100);
-                }
+                runToCollision();
 
                 expect(model.y).toBeLessThan(paddle.top);
             });
 
             it('bounces off angled part of paddle', function() {
-                model.update(100, 'LAUNCH');
+                triggerLaunch();
                 stubNormal = [1 / Math.sqrt(2), -1 / Math.sqrt(2)];
 
-                model.update(100);
-                var line = model.y;
-                while (model.y <= line) {
-                    model.update(100);
-                }
-                model.update(100);
-                model.update(100);
-                model.update(100);
+                runToCollision();
+                runToCollision();
 
                 expect(model.x).toBeGreaterThan(paddle.x);
                 expect(model.y).toBeCloseTo(paddle.top - d.BALL.RADIUS);
             });
             
             it('collides edge-to-edge with the paddle', function() {
-                model.update(100, 'LAUNCH');
+                triggerLaunch();
                 stubNormal = [0, -1];
 
                 model.update(100);
                 var line = model.y;
-                while (model.y <= line) {
-                    model.update(100);
-                }
+                runToCollision();
                 var maxY = 0;
                 while (model.y > line) {
                     model.update(1);
@@ -104,7 +89,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
             });
 
             it('dies if it misses the paddle', function() {
-                model.update(100, 'LAUNCH');
+                triggerLaunch();
                 stubNormal = null;
                 for (var i = 0; i < 100; ++i) {
                     model.update(100);
@@ -114,7 +99,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
             });
 
             it('ceases interacting with the paddle after passing below it', function() {
-                model.update(100, 'LAUNCH');
+                triggerLaunch();
                 while (model.y < paddle.top) {
                     model.update(100);
                 }
@@ -241,91 +226,57 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                 expect(bounceNoteSpy).toBe(60);
             });
         });
-        
+
         describe('modes', function() {
             describe('normal', function() {
                 it('latches current note', function() {
-                    model.update(100, 'LAUNCH');
-
-                    stubNote = 1;
-                    model.update(100);
-                    stubNote = null;
-
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
-                    expect(bounceNoteSpy).toBe(60);
+                    triggerLaunch();
+                    tapNote(1);
+                    expect(captureNoteOnCollision()).toBe(60);
                 });
                 
                 it('clears previous note on re-initialised', function() {
-                    model.update(100, 'LAUNCH');
-
-                    stubNote = 1;
-                    model.update(100);
-                    stubNote = null;
-
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
-                    expect(bounceNoteSpy).toBe(60);
-                    
-                    bounceNoteSpy = null;
+                    triggerLaunch();
+                    tapNote(1);
+                    expect(captureNoteOnCollision()).toBe(60);
 
                     model = createModel();
-                    model.update(100, 'LAUNCH');
-
-                    for (i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
-                    expect(bounceNoteSpy).toBeNull();
+                    triggerLaunch();
+                    expect(captureNoteOnCollision()).toBeNull();
                 });
             });
             
             describe('earth', function() {
                 it('does not latch current note', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'EARTH');
-
-                    stubNote = 1;
-                    model.update(100);
-                    stubNote = null;
-
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
-                    expect(bounceNoteSpy).toBeNull();
+                    triggerLaunch();
+                    triggerAction('EARTH');
+                    tapNote(1);
+                    expect(captureNoteOnCollision()).toBeNull();
                 });
                 
                 it('moves slower than a standard ball', function() {
-                    model.update(100, 'LAUNCH');
-                    var y1 = model.y;
-                    model.update(100, 'EARTH');
-                    var y2 = model.y;
-                    model.update(100);
-                    var y3 = model.y;
+                    triggerLaunch();
+                    var initialSpeed = measureSpeed();
+                    triggerAction('EARTH');
+                    var currentSpeed = measureSpeed();
 
-                    expect(Math.abs(Math.round(y3 - y2))).toBeLessThan(Math.abs(Math.round(y2 - y1)));
+                    expect(currentSpeed).toBeLessThan(initialSpeed);
                 });
                 
                 it('sticks to the paddle when caught', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'EARTH');
+                    triggerLaunch();
+                    triggerAction('EARTH');
                     stubNormal = [0, -1];
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
+                    runToCollision();
+                    runToCollision();
+                    
                     expect(model.y).toEqual(paddle.top - d.BALL.RADIUS);
                     expect(model.released).toBe(false);
                 });
                 
                 it('moves directly upwards when re-released', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'EARTH');
+                    triggerLaunch();
+                    triggerAction('EARTH');
 
                     var collided = false;
                     var point = physics.createPoint('BLOCK',
@@ -340,128 +291,142 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/physics'], 
                     }
                     
                     objects.pop();
-                    
-                    model.update(100, 'LAUNCH');
-                    var initialX = model.x;
-                    model.update(100);
-                    
+
+                    triggerLaunch();
                     expect(model.released).toBe(true);
-                    expect(model.x).toBe(initialX);
+                    expect(measureVelocity()[0]).toBe(0);
                 });
             });
             
             describe('air', function() {
                 it('does not pass note to collision function', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'AIR');
+                    triggerLaunch();
+                    triggerAction('AIR');
                     var actualNote = null;
-                    stubNote = 1;
+                    holdNote(1);
 
-                    var collided = false;
                     var newPlane = physics.createPlane('BLOCK', [0, 1], model.y - d.WIDTH / 4, function(x, y, t, note) {
-                        collided = true;
                         actualNote = note;
                         return [0, 1];
                     });
                     objects.push(newPlane);
-
-                    while (!collided) {
-                        model.update(100);
-                    }
+                    runToCollision();
 
                     expect(actualNote).toBeFalsy();
                 });
 
                 it('does not bounce off blocks', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'AIR');
+                    triggerLaunch();
+                    triggerAction('AIR');
 
-                    var collided = false;
                     var newPlane = physics.createPlane('BLOCK', [0, 1], model.y - d.WIDTH / 4, function() {
-                        collided = true;
                         return [0, 1];
                     });
-                    newPlane.type = 'BLOCK';
                     objects.push(newPlane);
-
-                    while (!collided) {
-                        model.update(100);
-                    }
+                    runToCollision();
 
                     var effectivePlaneY = newPlane.position()[1] + d.BALL.RADIUS;
                     expect(model.y).toBeLessThan(effectivePlaneY);
                 });
 
                 it('does not play note on collision', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'AIR');
-
-                    stubNote = 1;
-
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
+                    triggerLaunch();
+                    triggerAction('AIR');
+                    holdNote(1);
+                    runToCollision();
 
                     expect(bounceNoteSpy).toBeFalsy();
                 });
 
                 it('moves faster than a standard ball', function() {
-                    model.update(100, 'LAUNCH');
-                    var y1 = model.y;
-                    model.update(100, 'AIR');
-                    var y2 = model.y;
-                    model.update(100);
-                    var y3 = model.y;
+                    triggerLaunch();
+                    var initialSpeed = measureSpeed();
+                    triggerAction('FIRE');
+                    var currentSpeed = measureSpeed();
 
-                    expect(Math.abs(Math.round(y3 - y2))).toBeGreaterThan(Math.abs(Math.round(y2 - y1)));
+                    expect(currentSpeed).toBeGreaterThan(initialSpeed);
                 });
             });
             
             describe('fire', function() {
                 it('passes wildcard note to collision function', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'FIRE');
+                    triggerLaunch();
+                    triggerAction('FIRE');
                     var actualNote = null;
 
-                    var collided = false;
                     var newPlane = physics.createPlane('BLOCK', [0, 1], model.y - d.WIDTH / 4, function(x, y, t, note) {
-                        collided = true;
                         actualNote = note;
                         return [0, 1];
                     });
                     objects.push(newPlane);
 
-                    while (!collided) {
-                        model.update(100);
-                    }
+                    runToCollision();
 
                     expect(actualNote).toBe(true);
                 });
                 
                 it('moves faster than a standard ball', function() {
-                    model.update(100, 'LAUNCH');
-                    var y1 = model.y;
-                    model.update(100, 'FIRE');
-                    var y2 = model.y;
-                    model.update(100);
-                    var y3 = model.y;
+                    triggerLaunch();
+                    var initialSpeed = measureSpeed();
+                    triggerAction('FIRE');
+                    var currentSpeed = measureSpeed();
                     
-                    expect(Math.abs(Math.round(y3 - y2))).toBeGreaterThan(Math.abs(Math.round(y2 - y1)));
+                    expect(currentSpeed).toBeGreaterThan(initialSpeed);
                 });
 
                 it('does not play note on collision', function() {
-                    model.update(100, 'LAUNCH');
-                    model.update(100, 'FIRE');
-
-                    stubNote = 1;
-
-                    for (var i = 0; i < 100; ++i) {
-                        model.update(100);
-                    }
-
+                    triggerLaunch();
+                    triggerAction('FIRE');
+                    holdNote(1);
+                    runToCollision();
                     expect(bounceNoteSpy).toBeFalsy();
                 });
             });
         });
+
+        function triggerLaunch() {
+            triggerAction('LAUNCH');
+        }
+
+        function tapNote(note) {
+            stubNote = note;
+            model.update(100);
+            stubNote = null;
+        }
+
+        function holdNote(note) {
+            stubNote = note;
+        }
+
+        function triggerAction(action) {
+            model.update(100, action);
+        }
+
+        function measureVelocity() {
+            var start = [model.x, model.y];
+            model.update(100);
+            return [model.x - start[0], model.y - start[1]];
+        }
+
+        function measureSpeed() {
+            return maths.magnitude(measureVelocity());
+        }
+
+        function runToCollision() {
+            var initialV = measureVelocity();
+
+            while (true) {
+                var currentV = measureVelocity();
+                if (Math.abs(currentV[0] - initialV[0]) > 0.001 || Math.abs(currentV[1] - initialV[1]) > 0.001) {
+                    return;
+                }
+            }
+        }
+        
+        function captureNoteOnCollision() {
+            bounceNoteSpy = null;
+            runToCollision();
+            return bounceNoteSpy;
+        }
     });
 });

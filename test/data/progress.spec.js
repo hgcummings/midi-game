@@ -1,4 +1,5 @@
 define(['data/progress'], function(progress) {
+    'use strict';
     describe('progress', function() {
         beforeEach(function() {
             localStorage.clear();
