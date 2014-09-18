@@ -67,7 +67,9 @@ define(['models/paddle', 'data/dimensions'], function(paddle, d) {
             var plane;
             
             beforeEach(function() {
-                var planes = model.getCollisionObjects().filter(function(plane) { return plane.positionNormal()[1] === -1; });
+                var planes = model.getCollisionObjects().filter(function(plane) {
+                    return plane.positionNormal()[1] === -1;
+                });
                 expect(planes.length).toBe(1);
                 plane = planes[0];
             });

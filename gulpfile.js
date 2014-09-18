@@ -8,6 +8,7 @@ var stylish = require('jshint-stylish');
 var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
 var htmlreplace = require('gulp-html-replace');
+var jscs = require('gulp-jscs');
 
 /**
  * Run test once and exit
@@ -21,6 +22,11 @@ gulp.task('test', function (done) {
  */
 gulp.task('tdd', function (done) {
     karma.start({basePath: __dirname, configFile: __dirname + '/karma.conf.js'}, done);
+});
+
+gulp.task('style', function() {
+    return gulp.src(['./src/**/*.js', './test/**/*.js', '!./src/scripts/**/*.js', '!./src/output/wavetable*.js'])
+        .pipe(jscs('.jscsrc'));
 });
 
 gulp.task('lint', function() {
