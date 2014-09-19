@@ -16,7 +16,7 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                     } else {
                         colour = c.BALL;
                     }
-                    
+
                     util.drawCircle(context, colour, Math.round(ball.x), Math.round(ball.y), d.BALL.RADIUS);
                 },
                 drawWave: function(wave) {

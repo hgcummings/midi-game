@@ -1,4 +1,4 @@
-define(function () {
+define(function() {
     'use strict';
     return [
         {
@@ -8,7 +8,8 @@ define(function () {
                 [5, 5, 5, 5, 5, 5, 5],
                 [3, 3, 3, 3, 3, 3, 3],
                 [1, 1, 1, 1, 1, 1, 1]
-            ]},
+            ]
+        },
         {
             name: 'Level 1',
             par: [180, 120, 60],

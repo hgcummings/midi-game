@@ -9,6 +9,7 @@ var minifyCSS = require('gulp-minify-css');
 var minifyHTML = require('gulp-minify-html');
 var htmlreplace = require('gulp-html-replace');
 var jscs = require('gulp-jscs');
+var filter = require('gulp-filter');
 
 /**
  * Run test once and exit
@@ -25,14 +26,18 @@ gulp.task('tdd', function (done) {
 });
 
 gulp.task('style', function() {
-    return gulp.src(['./src/**/*.js', './test/**/*.js', '!./src/scripts/**/*.js', '!./src/output/wavetable*.js'])
-        .pipe(jscs('.jscsrc'));
+    return gulp.src(['./src/**/*.js', './test/**/*.js', '!./src/scripts/**/*.js'])
+        .pipe(jscs('.jscsrc', {
+            "excludeFiles:": ["./**/wavetable*.js"]
+        }));
 });
 
 gulp.task('lint', function() {
     return gulp.src(['./src/**/*.js', './test/**/*.js', '!./src/scripts/**/*.js'])
         .pipe(jshint('.jshintrc'))
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(filter(['**/*', '!**/wavetable*.js']))
+        .pipe(jscs('.jscsrc'));
 });
 
 gulp.task('build', function() {

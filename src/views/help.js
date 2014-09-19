@@ -6,10 +6,10 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
             canvas.width = d.WIDTH;
             canvas.height = d.HEIGHT;
             canvas.classList.add('keyMap');
-            
+
             var context = canvas.getContext('2d');
             var keySize = d.CORNER;
-            
+
             var drawKey = function(x, y, fillStyle, textStyle, name) {
                 util.drawRoundedRect(context, x, y, keySize, keySize, keySize / 8);
                 context.fillStyle = fillStyle;
@@ -25,11 +25,11 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     'top'
                 );
             };
-            
+
             var noteSpacing = keySize / 3;
             var notesTop = d.HEIGHT - 2 * d.BLOCK.MARGIN.Y;
             var notesLeft = (d.WIDTH - (7 * keySize) - 6 * noteSpacing) / 2;
-            
+
             var drawNote = function(note) {
                 var x = notesLeft +
                     (Math.floor(note) + (note % 1) * 3 / 2 - 1) * keySize +
@@ -42,13 +42,13 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
 
                 drawKey(x, y, c.NOTES[note], c.FOREGROUND, String.fromCharCode(keyboard.noteMap.indexOf(note)));
             };
-            
+
             for (var note in c.NOTES) {
                 if (c.NOTES.hasOwnProperty(note)) {
                     drawNote(parseFloat(note));
                 }
             }
-            
+
             var drawElement = function(num) {
                 var x = keySize / 2;
                 var textAlign = 'left';
@@ -65,7 +65,7 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     textY = y - keySize / 2;
                 }
 
-                drawKey(x, y, c.FOREGROUND, c.BACKGROUND, num);      
+                drawKey(x, y, c.FOREGROUND, c.BACKGROUND, num);
                 util.drawText(
                     context,
                     keyboard.actionMap[num.toString().charCodeAt(0)],
@@ -77,11 +77,11 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     'middle'
                 );
             };
-            
+
             for (var i = 1; i <= 4; ++i) {
                 drawElement(i);
             }
-            
+
             var drawDirection = function(direction, key, name) {
                 var x = notesLeft + 3 * keySize + 3 * noteSpacing + direction * 4.5 * (keySize + noteSpacing);
                 var y = notesTop + 2 * (keySize + noteSpacing);
@@ -98,10 +98,10 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     'middle'
                 );
             };
-            
+
             drawDirection(-1, 'Z', 'left');
             drawDirection(1, '/', 'right');
-            
+
             return canvas;
         },
         drawHint: function(context, model) {
@@ -118,6 +118,6 @@ define(['data/colours', 'data/dimensions', 'views/util', 'input/keyboard'], func
                     'middle'
                 );
             }
-        } 
+        }
     };
 });

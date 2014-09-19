@@ -2,7 +2,7 @@ define(function() {
     'use strict';
     var magnitude = function(v) {
         var m2 = 0;
-        for(var i = 0; i < v.length; ++i) {
+        for (var i = 0; i < v.length; ++i) {
             m2 += (v[i] * v[i]);
         }
         return Math.sqrt(m2);
@@ -26,7 +26,7 @@ define(function() {
         normalise: function(v) {
             var m = magnitude(v);
             var n = [];
-            for(var i = 0; i < v.length; ++i) {
+            for (var i = 0; i < v.length; ++i) {
                 n[i] = v[i] / m;
             }
             return n;

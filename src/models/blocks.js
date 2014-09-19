@@ -3,7 +3,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
     var loadLevel = function(data, output) {
         var left = d.BLOCK.MARGIN.X;
         var top = d.BLOCK.MARGIN.Y;
-        
+
         var gap = (d.WIDTH - 2 * d.BLOCK.MARGIN.X) / (4 * data[0].length + data[0].length - 1);
 
         var width = Math.round(gap * 4);
@@ -11,15 +11,15 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
 
         var spacingX = Math.round(gap * 5);
         var spacingY = Math.round((d.HEIGHT - (3 * d.BLOCK.MARGIN.Y)) / data.length);
-                
-        var columnLeft = function (col) {
+
+        var columnLeft = function(col) {
             return left + col * spacingX;
         };
 
         var rowTop = function(row) {
             return top + row * spacingY;
         };
-        
+
         var getColumn = function(blocks, x) {
             var withinBlock = ((x - left) % spacingX) <= width;
             if (withinBlock) {
@@ -30,7 +30,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
             }
             return null;
         };
-        
+
         var processHit = function(block, time, note) {
             if (!block.hit) {
                 if (note === true || block.note === note) {
@@ -43,7 +43,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 }
             }
         };
-        
+
         function createPlanes(blocks) {
             var planes = [];
 
@@ -58,12 +58,12 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 return null;
             };
 
-            var createHorizontalPlane = function (row, normalY) {
+            var createHorizontalPlane = function(row, normalY) {
                 return physics.createPlane(
                     'BLOCK',
                     [0, normalY],
                     rowTop(row) + height * (normalY + 1) / 2,
-                    function (x, y, t, note) {
+                    function(x, y, t, note) {
                         var col = getColumn(blocks, x);
                         if (col !== null && processHit(blocks[row][col], t, note)) {
                             return [0, normalY];
@@ -73,12 +73,12 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 );
             };
 
-            var createVerticalPlane = function (col, normalX) {
+            var createVerticalPlane = function(col, normalX) {
                 return physics.createPlane(
                     'BLOCK',
                     [normalX, 0],
                     columnLeft(col) + width * (normalX + 1) / 2,
-                    function (x, y, t, note) {
+                    function(x, y, t, note) {
                         var row = getRow(y);
                         if (row !== null && processHit(blocks[row][col], t, note)) {
                             return [normalX, 0];
@@ -125,7 +125,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
 
             return points;
         };
-        
+
         var getIntersection = function(x, start, end) {
             var column = getColumn(all, x);
             if (column !== null) {
@@ -143,7 +143,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                 }
             }
             return [];
-        };     
+        };
 
         var blockForNote = function(note) {
             return {

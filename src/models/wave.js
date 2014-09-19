@@ -1,7 +1,7 @@
 define(['data/dimensions'], function(d) {
     'use strict';
     var growthRate = d.HEIGHT / 4800;
-    return {        
+    return {
         init: function(paddle, blocks, output) {
             var self = {};
             var growing = true;
@@ -10,10 +10,10 @@ define(['data/dimensions'], function(d) {
             self.x = paddle.x;
             self.bottom = paddle.top;
             self.top = paddle.top;
-            
-            self.update = function(delta) {                
+
+            self.update = function(delta) {
                 self.x = paddle.x;
-                
+
                 if (growing) {
                     self.top -= growthRate * delta;
 
@@ -28,10 +28,10 @@ define(['data/dimensions'], function(d) {
                         self.alive = false;
                     }
                 }
-                
+
                 if (self.alive) {
                     var newIntersectingBlocks = blocks.getIntersection(self.x, self.top, self.bottom);
-                    
+
                     activeIntersectingBlocks.concat().forEach(function(soundingBlock) {
                         var index = newIntersectingBlocks.indexOf(soundingBlock.block);
                         if (index === -1) {
@@ -41,11 +41,11 @@ define(['data/dimensions'], function(d) {
                             newIntersectingBlocks.splice(index, 1);
                         }
                     });
-                    
+
                     activeIntersectingBlocks = activeIntersectingBlocks.filter(function(soundingBlock) {
                         return !soundingBlock.toDelete;
                     });
-                    
+
                     newIntersectingBlocks.forEach(function(block) {
                         if (!block.hit) {
                             activeIntersectingBlocks.push({ block: block, note: output.startNote(block.midiNote) });
@@ -53,7 +53,7 @@ define(['data/dimensions'], function(d) {
                     });
                 }
             };
-            
+
             return self;
         }
     };

@@ -41,8 +41,8 @@ define(['models/paddle', 'data/dimensions'], function(paddle, d) {
                 }
 
                 for (i = 2; i < positions.length; ++i) {
-                    expect(Math.round(positions[i] - positions[i-1])).toBe(
-                        Math.round(positions[i-1] - positions[i-2]));
+                    expect(Math.round(positions[i] - positions[i - 1])).toBe(
+                        Math.round(positions[i - 1] - positions[i - 2]));
                 }
             });
 
@@ -62,10 +62,10 @@ define(['models/paddle', 'data/dimensions'], function(paddle, d) {
                 expect(model.x).toBeLessThan(d.WIDTH);
             });
         });
-        
+
         describe('primary collision plane', function() {
             var plane;
-            
+
             beforeEach(function() {
                 var planes = model.getCollisionObjects().filter(function(plane) {
                     return plane.positionNormal()[1] === -1;
@@ -73,15 +73,15 @@ define(['models/paddle', 'data/dimensions'], function(paddle, d) {
                 expect(planes.length).toBe(1);
                 plane = planes[0];
             });
-            
+
             it('is horizontal', function() {
                 expect(plane.positionNormal()[0]).toBe(0);
             });
-            
+
             it('can be collided with from above', function() {
                 expect(plane.positionNormal()[1]).toBe(-1);
             });
-            
+
             it('is at the top of the paddle', function() {
                 expect(plane.position()).toEqual([0, model.top]);
             });

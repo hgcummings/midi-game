@@ -1,4 +1,5 @@
-define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'models/physics'], function(ball, d, fixtures, maths, physics) {
+define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'models/physics'],
+function(ball, d, fixtures, maths, physics) {
     'use strict';
     describe('ball', function() {
         var stubNormal = null;
@@ -10,7 +11,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
         var objects;
         var stubNote;
         var bounceNoteSpy;
-        
+
         var createModel = function() {
             return ball.init(paddle, objects, {
                 getNote: function() { return stubNote; }
@@ -40,7 +41,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 triggerLaunch();
                 var initialV = measureVelocity();
                 var currentV = measureVelocity();
-                
+
                 expect(initialV[0]).toBeLessThan(1);
                 expect(initialV[1]).toBeLessThan(0);
                 expect(currentV[1]).toBeCloseTo(initialV[1], 1);
@@ -52,7 +53,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
 
                 expect(model.y).toBeGreaterThan(d.BORDER);
             });
-            
+
             it('bounces off the paddle', function() {
                 triggerLaunch();
                 stubNormal = [0, -1];
@@ -71,7 +72,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 expect(model.x).toBeGreaterThan(paddle.x);
                 expect(model.y).toBeCloseTo(paddle.top - d.BALL.RADIUS);
             });
-            
+
             it('collides edge-to-edge with the paddle', function() {
                 triggerLaunch();
                 stubNormal = [0, -1];
@@ -127,7 +128,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
 
                 expect(model.x).toBeGreaterThan(0);
             });
-            
+
             it('bounces off the corners of blocks', function() {
                 triggerLaunch();
                 model.update(100);
@@ -135,11 +136,11 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 var point = physics.createPoint('BLOCK', model.x - d.BALL.RADIUS / 2, model.y - 100);
                 objects.push(point);
                 runToCollision(20);
-                
+
                 var velocity = measureVelocity();
                 expect(velocity[0]).toBeGreaterThan(0);
             });
-            
+
             it('bounces off previously irrelevant very nearby planes', function() {
                 triggerLaunch();
 
@@ -149,19 +150,19 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     return [0, 1];
                 });
                 objects.push(newPlane);
-                
+
                 model.update(100);
-                
+
                 expect(collided).toBe(true);
             });
-            
+
             it('maintains speed through collision with plane', function() {
                 triggerLaunch();
                 var initialSpeed = measureSpeed();
 
                 addPlaneAboveBall();
                 runToCollision();
-                
+
                 var currentSpeed = measureSpeed();
                 expect(currentSpeed).toBeCloseTo(initialSpeed, 8);
             });
@@ -170,14 +171,14 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 triggerLaunch();
                 model.update(100);
                 var actualNote = null;
-                
+
                 holdNote(1);
                 addPlaneAboveBall(function(note) { actualNote = note; });
                 runToCollision();
 
                 expect(actualNote).toBe(1);
             });
-            
+
             it('plays its current note when bouncing off an object', function() {
                 triggerLaunch();
                 holdNote(1);
@@ -193,7 +194,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     tapNote(1);
                     expect(captureNoteOnCollision()).toBe(60);
                 });
-                
+
                 it('clears previous note on re-initialised', function() {
                     triggerLaunch();
                     tapNote(1);
@@ -204,7 +205,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     expect(captureNoteOnCollision()).toBeNull();
                 });
             });
-            
+
             describe('earth', function() {
                 it('does not latch current note', function() {
                     triggerLaunch();
@@ -212,7 +213,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     tapNote(1);
                     expect(captureNoteOnCollision()).toBeNull();
                 });
-                
+
                 it('moves slower than a standard ball', function() {
                     triggerLaunch();
                     var initialSpeed = measureSpeed();
@@ -221,18 +222,18 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
 
                     expect(currentSpeed).toBeLessThan(initialSpeed);
                 });
-                
+
                 it('sticks to the paddle when caught', function() {
                     triggerLaunch();
                     triggerAction('EARTH');
                     stubNormal = [0, -1];
                     runToCollision();
                     runToCollision();
-                    
+
                     expect(model.y).toEqual(paddle.top - d.BALL.RADIUS);
                     expect(model.released).toBe(false);
                 });
-                
+
                 it('moves directly upwards when re-released', function() {
                     triggerLaunch();
                     triggerAction('EARTH');
@@ -242,13 +243,13 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                         model.x - d.BALL.RADIUS / 2, model.y - d.HEIGHT / 5,
                         function() { collided = true; return true; }
                     );
-                    
+
                     objects.push(point);
-                    
-                    while(model.released) {
+
+                    while (model.released) {
                         model.update(100);
                     }
-                    
+
                     objects.pop();
 
                     triggerLaunch();
@@ -256,7 +257,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     expect(measureVelocity()[0]).toBe(0);
                 });
             });
-            
+
             describe('air', function() {
                 it('does not pass note to collision function', function() {
                     triggerLaunch();
@@ -273,7 +274,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 it('does not bounce off blocks', function() {
                     triggerLaunch();
                     triggerAction('AIR');
-                    
+
                     var newPlane = addPlaneAboveBall();
                     runToCollision();
 
@@ -299,25 +300,25 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                     expect(currentSpeed).toBeGreaterThan(initialSpeed);
                 });
             });
-            
+
             describe('fire', function() {
                 it('passes wildcard note to collision function', function() {
                     triggerLaunch();
                     triggerAction('FIRE');
-                    
+
                     var actualNote = null;
                     addPlaneAboveBall(function(note) { actualNote = note; });
                     runToCollision();
 
                     expect(actualNote).toBe(true);
                 });
-                
+
                 it('moves faster than a standard ball', function() {
                     triggerLaunch();
                     var initialSpeed = measureSpeed();
                     triggerAction('FIRE');
                     var currentSpeed = measureSpeed();
-                    
+
                     expect(currentSpeed).toBeGreaterThan(initialSpeed);
                 });
 
@@ -369,7 +370,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
                 }
             }
         }
-        
+
         function captureNoteOnCollision() {
             bounceNoteSpy = null;
             runToCollision();
@@ -377,7 +378,7 @@ define(['models/ball', 'data/dimensions', 'models/fixtures', 'models/maths', 'mo
         }
 
         function addPlaneAboveBall(callback) {
-            var newPlane = physics.createPlane('BLOCK', [0, 1], model.y - d.WIDTH / 4, function (x, y, t, note) {
+            var newPlane = physics.createPlane('BLOCK', [0, 1], model.y - d.WIDTH / 4, function(x, y, t, note) {
                 if (callback) {
                     callback(note);
                 }

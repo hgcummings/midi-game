@@ -1,8 +1,8 @@
 define(['models/blocks', 'data/dimensions'], function(blocks, d) {
     'use strict';
     function getNotes(fromBlocks) {
-        return fromBlocks.map(function (row) {
-            return row.map(function (block) {
+        return fromBlocks.map(function(row) {
+            return row.map(function(block) {
                 return block.midiNote;
             });
         });
@@ -74,10 +74,10 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
             ]);
         });
     });
-    
+
     describe('getIntersection', function() {
         var model;
-        
+
         beforeEach(function() {
             model = blocks.init([
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -88,14 +88,14 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
             ]);
         });
-        
+
         it('returns blocks intersecting line', function() {
             var result = model.getIntersection(
                 d.BLOCK.MARGIN.X + 4 * model.blockWidth,
                 d.BLOCK.MARGIN.Y + model.blockHeight,
                 d.HEIGHT - d.BORDER
             );
-            
+
             expect(result.length).toBe(5);
             expect(result).toContain(model.all[1][3]);
             expect(result).toContain(model.all[2][3]);
@@ -120,7 +120,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
             expect(result).toContain(model.all[5][0]);
         });
     });
-    
+
     describe('getCollisionObjects', function() {
         var model;
         var stubNote = null;
@@ -129,7 +129,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
         beforeEach(function() {
             hitNoteSpy = null;
             bounceNoteSpy = null;
-            
+
             model = blocks.init([
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -142,15 +142,15 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 playBounce: function(note) { bounceNoteSpy = note; }
             });
         });
-        
+
         it('specifies the object type as BLOCK', function() {
             var objects = model.getCollisionObjects();
-            
+
             for (var i = 0; i < objects.length; ++i) {
                 expect(objects[i].type).toBe('BLOCK');
             }
         });
-        
+
         describe('planes', function() {
             it('returns a plane for each line of block edges', function() {
                 var planes = model.getCollisionPlanes();
@@ -227,7 +227,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                     expect(block.hit).toBeFalsy();
                     stubNote = block.note;
                 });
-                
+
                 afterEach(function() {
                     expect(block.hit).toBe(gameTime);
                     expect(hitNoteSpy).toBe(block.midiNote);
@@ -508,7 +508,7 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
                 expect(hitNoteSpy).toBe(block.midiNote);
                 expect(result).toBeTruthy();
             });
-            
+
             it('ignores collisions against blocks when hit with the wrong note', function() {
                 var block = model.all[3][8];
                 var point = pointsMatching(block.x, block.y)[0];
@@ -537,5 +537,4 @@ define(['models/blocks', 'data/dimensions'], function(blocks, d) {
             }
         });
     });
- 
 });

@@ -4,7 +4,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
     var never = function() { return false; };
     var defaultSpeed = d.WIDTH / 3000;
     var previousNote = null;
-    
+
     var modes = {
         STANDARD: {
             speed: defaultSpeed,
@@ -40,7 +40,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
             isSticky: never
         }
     };
-    
+
     return {
         init: function(paddle, objects, input, output) {
             var self = {};
@@ -54,21 +54,21 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
 
             var dx = 0;
             var dy = -modes.STANDARD.speed;
-            
+
             var updatePosition = function(delta, gameTime) {
                 var newX = self.x + dx * delta;
                 var newY = self.y + dy * delta;
                 var collision = null;
                 var sortedObjects = physics.sortByCollisionTime(objects,
-                    { x: self.x, y: self.y, dx: dx, dy: dy, r: radius});
+                    { x: self.x, y: self.y, dx: dx, dy: dy, r: radius });
                 var object;
                 var maxCheckTime = delta;
-                                
-                while((!collision) && (object = sortedObjects.shift())) {
+
+                while ((!collision) && (object = sortedObjects.shift())) {
                     if (object.collisionTime > maxCheckTime) {
                         break;
                     }
-                    
+
                     var previousDistanceToObject = object.distance(self);
                     var currentDistanceToObject = object.distance({ x: newX, y: newY, r: radius });
 
@@ -77,7 +77,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                         currentDistanceToObject <= 0) {
                         var deltaToCollision =
                             delta * previousDistanceToObject / (previousDistanceToObject - currentDistanceToObject);
-                        
+
                         newX = self.x + dx * deltaToCollision;
                         newY = self.y + dy * deltaToCollision;
 
@@ -90,7 +90,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                                 output.playBounce(sound.getMidiNote(self.mode.getNote(input)));
                             }
                         }
-                        
+
                         if (collision && self.mode.isSticky(object.type)) {
                             self.released = false;
                             continue;
@@ -100,7 +100,7 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                         newY = newY + dy * (delta - deltaToCollision);
                     }
                 }
-                
+
                 self.x = newX;
                 self.y = newY;
             };

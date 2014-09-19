@@ -1,7 +1,7 @@
 define(['models/game', 'data/dimensions'], function(game, d) {
     'use strict';
     describe('game', function() {
-        var level = { name: 'Test Level', notes: [[1, 1]]};
+        var level = { name: 'Test Level', notes: [[1, 1]] };
         var model;
         var stubInput = {
             getDirection: function() { return stubInput.direction; },
@@ -34,18 +34,18 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 expect(currentPosition).toBeGreaterThan(initialPosition);
                 expect(model.ball.x).toBe(currentPosition);
             });
-            
+
             it('starts with three spare lives', function() {
                 expect(model.remainingLives).toBe(3);
             });
-            
+
             it('starts with all available elements', function() {
                 expect(model.remainingElements).toContain('EARTH');
                 expect(model.remainingElements).toContain('AIR');
                 expect(model.remainingElements).toContain('FIRE');
                 expect(model.remainingElements).toContain('WATER');
             });
-            
+
             it('exposes the level name', function() {
                 expect(model.levelName).toBe(level.name);
             });
@@ -69,12 +69,12 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 stubInput.direction = 1;
 
                 var firstBall = model.ball;
-                
+
                 var gameTime = 500;
-                while(model.ball.y < model.paddle.top - d.BALL.RADIUS) {
+                while (model.ball.y < model.paddle.top - d.BALL.RADIUS) {
                     model.update(gameTime += 100);
                 }
-                
+
                 for (var i = 0; i < 10; ++i) {
                     model.update(gameTime += 500);
                 }
@@ -84,7 +84,7 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 expect(model.ball.x).toBe(model.paddle.x);
                 expect(model.ball.y).toBeLessThan(model.paddle.top);
             });
-            
+
             it('removes element from remaining elements when used', function() {
                 stubInput.action = 'AIR';
                 model.update(500);
@@ -108,11 +108,11 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 model.update(1500);
                 expect(model.ball.mode).toBe(fireMode);
             });
-            
+
             it('deactivates the ball when wave is selected', function() {
                 stubInput.action = 'WATER';
                 model.update(500);
-                
+
                 expect(model.ball).toBeNull();
                 expect(model.wave).toBeTruthy();
             });
@@ -131,7 +131,7 @@ define(['models/game', 'data/dimensions'], function(game, d) {
             it('restores next ball after water expires', function() {
                 stubInput.action = 'WATER';
                 model.update(500);
-                
+
                 var gameTime = 500;
                 for (var i = 0; i < 20; ++i) {
                     model.update(gameTime += 1000);
@@ -140,22 +140,22 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 expect(model.wave).toBeNull();
                 expect(model.ball).toBeTruthy();
             });
-            
+
             it('returns success when level cleared', function() {
                 for (var row = 0; row < model.blocks.all.length; ++row) {
                     for (var col = 0; col < model.blocks.all[row].length; ++col) {
                         model.blocks.all[row][col].hit = 1;
                     }
                 }
-                
+
                 var result = model.update(500);
                 expect(result).toBe('CLEARED');
             });
 
             it('returns failure when no more spare lives', function() {
                 var gameTime = 100;
-                
-                while(model.remainingLives >= 0) {
+
+                while (model.remainingLives >= 0) {
                     stubInput.action = 'LAUNCH';
                     model.update(gameTime);
                     stubInput.action = null;
@@ -169,13 +169,13 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                 var result = model.update(gameTime += 500);
                 expect(result).toBe('FAILED');
             });
-            
+
             it('returns paused when paused', function() {
                 stubInput.action = 'PAUSE';
                 var result = model.update(100);
                 expect(result).toBe('PAUSED');
             });
-            
+
             it('updates the gameTime', function() {
                 expect(model.gameTime).toBe(0);
                 model.update(500);

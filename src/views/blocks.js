@@ -16,8 +16,8 @@ define(['data/colours', 'data/dimensions', 'views/util'], function(c, d, util) {
                 preContext.fill();
                 return preRenderCanvas;
             };
-            
-            var inactive = preRenderBlock(c.BLOCK); 
+
+            var inactive = preRenderBlock(c.BLOCK);
             var active = {};
             var fade = 1000;
             for (var note in c.NOTES) {

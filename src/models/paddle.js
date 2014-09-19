@@ -19,7 +19,7 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
                     self.x = rightBound;
                 }
             };
-            
+
             self.getCollisionObjects = function() {
                 return [physics.createPlane('PADDLE', [0, -1], self.top, self.positionNormal)];
             };
@@ -31,7 +31,7 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
                     angle = angleAtEdge * Math.PI / 4 * overlap * overlap * overlap;
                     return [Math.sin(angle), -Math.cos(angle)];
                 } else if (Math.abs(offset) < halfWidth + d.BALL.RADIUS) {
-                    overlap = Math.abs(offset) - halfWidth; 
+                    overlap = Math.abs(offset) - halfWidth;
                     angle = (angleAtEdge + (glancingAngleAtEdge - angleAtEdge) *
                         (overlap / d.BALL.RADIUS)) * offset / Math.abs(offset);
                     return [Math.sin(angle), -Math.cos(angle)];

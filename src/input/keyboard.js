@@ -13,7 +13,7 @@ define(function() {
     noteMap[75] = 6;
     noteMap[79] = 6.5;
     noteMap[76] = 7;
-    
+
     var actionMap = [];
     actionMap[32] = 'LAUNCH';
     actionMap[49] = 'EARTH';
@@ -46,7 +46,7 @@ define(function() {
             var getAction = function(keyCode) {
                 return actionMap[keyCode];
             };
-            
+
             var isGameKey = function(keyCode) {
                 return getNote(keyCode) || getDirection(keyCode) || getAction(keyCode);
             };
@@ -55,7 +55,7 @@ define(function() {
                 if (isGameKey(event.keyCode)) {
                     event.preventDefault();
                 }
-                
+
                 if (getNote(event.keyCode)) {
                     currentNote = getNote(event.keyCode);
                 } else if (getDirection(event.keyCode)) {
@@ -69,7 +69,7 @@ define(function() {
                 if (isGameKey(event.keyCode)) {
                     event.preventDefault();
                 }
-                
+
                 if (getDirection(event.keyCode) === currentDirection) {
                     currentDirection = 0;
                 } else if (getAction(event.keyCode) === currentAction) {
@@ -90,7 +90,7 @@ define(function() {
             self.getAction = function() {
                 return currentAction;
             };
-            
+
             self.clearAction = function() {
                 currentAction = null;
             };

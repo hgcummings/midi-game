@@ -3,12 +3,12 @@ define(['models/maths'], function(maths) {
     var getDistanceToPlane = function(plane, particle) {
         var position = [
             plane.position()[0] + particle.r * plane.positionNormal()[0],
-            plane.position()[1] + particle.r * plane.positionNormal()[1],
+            plane.position()[1] + particle.r * plane.positionNormal()[1]
         ];
         return maths.dotProduct([particle.x, particle.y], plane.positionNormal()) -
             maths.dotProduct(position, plane.positionNormal());
     };
-    
+
     var getCollisionTime = function(object, particle) {
         var distanceToObject = object.distance(particle);
         var speedToObject = -maths.dotProduct([particle.dx, particle.dy], object.positionNormal(particle));
@@ -43,11 +43,11 @@ define(['models/maths'], function(maths) {
                     }
                 }
             };
-            
+
             self.distance = function(particle) {
                 return maths.cartesianDistance(position, [particle.x, particle.y]) - particle.r;
             };
-            
+
             return self;
         },
         createPlane: function(type, normal, position, collisionCallback) {
@@ -55,19 +55,19 @@ define(['models/maths'], function(maths) {
                 var staticPosition = [Math.abs(normal[0]) * position, Math.abs(normal[1]) * position];
                 position = function() { return staticPosition; };
             }
-            
+
             var self = {
                 type: type,
                 positionNormal: function() { return normal; },
                 position: position,
                 collideAt: collisionCallback || function() { return normal; }
             };
-            
+
             self.distance = function(particle) { return getDistanceToPlane(self, particle); };
-            
+
             return self;
         },
-        sortByCollisionTime: function (objects, particle) {
+        sortByCollisionTime: function(objects, particle) {
             var result = objects.concat();
             result.forEach(function(object) {
                 object.collisionTime = getCollisionTime(object, particle);

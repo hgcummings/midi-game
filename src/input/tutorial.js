@@ -3,18 +3,18 @@ define(['input/keyboard'], function(keyboard) {
     return {
         init: function() {
             var realInput = keyboard.init();
-            
+
             var allowMovement = false;
             var allowedActions = [];
             var currentState = null;
             var stateData;
-            
+
             var enterState = function(i, model) {
                 currentState = i;
                 stateData = {};
                 states[i].init(model);
             };
-            
+
             var states = [
                 {
                     hint: 'Press SPACE to launch the ball..',
@@ -70,16 +70,16 @@ define(['input/keyboard'], function(keyboard) {
             ];
 
             enterState(0);
-            
+
             var self = {};
-            
+
             self.getHint = function(model) {
                 var state = states[currentState];
-                
+
                 if (state.test(model)) {
                     enterState(currentState + 1, model);
                 }
-                
+
                 return state.hint;
             };
 

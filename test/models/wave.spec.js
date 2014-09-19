@@ -6,7 +6,7 @@ define(['models/wave', 'data/dimensions'], function(wave, d) {
         var intersectingBlocks;
         var playedNotes;
         var stoppedNotes;
-        
+
         beforeEach(function() {
             stubPaddle = {
                 x: d.WIDTH / 2,
@@ -24,30 +24,30 @@ define(['models/wave', 'data/dimensions'], function(wave, d) {
                 }
             });
         });
-        
+
         it('locks position to the paddle', function() {
             stubPaddle.x = d.WIDTH / 4;
-            
+
             model.update(500);
-            
+
             expect(model.x).toBe(stubPaddle.x);
         });
 
         it('grows from bottom to top', function() {
             expect(model.top).toBe(stubPaddle.top);
             expect(model.bottom).toBe(stubPaddle.top);
-            
+
             model.update(500);
-            
+
             expect(model.bottom).toBe(stubPaddle.top);
             expect(model.top).toBeLessThan(stubPaddle.top);
         });
-        
+
         it('stops growing at the top of the screen', function() {
             while (model.top > d.BLOCK.MARGIN.Y) {
                 model.update(500);
             }
-            
+
             for (var i = 0; i < 4; ++i) {
                 model.update(500);
             }
@@ -58,8 +58,8 @@ define(['models/wave', 'data/dimensions'], function(wave, d) {
         it('shrinks from bottom to top at a slower rate', function() {
             var initial = model.top;
             model.update(500);
-            var growthSpeed = Math.abs(model.top - initial);            
-            
+            var growthSpeed = Math.abs(model.top - initial);
+
             while (model.top > d.BLOCK.MARGIN.Y) {
                 model.update(500);
             }
@@ -73,7 +73,7 @@ define(['models/wave', 'data/dimensions'], function(wave, d) {
 
             expect(shrinkSpeed).toBeLessThan(growthSpeed);
         });
-        
+
         it('dies when shrunk to nothing', function() {
             while (model.bottom > d.BLOCK.MARGIN.Y) {
                 model.update(500);
@@ -82,10 +82,10 @@ define(['models/wave', 'data/dimensions'], function(wave, d) {
             for (var i = 0; i < 4; ++i) {
                 model.update(500);
             }
-            
+
             expect(model.alive).toBe(false);
         });
-        
+
         it('starts playing notes of intersecting blocks', function() {
             intersectingBlocks.push({ midiNote: 60 });
             model.update(100);

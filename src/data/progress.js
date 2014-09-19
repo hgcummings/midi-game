@@ -3,7 +3,7 @@ define(function() {
     var key = function(level) {
         return 'timeForLevel' + level;
     };
-    
+
     return {
         getTime: function(level) {
             var time = parseInt(localStorage[key(level)]);

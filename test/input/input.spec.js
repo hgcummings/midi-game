@@ -1,7 +1,6 @@
 define(['input/keyboard'], function(keyboard) {
     'use strict';
     describe('keyboard input', function() {
-
         var input;
 
         beforeEach(function() {
@@ -42,11 +41,9 @@ define(['input/keyboard'], function(keyboard) {
 
                 expect(input.getNote()).toBeNull();
             });
-
         });
 
         describe('getDirection', function() {
-
             it('returns zero if no key is pressed', function() {
                 expect(input.getDirection()).toBe(0);
             });
@@ -104,17 +101,16 @@ define(['input/keyboard'], function(keyboard) {
                 expect(input.getAction()).toBeNull();
             });
         });
-        
+
         describe('clearAction', function() {
             it('clears the current action', function() {
                 dispatchKeyDown(' ');
-                
+
                 input.clearAction();
-                
+
                 expect(input.getAction()).toBeNull();
             });
         });
-
 
         var dispatchKeyDown = function(key) {
             dispatchKeyEvent('keydown', key);
@@ -141,6 +137,5 @@ define(['input/keyboard'], function(keyboard) {
                 throw new Error('Unknown key code for key "' + key + '"');
             }
         };
-
     });
 });

@@ -1,6 +1,6 @@
 define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'models/ball', 'models/wave'],
-    function(progress, fixtures, blocks, paddle, ball, wave) {
-        'use strict';
+function(progress, fixtures, blocks, paddle, ball, wave) {
+    'use strict';
     var allElements = ['EARTH', 'AIR', 'FIRE', 'WATER'];
     function cleared(blocks) {
         for (var row = 0; row < blocks.all.length; ++row) {
@@ -25,7 +25,7 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
             self.fixtures = fixtures.init();
             self.blocks = blocks.init(level.notes, output);
             self.paddle = paddle.init();
-            
+
             self.levelName = level.name;
 
             var collisionObjects = self.fixtures.getCollisionObjects()
@@ -41,7 +41,7 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
             self.update = function(gameTime) {
                 var delta = gameTime - self.gameTime;
                 var action = input.getAction();
-                
+
                 if (action === 'PAUSE') {
                     return 'PAUSED';
                 }
@@ -90,7 +90,7 @@ define(['data/progress', 'models/fixtures', 'models/blocks', 'models/paddle', 'm
                     return 'CLEARED';
                 }
             };
-            
+
             self.getHint = function() {
                 if (self.input.getHint) {
                     var hint = self.input.getHint(self);
