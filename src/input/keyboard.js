@@ -40,6 +40,8 @@ define(function() {
                     return 1;
                 } else if (keyCode === 90) {
                     return -1;
+                } else {
+                    return null;
                 }
             };
 

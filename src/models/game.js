@@ -89,6 +89,8 @@ function(progress, fixtures, blocks, paddle, ball, wave) {
                     progress.saveTime(level.id, Math.round(gameTime / 1000));
                     return 'CLEARED';
                 }
+
+                return null;
             };
 
             self.getHint = function() {

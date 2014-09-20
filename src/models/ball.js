@@ -62,10 +62,9 @@ define(['data/dimensions', 'models/physics', 'models/maths', 'output/sound'], fu
                 var sortedObjects = physics.sortByCollisionTime(objects,
                     { x: self.x, y: self.y, dx: dx, dy: dy, r: radius });
                 var object;
-                var maxCheckTime = delta;
 
                 while ((!collision) && (object = sortedObjects.shift())) {
-                    if (object.collisionTime > maxCheckTime) {
+                    if (object.collisionTime > delta) {
                         break;
                     }
 

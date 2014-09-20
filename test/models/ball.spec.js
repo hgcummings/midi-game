@@ -70,7 +70,7 @@ function(ball, d, fixtures, maths, physics) {
                 runToCollision();
 
                 expect(model.x).toBeGreaterThan(paddle.x);
-                expect(model.y).toBeCloseTo(paddle.top - d.BALL.RADIUS);
+                expect(model.y).toBeCloseTo(paddle.top - d.BALL.RADIUS, 0);
             });
 
             it('collides edge-to-edge with the paddle', function() {

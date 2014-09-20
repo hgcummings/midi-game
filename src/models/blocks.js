@@ -42,6 +42,7 @@ define(['data/dimensions', 'models/physics', 'output/sound'], function(d, physic
                     return true;
                 }
             }
+            return false;
         };
 
         function createPlanes(blocks) {

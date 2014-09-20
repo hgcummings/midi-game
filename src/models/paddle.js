@@ -21,10 +21,10 @@ define(['data/dimensions', 'models/physics'], function(d, physics) {
             };
 
             self.getCollisionObjects = function() {
-                return [physics.createPlane('PADDLE', [0, -1], self.top, self.positionNormal)];
+                return [physics.createPlane('PADDLE', [0, -1], self.top, self.collisionNormal)];
             };
 
-            self.positionNormal = function(x) {
+            self.collisionNormal = function(x) {
                 var offset = x - self.x, overlap, angle;
                 if (Math.abs(offset) < halfWidth) {
                     overlap = offset / halfWidth;

@@ -166,7 +166,7 @@ define(['models/game', 'data/dimensions'], function(game, d) {
                     model.update(gameTime += 500);
                 }
 
-                var result = model.update(gameTime += 500);
+                var result = model.update(gameTime + 500);
                 expect(result).toBe('FAILED');
             });
 

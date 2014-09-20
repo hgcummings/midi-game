@@ -12,8 +12,7 @@ define(['models/maths'], function(maths) {
     var getCollisionTime = function(object, particle) {
         var distanceToObject = object.distance(particle);
         var speedToObject = -maths.dotProduct([particle.dx, particle.dy], object.positionNormal(particle));
-        var timeToObject = distanceToObject / speedToObject;
-        return timeToObject;
+        return distanceToObject / speedToObject;
     };
 
     return {
