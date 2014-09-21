@@ -44,8 +44,8 @@ canvas, .pause, #menu, .keyMap {
 }
 
 #menu .level {
-    margin: 0 0 2.5% 2.5%;
-    width: 18%;
+    margin: 0 0 5% 5%;
+    width: 30%;
     box-sizing: border-box;
     border: 0.75em solid #eee;
     padding: 0.5em;
@@ -62,7 +62,7 @@ canvas, .pause, #menu, .keyMap {
     cursor: pointer;
 }
 
-#menu .level:nth-of-type(5n+1) {
+#menu .level:nth-of-type(3n+1) {
     margin-left: 0;
 }
 
